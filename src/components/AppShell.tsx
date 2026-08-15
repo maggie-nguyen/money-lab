@@ -1,0 +1,229 @@
+"use client";
+
+import * as React from "react";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
+import { session } from "@/lib/api";
+import { useSession } from "@/components/Providers";
+import { Button, Chip, cx } from "@/components/ui";
+
+const NAV = [
+  { href: "/learn", label: "Khóa học" },
+  { href: "/library", label: "Thư viện" },
+  { href: "/sims", label: "Mô phỏng" },
+  { href: "/tools", label: "Công cụ" },
+  { href: "/tutor", label: "Trợ giảng" },
+] as const;
+
+function ThemeToggle() {
+  const [theme, setTheme] = React.useState<"light" | "dark" | null>(null);
+
+  React.useEffect(() => {
+    const saved = window.localStorage.getItem("ml-theme");
+    if (saved === "dark" || saved === "light") setTheme(saved);
+  }, []);
+
+  function toggle() {
+    const current =
+      theme ?? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const next = current === "dark" ? "light" : "dark";
+    document.documentElement.dataset.theme = next;
+    window.localStorage.setItem("ml-theme", next);
+    setTheme(next);
+  }
+
+  return (
+    <button
+      onClick={toggle}
+      className="rounded-[var(--radius-control)] px-2 py-1 text-sm text-ink-soft hover:bg-paper-sunken hover:text-ink"
+      aria-label="Chuyển giao diện sáng/tối"
+      title="Chuyển giao diện sáng/tối"
+    >
+      {theme === "dark" ? "☾" : "☀"}
+    </button>
+  );
+}
+
+function Wordmark() {
+  return (
+    <Link href="/learn" className="flex items-baseline gap-2">
+      <span className="font-display text-xl font-semibold tracking-tight">MoneyLab</span>
+          <span className="ledger-label hidden text-ink-faint sm:inline">Tài chính cá nhân</span>
+    </Link>
+  );
+}
+
+function StreakAndCoins() {
+  const { bootstrap } = useSession();
+  if (!bootstrap) return null;
+  const { stats } = bootstrap;
+  return (
+    <div className="flex items-center gap-3 text-sm">
+      <span className="figure text-ink-soft" title="Chuỗi ngày học">
+        {stats.streakCurrent} ngày
+      </span>
+      <span className="figure text-ink-soft" title="Xu">
+        {stats.coins} xu
+      </span>
+      <Chip tone="moss" className="figure">
+        Cấp {stats.level}
+      </Chip>
+    </div>
+  );
+}
+
+function AccountMenu() {
+  const { bootstrap } = useSession();
+  const router = useRouter();
+  const qc = useQueryClient();
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
+
+  React.useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [open]);
+
+  if (!bootstrap) {
+    return (
+      <Link href="/login">
+        <Button size="sm" variant="secondary">
+          Đăng nhập
+        </Button>
+      </Link>
+    );
+  }
+
+  async function signOut() {
+    await session.logout().catch(() => undefined);
+    qc.clear();
+    router.push("/");
+  }
+
+  const name = bootstrap.user.displayName;
+  return (
+    <div className="relative" ref={ref}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="flex h-9 w-9 items-center justify-center rounded-full border border-rule-strong bg-paper-raised text-sm font-semibold"
+        aria-haspopup="menu"
+        aria-expanded={open}
+        aria-label="Tài khoản"
+      >
+        {name.slice(0, 1).toUpperCase()}
+      </button>
+      {open && (
+        <div
+          role="menu"
+          className="absolute right-0 z-40 mt-2 w-56 rounded-[var(--radius-card)] border border-rule bg-paper-raised py-1 text-sm shadow-sm"
+        >
+          <div className="border-b border-rule px-3 py-2">
+            <div className="truncate font-medium">{name}</div>
+            <div className="truncate text-xs text-ink-faint">
+              {bootstrap.user.email}
+            </div>
+          </div>
+          {[
+            { href: "/profile", label: "Hồ sơ" },
+            { href: "/quests", label: "Nhiệm vụ" },
+            { href: "/leaderboard", label: "Bảng xếp hạng" },
+            { href: "/shop", label: "Cửa hàng" },
+            { href: "/settings", label: "Cài đặt" },
+          ].map((i) => (
+            <Link
+              key={i.href}
+              href={i.href}
+              role="menuitem"
+              className="block px-3 py-2 hover:bg-paper-sunken"
+              onClick={() => setOpen(false)}
+            >
+              {i.label}
+            </Link>
+          ))}
+          {bootstrap.user.role === "ADMIN" && (
+            <Link href="/admin" role="menuitem" className="block px-3 py-2 hover:bg-paper-sunken" onClick={() => setOpen(false)}>
+              Quản trị
+            </Link>
+          )}
+          <button role="menuitem" onClick={signOut} className="block w-full px-3 py-2 text-left text-critical hover:bg-paper-sunken">
+            Đăng xuất
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+export function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  return (
+    <div className="flex min-h-dvh flex-col">
+      <header className="sticky top-0 z-30 border-b border-rule bg-paper/95 backdrop-blur">
+        <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4">
+          <Wordmark />
+          <nav className="hidden items-center gap-1 md:flex" aria-label="Điều hướng chính">
+            {NAV.map((item) => {
+              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  className={cx(
+                    "rounded-[var(--radius-control)] px-3 py-1.5 text-sm",
+                    active ? "bg-moss-50 font-medium text-moss-600" : "text-ink-soft hover:bg-paper-sunken hover:text-ink",
+                  )}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+          <div className="ml-auto flex items-center gap-3">
+            <div className="hidden lg:block">
+              <StreakAndCoins />
+            </div>
+            <ThemeToggle />
+            <AccountMenu />
+          </div>
+        </div>
+      </header>
+
+
+      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 pb-20 md:pb-6">
+        {children}
+      </main>
+
+      <nav
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-rule bg-paper-raised md:hidden"
+        aria-label="Điều hướng chính"
+      >
+        {NAV.map((item) => {
+          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              aria-current={active ? "page" : undefined}
+              className={cx("py-3 text-center text-xs", active ? "font-medium text-moss-600" : "text-ink-soft")}
+            >
+              {item.label}
+            </Link>
+          );
+        })}
+      </nav>
+
+      <footer className="hidden border-t border-rule px-4 py-6 text-xs text-ink-faint md:block">
+        <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-2">
+          <span>MoneyLab. Nội dung mang tính giáo dục, không phải lời khuyên đầu tư.</span>
+          <span>Mọi số liệu trong mô phỏng đều là giả lập.</span>
+        </div>
+      </footer>
+    </div>
+  );
+}

@@ -1,0 +1,1310 @@
+{
+  "$schema": "moneylab-content-v1",
+  "track": {
+    "slug": "nen-tang-tien-bac",
+    "order": 1,
+    "iconKey": "piggy-bank",
+    "i18n": {
+      "vi": {
+        "title": "Nền tảng tiền bạc",
+        "subtitle": "Kiếm tiền, chi tiêu, ngân sách và tiết kiệm",
+        "description": "Điểm khởi đầu cho mọi kỹ năng tài chính: hiểu tiền đến từ đâu, đi về đâu, và làm sao giữ lại một phần cho tương lai."
+      }
+    }
+  },
+  "course": {
+    "slug": "ngan-sach-va-tiet-kiem",
+    "order": 1,
+    "level": 1,
+    "estimatedMinutes": 61,
+    "xpReward": 50,
+    "i18n": {
+      "vi": {
+        "title": "Ngân sách và tiết kiệm",
+        "subtitle": "Làm chủ đồng tiền đầu tiên của bạn",
+        "description": "Sáu bài học ngắn giúp bạn lập ngân sách đầu tiên, xây quỹ khẩn cấp và biến tiết kiệm thành thói quen, kết thúc bằng mô phỏng \"Tháng lương đầu tiên\".",
+        "learningObjectives": [
+          "Phân biệt nhu cầu và mong muốn trong chi tiêu hằng ngày",
+          "Áp dụng quy tắc 50/30/20 cho thu nhập của bản thân",
+          "Giải thích vì sao cần quỹ khẩn cấp và cách xây dựng nó",
+          "Tính lãi đơn và hình dung được cách lãi kép vận hành",
+          "Lập kế hoạch chi tiêu một tháng hoàn chỉnh"
+        ]
+      }
+    },
+    "modules": [
+      {
+        "slug": "hieu-ve-ngan-sach",
+        "order": 1,
+        "i18n": {
+          "vi": {
+            "title": "Hiểu về ngân sách"
+          }
+        }
+      },
+      {
+        "slug": "tiet-kiem-thong-minh",
+        "order": 2,
+        "i18n": {
+          "vi": {
+            "title": "Tiết kiệm thông minh"
+          }
+        }
+      }
+    ],
+    "lessons": [
+      {
+        "slug": "vi-sao-can-ngan-sach",
+        "order": 1,
+        "moduleSlug": "hieu-ve-ngan-sach",
+        "estimatedMinutes": 9,
+        "xpReward": 20,
+        "i18n": {
+          "vi": {
+            "title": "Vì sao cần ngân sách?",
+            "summary": "Ngân sách không phải là sự gò bó, mà là bản đồ cho tiền của bạn.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=jXMu2wNq_Wk",
+                "caption": "Kỹ năng quản lý tài chính cá nhân cho người trẻ (Câu chuyện cuộc sống)"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Đã bao giờ bạn nhận tiền lì xì, tiền thưởng hay lương làm thêm, rồi hai tuần sau không nhớ nổi mình đã chi số tiền đó vào đâu chưa? Điều đó không có nghĩa là bạn tiêu hoang. Khi không có kế hoạch, các khoản chi nhỏ rất dễ cộng lại thành một số tiền lớn."
+              },
+              {
+                "type": "KEY_TERM",
+                "term": "Ngân sách",
+                "definition": "Kế hoạch phân chia thu nhập cho các khoản chi tiêu và tiết kiệm trước khi tiêu, thay vì nhìn lại sau khi tiền đã hết."
+              },
+              {
+                "type": "HEADING",
+                "text": "Ba lợi ích lớn nhất",
+                "level": 2
+              },
+              {
+                "type": "LIST",
+                "ordered": true,
+                "items": [
+                  "Nhìn rõ dòng tiền: bạn biết chính xác mỗi tháng tiền đi những đâu.",
+                  "Chủ động lựa chọn: bạn quyết định điều gì là quan trọng, thay vì để quảng cáo quyết định thay mình.",
+                  "Bớt lo: không còn cảm giác thấp thỏm mỗi lần mở ví vào cuối tháng."
+                ]
+              },
+              {
+                "type": "EXAMPLE",
+                "title": "Lan, 17 tuổi",
+                "text": "Lan nhận 2.000.000 đồng mỗi tháng từ việc làm thêm. Vì không có kế hoạch, đến cuối tháng Lan không còn đồng nào. Khi bắt đầu lập ngân sách, Lan để riêng 400.000 đồng ngay ngày nhận lương, và sau mười tháng thì đủ tiền mua chiếc điện thoại đã ngắm từ lâu."
+              },
+              {
+                "type": "SIM_LINK",
+                "simSlug": "thang-luong-dau-tien",
+                "label": "Thử trước tháng lương đầu tiên"
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "ngan-sach-la-gi",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Ngân sách chủ yếu giúp bạn điều gì?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Cấm bản thân tiêu tiền cho những thứ mình thích"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Quyết định trước tiền sẽ đi đâu"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Kiếm được nhiều tiền hơn mỗi tháng"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "Ngân sách không tạo ra thu nhập và cũng không cấm đoán. Nó chỉ chuyển quyết định chi tiêu từ lúc đứng trước quầy hàng sang lúc bạn còn tỉnh táo."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "ngan-sach-va-giai-tri",
+                  "type": "TRUE_FALSE",
+                  "prompt": "Một ngân sách tốt thì không có khoản nào dành cho giải trí.",
+                  "answerKey": {
+                    "correct": false
+                  },
+                  "explanation": "Ngân sách nào cũng nên có khoản giải trí. Điểm khác biệt là con số được đặt ra trước, nên nó không lấn sang tiền học hay tiền tiết kiệm."
+                }
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Bài tiếp theo giới thiệu quy tắc 50/30/20, cách chia thu nhập đơn giản nhất mà người mới bắt đầu nào cũng áp dụng được."
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "TRUE_FALSE",
+              "points": 1,
+              "answerKey": {
+                "correct": false
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Ngân sách nghĩa là không được tiêu tiền cho giải trí.",
+                  "explanation": "Ngân sách nào cũng nên có khoản cho giải trí. Khác biệt nằm ở chỗ bạn quyết định trước con số, để nó không lấn sang tiền học hay tiền tiết kiệm."
+                }
+              }
+            },
+            {
+              "type": "SINGLE_CHOICE",
+              "points": 1,
+              "options": [
+                "a",
+                "b",
+                "c",
+                "d"
+              ],
+              "answerKey": {
+                "correct": "c"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Thời điểm tốt nhất để phân chia tiền vào các khoản là khi nào?",
+                  "explanation": "Chia tiền ngay khi vừa nhận, tức là trả cho mình trước, hiệu quả hơn hẳn so với đợi đến cuối tháng, vì đến lúc đó thường chẳng còn gì để chia.",
+                  "optionsText": {
+                    "a": "Cuối tháng, sau khi đã tiêu xong",
+                    "b": "Khi thấy tài khoản sắp hết tiền",
+                    "c": "Ngay khi nhận được tiền",
+                    "d": "Chỉ khi có khoản chi lớn sắp tới"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "slug": "quy-tac-50-30-20",
+        "order": 2,
+        "moduleSlug": "hieu-ve-ngan-sach",
+        "estimatedMinutes": 10,
+        "xpReward": 20,
+        "i18n": {
+          "vi": {
+            "title": "Quy tắc 50/30/20",
+            "summary": "Một công thức đơn giản để chia thu nhập thành nhu cầu, mong muốn và tiết kiệm.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=4mkJbPUbyRo",
+                "caption": "Năm bước quản lý tài chính cá nhân đơn giản"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Quy tắc 50/30/20 chia thu nhập thành ba phần: 50% cho nhu cầu, 30% cho mong muốn và 20% cho tiết kiệm. Bạn có thể bắt đầu mà không cần một bảng tính phức tạp."
+              },
+              {
+                "type": "KEY_TERM",
+                "term": "Nhu cầu và mong muốn",
+                "definition": "Nhu cầu là khoản mà nếu không chi thì cuộc sống gặp khó khăn đáng kể: bữa ăn, tiền xe, học phí. Mong muốn là những khoản còn lại, kể cả những thứ rất khó từ chối."
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Khi phân vân, hãy tự hỏi: nếu không chi khoản này, cuộc sống của mình có gặp khó khăn đáng kể không? Nếu có, đó là nhu cầu; nếu không, đó là mong muốn."
+              },
+              {
+                "type": "TABLE",
+                "caption": "Thử phân loại vài khoản quen thuộc",
+                "headers": [
+                  "Khoản chi",
+                  "Nhu cầu hay mong muốn"
+                ],
+                "rows": [
+                  [
+                    "Cơm trưa ở căng tin",
+                    "Nhu cầu"
+                  ],
+                  [
+                    "Trà sữa size L thêm trân châu",
+                    "Mong muốn"
+                  ],
+                  [
+                    "Vé xe buýt đi học",
+                    "Nhu cầu"
+                  ],
+                  [
+                    "Skin mới trong game",
+                    "Mong muốn"
+                  ],
+                  [
+                    "Sách giáo khoa",
+                    "Nhu cầu"
+                  ]
+                ]
+              },
+              {
+                "type": "EXAMPLE",
+                "title": "Với thu nhập 3.000.000 đồng",
+                "text": "1.500.000 đồng cho nhu cầu, 900.000 đồng cho mong muốn, 600.000 đồng cho tiết kiệm. Tỷ lệ này có thể điều chỉnh thành 55/25/20 hay 60/20/20 tùy hoàn cảnh. Điều quan trọng là bạn chọn một tỷ lệ rõ ràng và có thể duy trì."
+              },
+              {
+                "type": "CALCULATOR",
+                "tool": "budget-503020",
+                "presets": {
+                  "incomeVnd": 3000000
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "chia-theo-503020",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Thu nhập 4.000.000 đồng một tháng. Theo 50/30/20, bạn để dành bao nhiêu?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "400.000 đồng"
+                    },
+                    {
+                      "key": "b",
+                      "text": "800.000 đồng"
+                    },
+                    {
+                      "key": "c",
+                      "text": "1.200.000 đồng"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "Phần để dành là 20%, tức 4.000.000 nhân 0,2 bằng 800.000 đồng."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "nhu-cau-hay-mong-muon",
+                  "type": "MULTI_CHOICE",
+                  "prompt": "Khoản nào dưới đây thuộc nhóm nhu cầu?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Tiền xe buýt đi học hằng ngày"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Vé xem phim cuối tuần"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Bữa trưa ở trường"
+                    },
+                    {
+                      "key": "d",
+                      "text": "Tai nghe mới khi tai nghe cũ vẫn dùng được"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": [
+                      "a",
+                      "c"
+                    ]
+                  },
+                  "explanation": "Tiền xe và bữa trưa ảnh hưởng trực tiếp tới việc học hằng ngày. Vé xem phim và tai nghe thay thế đều có thể hoãn mà không gây thiệt hại."
+                }
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Quy tắc 50/30/20 là điểm bắt đầu, không phải quy định bắt buộc. Nếu sống cùng gia đình, bạn có thể để dành tới 40%, còn người phải thuê nhà ở thành phố lớn có khi cần tới 60% cho nhu cầu. Hãy hiểu nguyên tắc trước, rồi chỉnh con số cho vừa với hoàn cảnh của mình."
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "MULTI_CHOICE",
+              "points": 2,
+              "options": [
+                "a",
+                "b",
+                "c",
+                "d",
+                "e"
+              ],
+              "answerKey": {
+                "correct": [
+                  "a",
+                  "c"
+                ]
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Chọn tất cả các khoản thuộc nhóm nhu cầu.",
+                  "explanation": "Tiền ăn trưa và vé xe đi học là chi phí bắt buộc để sinh hoạt và học tập. Trà sữa, vé xem phim và phụ kiện điện thoại là mong muốn, cắt được khi cần.",
+                  "optionsText": {
+                    "a": "Tiền ăn trưa",
+                    "b": "Trà sữa với bạn mỗi chiều",
+                    "c": "Vé xe buýt đi học",
+                    "d": "Vé xem phim cuối tuần",
+                    "e": "Ốp điện thoại mới"
+                  }
+                }
+              }
+            },
+            {
+              "type": "NUMERIC",
+              "points": 1,
+              "unit": "VND",
+              "answerKey": {
+                "value": "1500000",
+                "toleranceAbs": "0"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Với thu nhập 5.000.000 đồng một tháng và quy tắc 50/30/20, số tiền tối đa dành cho nhóm mong muốn là bao nhiêu?",
+                  "explanation": "30% của 5.000.000 đồng là 1.500.000 đồng dành cho nhóm mong muốn."
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "slug": "quy-khan-cap",
+        "order": 3,
+        "moduleSlug": "hieu-ve-ngan-sach",
+        "estimatedMinutes": 9,
+        "xpReward": 20,
+        "i18n": {
+          "vi": {
+            "title": "Quỹ khẩn cấp: tấm đệm an toàn",
+            "summary": "Những khoản chi bất ngờ có thể xảy ra. Quỹ khẩn cấp giúp chúng không trở thành gánh nặng lớn.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=cOmVnRiFSmE",
+                "caption": "Cách lập quỹ dự phòng tài chính"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Xe hỏng giữa đường. Điện thoại rơi vỡ màn hình. Ốm phải mua thuốc. Những chuyện này không báo trước và có thể làm xáo trộn ngân sách nếu bạn không chuẩn bị."
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Không có quỹ khẩn cấp, một sự cố 700.000 đồng có thể buộc bạn vay mượn, và khoản vay nhỏ đó thường đắt hơn nhiều so với con số ban đầu."
+              },
+              {
+                "type": "KEY_TERM",
+                "term": "Quỹ khẩn cấp",
+                "definition": "Khoản tiền để riêng, chỉ dùng cho sự cố bất ngờ. Không dùng cho đợt giảm giá, không dùng cho chuyến đi chơi phát sinh."
+              },
+              {
+                "type": "HEADING",
+                "text": "Bao nhiêu là đủ",
+                "level": 2
+              },
+              {
+                "type": "LIST",
+                "items": [
+                  "Mới bắt đầu: 500.000 đến 1.000.000 đồng đã đủ xử lý phần lớn sự cố thường gặp ở tuổi học sinh.",
+                  "Khi đã đi làm: hướng tới ba đến sáu tháng chi phí sinh hoạt."
+                ]
+              },
+              {
+                "type": "CALLOUT",
+                "variant": "WARNING",
+                "title": "Vay nóng là cái bẫy đắt nhất",
+                "text": "Vay qua ứng dụng không rõ nguồn gốc để xử lý một sự cố nhỏ có thể khiến bạn phải trả lãi hàng chục phần trăm mỗi tháng. Quỹ khẩn cấp chính là lớp bảo vệ đầu tiên trước tín dụng đen."
+              },
+              {
+                "type": "CALCULATOR",
+                "tool": "savings-goal",
+                "presets": {
+                  "goalVnd": 4500000,
+                  "currentVnd": 0,
+                  "contributionVnd": 500000
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "dung-quy-khan-cap",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Trường hợp nào dưới đây nên dùng quỹ khẩn cấp?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Đợt giảm giá giày bạn đã ngắm từ lâu"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Xe hỏng, cần sửa ngay để kịp đi học"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Bạn bè rủ đi ăn mừng sinh nhật"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "Chỉ tình huống không hoãn được và ảnh hưởng tới sinh hoạt mới đúng là khẩn cấp. Hai trường hợp còn lại thuộc nhóm chi tiêu đã biết trước hoặc có thể chờ."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "noi-de-quy-khan-cap",
+                  "type": "TRUE_FALSE",
+                  "prompt": "Nên để quỹ khẩn cấp ở nơi rút ra được trong vòng một tới hai ngày.",
+                  "answerKey": {
+                    "correct": true
+                  },
+                  "explanation": "Quá dễ rút thì bạn sẽ tiêu mất, còn quá khó rút thì nó không giúp được đúng lúc cần. Một tài khoản tiết kiệm riêng là điểm cân bằng hợp lý."
+                }
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Mẹo xây quỹ nhanh: coi quỹ khẩn cấp là hóa đơn bắt buộc đầu tiên của tháng. Để dành 100.000 đồng mỗi tuần thì sau một năm bạn có hơn 5.000.000 đồng."
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "SINGLE_CHOICE",
+              "points": 1,
+              "options": [
+                "a",
+                "b",
+                "c",
+                "d"
+              ],
+              "answerKey": {
+                "correct": "c"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Trường hợp nào sau đây ĐÚNG là lúc dùng quỹ khẩn cấp?",
+                  "explanation": "Xe hỏng phải sửa ngay để kịp đi học là sự cố bất ngờ và không hoãn được. Ba trường hợp còn lại đều là mong muốn, hoặc có thể lên kế hoạch từ trước.",
+                  "optionsText": {
+                    "a": "Đợt giảm giá lớn cuối năm",
+                    "b": "Sinh nhật bạn thân, cần mua quà",
+                    "c": "Xe đạp điện hỏng, cần sửa ngay để đi học",
+                    "d": "Ra mắt điện thoại đời mới"
+                  }
+                }
+              }
+            },
+            {
+              "type": "TRUE_FALSE",
+              "points": 1,
+              "answerKey": {
+                "correct": true
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Nên giữ quỹ khẩn cấp tách riêng khỏi tài khoản chi tiêu hằng ngày.",
+                  "explanation": "Tiền để chung rất dễ bị tiêu mất theo kiểu tiện tay. Tách riêng ra tạo được một rào cản nhỏ nhưng hiệu quả."
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "slug": "thoi-quen-tiet-kiem",
+        "order": 4,
+        "moduleSlug": "tiet-kiem-thong-minh",
+        "estimatedMinutes": 9,
+        "xpReward": 20,
+        "i18n": {
+          "vi": {
+            "title": "Biến tiết kiệm thành thói quen",
+            "summary": "Đừng chỉ dựa vào ý chí. Một hệ thống tự động sẽ giúp bạn tiết kiệm đều đặn hơn.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=FzPQdifOn9Q",
+                "caption": "Quản lý tài chính: cẩm nang tự lập cho người mới"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Hầu hết mọi người tiết kiệm theo kiểu tiêu trước, còn gì để dành nấy. Kết quả quen thuộc là chẳng còn gì."
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Người tiết kiệm thành công làm ngược lại: để dành trước, rồi mới tiêu phần còn lại. Nguyên tắc này thường được gọi là \"trả cho mình trước\"."
+              },
+              {
+                "type": "KEY_TERM",
+                "term": "Trả cho mình trước",
+                "definition": "Chuyển phần để dành ra khỏi tài khoản chi tiêu ngay ngày nhận tiền, trước khi bất kỳ khoản nào khác được chi."
+              },
+              {
+                "type": "CALLOUT",
+                "variant": "TIP",
+                "title": "Để hệ thống làm thay ý chí",
+                "text": "Nếu dùng ứng dụng ngân hàng, hãy đặt lệnh chuyển tự động một khoản cố định sang tài khoản tiết kiệm đúng ngày nhận tiền. Khi không phải quyết định lại mỗi tháng, bạn cũng không còn dịp để bỏ cuộc."
+              },
+              {
+                "type": "HEADING",
+                "text": "Bốn cách giữ thói quen",
+                "level": 2
+              },
+              {
+                "type": "LIST",
+                "ordered": true,
+                "items": [
+                  "Bắt đầu từ mức nhỏ: 50.000 đồng mỗi tuần vẫn hơn là không để dành đồng nào, rồi nâng dần khi đã quen.",
+                  "Đặt tên cho mục tiêu: một quỹ laptop 15.000.000 đồng dễ theo đuổi hơn là tiết kiệm chung chung.",
+                  "Tách tài khoản: tiền để dành không nên nằm chung với tiền tiêu hằng ngày.",
+                  "Ghi nhận cột mốc: dành dụm được 1.000.000 đồng đầu tiên là một cột mốc đáng kể, đừng bỏ qua nó."
+                ]
+              },
+              {
+                "type": "EXAMPLE",
+                "title": "Hùng, 18 tuổi",
+                "text": "Hùng đặt lệnh chuyển tự động 300.000 đồng vào ngày 5 hằng tháng. Sau mười hai tháng, Hùng có 3.600.000 đồng cùng phần lãi, mà sau lần cài đặt đầu tiên thì không phải cố gắng thêm lần nào."
+              },
+              {
+                "type": "CALCULATOR",
+                "tool": "savings-goal",
+                "presets": {
+                  "goalVnd": 2600000,
+                  "currentVnd": 0,
+                  "contributionVnd": 200000
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "tra-cho-minh-truoc",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Trả cho mình trước nghĩa là gì?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Tiêu cho bản thân trước khi trả các khoản khác"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Chuyển phần để dành đi ngay khi nhận tiền"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Chỉ tiết kiệm khi cuối tháng còn dư"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "Phần để dành được tách ra đầu tiên, phần còn lại mới là tiền để tiêu. Cách làm ở phương án cuối chính là lý do khiến hầu hết mọi người không tiết kiệm được."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "tu-dong-hoa",
+                  "type": "TRUE_FALSE",
+                  "prompt": "Đặt lệnh chuyển tiền tự động giúp tiết kiệm đều hơn là dựa vào ý chí mỗi tháng.",
+                  "answerKey": {
+                    "correct": true
+                  },
+                  "explanation": "Một quyết định cài đặt một lần bền hơn hẳn mười hai quyết định lặp lại, vì mỗi lần phải quyết định lại là một lần bạn có thể bỏ qua."
+                }
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Bài sau nói về chuyện tiền tiết kiệm có thể tự sinh thêm tiền, nhờ lãi suất."
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "SINGLE_CHOICE",
+              "points": 1,
+              "options": [
+                "a",
+                "b",
+                "c"
+              ],
+              "answerKey": {
+                "correct": "a"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "\"Trả cho mình trước\" nghĩa là gì?",
+                  "explanation": "Chuyển tiền tiết kiệm ngay khi nhận thu nhập, trước mọi khoản chi, để khoản dành cho tương lai không phụ thuộc vào việc cuối tháng còn dư hay không.",
+                  "optionsText": {
+                    "a": "Chuyển tiền vào tiết kiệm ngay khi nhận thu nhập, trước khi tiêu",
+                    "b": "Tự thưởng bản thân một món đồ mỗi khi nhận lương",
+                    "c": "Trả hết các hóa đơn rồi mới tiêu cho bản thân"
+                  }
+                }
+              }
+            },
+            {
+              "type": "TRUE_FALSE",
+              "points": 1,
+              "answerKey": {
+                "correct": false
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Nếu chỉ tiết kiệm được 50.000 đồng mỗi tuần thì không đáng để bắt đầu.",
+                  "explanation": "50.000 đồng mỗi tuần là 2.600.000 đồng một năm, chưa tính lãi. Quan trọng hơn, thói quen đã được hình thành, và số tiền sẽ nâng dần theo thu nhập."
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "slug": "lai-suat-co-ban",
+        "order": 5,
+        "moduleSlug": "tiet-kiem-thong-minh",
+        "estimatedMinutes": 11,
+        "xpReward": 20,
+        "i18n": {
+          "vi": {
+            "title": "Lãi suất: khi tiền tự sinh thêm tiền",
+            "summary": "Lãi đơn, lãi kép, và vì sao bắt đầu sớm quan trọng hơn bắt đầu nhiều.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=npIWZ4ropZ8",
+                "caption": "Giải thích lãi kép cực kỳ đơn giản"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Khi bạn gửi tiết kiệm, ngân hàng trả cho bạn lãi suất, có thể hiểu đó là khoản ngân hàng trả để được dùng tiền của bạn. Lãi suất ghi theo phần trăm một năm: gửi 10.000.000 đồng với lãi 5% một năm thì sau một năm bạn nhận thêm 500.000 đồng."
+              },
+              {
+                "type": "KEY_TERM",
+                "term": "Lãi đơn và lãi kép",
+                "definition": "Lãi đơn chỉ tính trên tiền gốc ban đầu. Lãi kép cộng lãi vào gốc, nên kỳ sau bạn nhận lãi trên cả gốc lẫn phần lãi cũ."
+              },
+              {
+                "type": "TABLE",
+                "caption": "Gốc 10.000.000 đồng, lãi 5% một năm",
+                "headers": [
+                  "Năm",
+                  "Lãi đơn",
+                  "Lãi kép"
+                ],
+                "rows": [
+                  [
+                    "1",
+                    "10.500.000 ₫",
+                    "10.500.000 ₫"
+                  ],
+                  [
+                    "5",
+                    "12.500.000 ₫",
+                    "12.762.816 ₫"
+                  ],
+                  [
+                    "10",
+                    "15.000.000 ₫",
+                    "16.288.946 ₫"
+                  ],
+                  [
+                    "20",
+                    "20.000.000 ₫",
+                    "26.532.977 ₫"
+                  ]
+                ]
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Hãy chú ý năm đầu tiên: hai cột giống hệt nhau. Càng về sau, khoảng cách giữa hai cột càng rộng. Đó là lý do thời gian là tài sản lớn nhất của người trẻ: bắt đầu ở tuổi 16 với số tiền nhỏ vẫn hơn bắt đầu ở tuổi 30 với số tiền lớn."
+              },
+              {
+                "type": "CALLOUT",
+                "variant": "WARNING",
+                "title": "Con dao hai lưỡi",
+                "text": "Với các khoản nợ, lãi kép có thể làm số tiền phải trả tăng theo thời gian. Khoản vay không được thanh toán đúng hạn có thể phình to theo cơ chế đó."
+              },
+              {
+                "type": "CALCULATOR",
+                "tool": "compound-interest",
+                "presets": {
+                  "principalVnd": 10000000,
+                  "ratePercent": 5,
+                  "years": 10
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "lai-don-mot-nam",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Gửi 4.000.000 đồng với lãi đơn 6% một năm. Sau một năm bạn nhận được bao nhiêu tiền lãi?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "60.000 đồng"
+                    },
+                    {
+                      "key": "b",
+                      "text": "240.000 đồng"
+                    },
+                    {
+                      "key": "c",
+                      "text": "600.000 đồng"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "6% của 4.000.000 đồng là 240.000 đồng. Lãi suất luôn tính trên số tiền gốc, chứ không phải trên một con số cố định."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "lai-kep-khac-biet",
+                  "type": "TRUE_FALSE",
+                  "prompt": "Trong năm đầu tiên, lãi kép và lãi đơn cho kết quả như nhau.",
+                  "answerKey": {
+                    "correct": true
+                  },
+                  "explanation": "Trong năm đầu chưa có kỳ nào để lãi cộng dồn, nên hai cách tính cho cùng một kết quả. Khác biệt chỉ xuất hiện từ kỳ thứ hai trở đi, rồi lớn dần theo thời gian."
+                }
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "MATCHING",
+              "points": 2,
+              "left": [
+                "l1",
+                "l2",
+                "l3"
+              ],
+              "right": [
+                "r1",
+                "r2",
+                "r3"
+              ],
+              "answerKey": {
+                "pairs": {
+                  "l1": "r2",
+                  "l2": "r3",
+                  "l3": "r1"
+                }
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Nối mỗi khái niệm với mô tả đúng.",
+                  "explanation": "Lãi suất là giá của việc dùng tiền. Lãi đơn chỉ tính trên gốc, còn lãi kép tính trên cả gốc lẫn phần lãi đã cộng dồn.",
+                  "leftText": {
+                    "l1": "Lãi suất",
+                    "l2": "Lãi đơn",
+                    "l3": "Lãi kép"
+                  },
+                  "rightText": {
+                    "r1": "Lãi tính trên cả gốc lẫn lãi các kỳ trước",
+                    "r2": "Tỉ lệ phần trăm trả cho việc sử dụng tiền, tính theo năm",
+                    "r3": "Lãi chỉ tính trên số tiền gốc ban đầu"
+                  }
+                }
+              }
+            },
+            {
+              "type": "SINGLE_CHOICE",
+              "points": 1,
+              "options": [
+                "a",
+                "b",
+                "c"
+              ],
+              "answerKey": {
+                "correct": "b"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Vì sao người trẻ là những người hưởng lợi nhiều nhất từ lãi kép?",
+                  "explanation": "Lãi kép mạnh dần theo thời gian, nên mỗi năm bắt đầu sớm hơn đáng giá hơn nhiều so với việc bỏ thêm tiền vào sau này.",
+                  "optionsText": {
+                    "a": "Vì ngân hàng ưu đãi lãi suất cao hơn cho người trẻ",
+                    "b": "Vì họ có nhiều thời gian nhất để lãi cộng dồn",
+                    "c": "Vì người trẻ có thu nhập cao hơn"
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "slug": "ke-hoach-mot-thang",
+        "order": 6,
+        "moduleSlug": "tiet-kiem-thong-minh",
+        "estimatedMinutes": 13,
+        "xpReward": 25,
+        "i18n": {
+          "vi": {
+            "title": "Thực hành: kế hoạch một tháng",
+            "summary": "Ghép tất cả lại thành một ngân sách tháng hoàn chỉnh, rồi thử sức trong mô phỏng.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=QG3Qj0obXSk",
+                "caption": "Hướng dẫn tài chính cá nhân cho người mới bắt đầu"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Bạn đã có đủ công cụ: phân biệt nhu cầu và mong muốn, quy tắc 50/30/20, quỹ khẩn cấp, trả cho mình trước, và lãi suất. Giờ hãy ghép tất cả thành một kế hoạch tháng hoàn chỉnh."
+              },
+              {
+                "type": "HEADING",
+                "text": "Bốn bước",
+                "level": 2
+              },
+              {
+                "type": "LIST",
+                "ordered": true,
+                "items": [
+                  "Ghi lại toàn bộ thu nhập của tháng.",
+                  "Liệt kê các khoản cố định phải chi.",
+                  "Đặt trước phần để dành, trước khi chia phần chi tiêu tự do.",
+                  "Kiểm tra lại vào giữa tháng và điều chỉnh nếu lệch."
+                ]
+              },
+              {
+                "type": "TABLE",
+                "caption": "Một tháng mẫu với thu nhập 6.500.000 đồng",
+                "headers": [
+                  "Khoản",
+                  "Số tiền",
+                  "Nhóm"
+                ],
+                "rows": [
+                  [
+                    "Lương làm thêm",
+                    "+6.500.000 ₫",
+                    "Thu nhập"
+                  ],
+                  [
+                    "Tiền trọ",
+                    "-1.800.000 ₫",
+                    "Cố định"
+                  ],
+                  [
+                    "Điện thoại",
+                    "-120.000 ₫",
+                    "Cố định"
+                  ],
+                  [
+                    "Ăn uống",
+                    "-1.800.000 ₫",
+                    "Nhu cầu"
+                  ],
+                  [
+                    "Đi lại",
+                    "-400.000 ₫",
+                    "Nhu cầu"
+                  ],
+                  [
+                    "Giải trí",
+                    "-800.000 ₫",
+                    "Mong muốn"
+                  ],
+                  [
+                    "Quỹ khẩn cấp",
+                    "-500.000 ₫",
+                    "Để dành"
+                  ],
+                  [
+                    "Tiết kiệm mục tiêu",
+                    "-800.000 ₫",
+                    "Để dành"
+                  ]
+                ]
+              },
+              {
+                "type": "CALLOUT",
+                "variant": "TIP",
+                "title": "Luôn để khoảng thở",
+                "text": "Kế hoạch trên chừa lại một khoản dư nhỏ. Ngân sách khớp đến từng đồng sẽ vỡ ngay ở sự cố đầu tiên."
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "con-lai-bao-nhieu",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Theo bảng trên, sau khi trừ hết các khoản thì còn dư bao nhiêu?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "0 đồng"
+                    },
+                    {
+                      "key": "b",
+                      "text": "280.000 đồng"
+                    },
+                    {
+                      "key": "c",
+                      "text": "1.300.000 đồng"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "Tổng chi là 6.220.000 đồng, nên còn dư 280.000 đồng. Khoản dư nhỏ này chính là khoảng thở cho những chi phí chưa lường trước."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "thu-tu-lap-ke-hoach",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Trong bốn bước lập kế hoạch, phần để dành được đặt ở đâu?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Sau khi đã chia xong toàn bộ chi tiêu"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Trước khi chia phần chi tiêu tự do"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Chỉ khi cuối tháng còn dư"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "Phần để dành được đặt trước, ngay sau các khoản cố định. Nếu nó đứng cuối hàng thì nó sẽ là khoản đầu tiên biến mất."
+                }
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Giờ đến lượt bạn thực hành. Trong mô phỏng \"Tháng lương đầu tiên\", bạn nhận mức lương giả lập 6.500.000 đồng mỗi tháng trong ba tháng, tự phân bổ ngân sách và xử lý những sự cố bất ngờ như xe hỏng hay bạn bè hỏi vay tiền."
+              },
+              {
+                "type": "SIM_LINK",
+                "simSlug": "thang-luong-dau-tien",
+                "label": "Vào mô phỏng \"Tháng lương đầu tiên\""
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "ORDERING",
+              "points": 1,
+              "items": [
+                "k1",
+                "k2",
+                "k3",
+                "k4"
+              ],
+              "answerKey": {
+                "order": [
+                  "k3",
+                  "k1",
+                  "k4",
+                  "k2"
+                ]
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Sắp xếp bốn bước lập ngân sách tháng theo đúng thứ tự.",
+                  "explanation": "Trước hết là thu nhập, để biết mình có bao nhiêu. Tiếp theo là các chi phí cố định, vì không tránh được. Sau đó mới trích tiết kiệm, tức là trả cho mình trước. Phần còn lại dành cho chi tiêu linh hoạt.",
+                  "itemsText": {
+                    "k1": "Liệt kê chi phí cố định",
+                    "k2": "Chia phần còn lại cho chi tiêu linh hoạt",
+                    "k3": "Cộng tất cả nguồn thu nhập",
+                    "k4": "Trích khoản tiết kiệm ngay"
+                  }
+                }
+              }
+            },
+            {
+              "type": "SCENARIO_CHOICE",
+              "points": 1,
+              "options": [
+                "a",
+                "b",
+                "c"
+              ],
+              "answerKey": {
+                "best": "c",
+                "acceptable": [
+                  "a"
+                ]
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Bạn xử lý thế nào?",
+                  "scenarioMd": "Giữa tháng, bạn đã tiêu hết phần dành cho nhóm mong muốn. Nhóm bạn rủ đi ăn buffet 250.000 đồng vào cuối tuần.",
+                  "explanation": "Từ chối khéo hoặc đề xuất một phương án rẻ hơn thì giữ được cả ngân sách lẫn tình bạn. Rút từ tiết kiệm là phá vỡ nguyên tắc, còn nói dối thì tạo ra thói quen xấu.",
+                  "optionsText": {
+                    "a": "Từ chối thẳng: \"Tháng này mình hết ngân sách rồi\"",
+                    "b": "Lấy 250.000 đồng từ khoản tiết kiệm, thỉnh thoảng thôi mà",
+                    "c": "Đề xuất phương án khác: tụ tập nấu ăn ở nhà, khoảng 50.000 đồng một người"
+                  },
+                  "feedback": {
+                    "a": "Thẳng thắn và giữ được ngân sách. Nói thật về giới hạn tài chính của mình là một kỹ năng đáng quý.",
+                    "b": "Rút tiết kiệm để chi cho mong muốn rất dễ thành thói quen, và mỗi lần như vậy thì mục tiêu của bạn lại lùi xa thêm.",
+                    "c": "Bạn giữ được ngân sách, giữ được bạn bè, và cho thấy quản lý tiền không có nghĩa là bỏ lỡ niềm vui."
+                  }
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "finalQuiz": {
+      "kind": "COURSE_FINAL",
+      "passThresholdPct": 70,
+      "maxAttempts": null,
+      "timeLimitSec": 900,
+      "shuffleQuestions": true,
+      "questions": [
+        {
+          "type": "SINGLE_CHOICE",
+          "points": 1,
+          "options": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "answerKey": {
+            "correct": "b"
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Theo quy tắc 50/30/20, ba nhóm được phân bổ là gì?",
+              "explanation": "50% nhu cầu, 30% mong muốn, 20% tiết kiệm, đúng theo thứ tự tên gọi của quy tắc.",
+              "optionsText": {
+                "a": "Ăn uống, Học tập, Giải trí",
+                "b": "Nhu cầu, Mong muốn, Tiết kiệm",
+                "c": "Cố định, Linh hoạt, Đầu tư",
+                "d": "Hôm nay, Tháng này, Năm nay"
+              }
+            }
+          }
+        },
+        {
+          "type": "MULTI_CHOICE",
+          "points": 2,
+          "options": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e"
+          ],
+          "answerKey": {
+            "correct": [
+              "b",
+              "d"
+            ]
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Chọn tất cả những tình huống nên dùng quỹ khẩn cấp.",
+              "explanation": "Sửa xe để kịp đi học và mua thuốc khi ốm là những sự cố bất ngờ, không hoãn được. Đợt giảm giá, chuyến du lịch và chiếc điện thoại mới đều là mong muốn, và đều có thể lên kế hoạch từ trước.",
+              "optionsText": {
+                "a": "Đợt giảm giá ngày 12 tháng 12",
+                "b": "Xe hỏng cần sửa gấp để đi học",
+                "c": "Chuyến du lịch hè cùng lớp",
+                "d": "Ốm, cần mua thuốc ngay",
+                "e": "Điện thoại đời mới vừa ra mắt"
+              }
+            }
+          }
+        },
+        {
+          "type": "TRUE_FALSE",
+          "points": 1,
+          "answerKey": {
+            "correct": true
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Với cùng lãi suất và số tiền gốc, gửi lãi kép trong 10 năm cho kết quả cao hơn lãi đơn.",
+              "explanation": "Lãi kép tính lãi trên cả phần lãi cũ, nên càng ngày càng bỏ xa lãi đơn. Với 10.000.000 đồng gốc và lãi 5% một năm, đến năm thứ mười chênh lệch đã hơn 1.200.000 đồng."
+            }
+          }
+        },
+        {
+          "type": "NUMERIC",
+          "points": 2,
+          "unit": "VND",
+          "inputHint": "20% của thu nhập tháng",
+          "answerKey": {
+            "value": "1300000",
+            "toleranceAbs": "0"
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Thu nhập 6.500.000 đồng một tháng, áp dụng quy tắc 50/30/20. Khoản tiết kiệm mỗi tháng là bao nhiêu?",
+              "explanation": "20% của 6.500.000 đồng là 1.300.000 đồng, đúng bằng mức gợi ý trong mô phỏng \"Tháng lương đầu tiên\"."
+            }
+          }
+        },
+        {
+          "type": "ORDERING",
+          "points": 2,
+          "items": [
+            "k1",
+            "k2",
+            "k3",
+            "k4"
+          ],
+          "answerKey": {
+            "order": [
+              "k2",
+              "k4",
+              "k1",
+              "k3"
+            ]
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Sắp xếp thứ tự xử lý tiền khi vừa nhận lương theo nguyên tắc \"trả cho mình trước\".",
+              "explanation": "Nhận tiền, trích tiết kiệm ngay, chi cho các nhu cầu, và cuối cùng mới dùng phần còn lại cho mong muốn.",
+              "itemsText": {
+                "k1": "Chi trả các nhu cầu thiết yếu",
+                "k2": "Nhận thu nhập",
+                "k3": "Chi cho mong muốn bằng phần còn lại",
+                "k4": "Chuyển khoản tiết kiệm đã định"
+              }
+            }
+          }
+        },
+        {
+          "type": "MATCHING",
+          "points": 2,
+          "left": [
+            "l1",
+            "l2",
+            "l3",
+            "l4"
+          ],
+          "right": [
+            "r1",
+            "r2",
+            "r3",
+            "r4"
+          ],
+          "answerKey": {
+            "pairs": {
+              "l1": "r3",
+              "l2": "r1",
+              "l3": "r4",
+              "l4": "r2"
+            }
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Nối mỗi khái niệm với ví dụ đúng.",
+              "explanation": "Nhu cầu là cơm trưa, mong muốn là trà sữa, quỹ khẩn cấp là khoản sửa xe đột xuất, còn trả cho mình trước là lệnh chuyển tiết kiệm tự động vào ngày nhận lương.",
+              "leftText": {
+                "l1": "Nhu cầu",
+                "l2": "Mong muốn",
+                "l3": "Quỹ khẩn cấp",
+                "l4": "Trả cho mình trước"
+              },
+              "rightText": {
+                "r1": "Trà sữa size L với bạn bè",
+                "r2": "Lệnh chuyển tự động vào tiết kiệm ngày 5 hằng tháng",
+                "r3": "Cơm trưa ở trường",
+                "r4": "Tiền sửa xe khi hỏng đột xuất"
+              }
+            }
+          }
+        },
+        {
+          "type": "SCENARIO_CHOICE",
+          "points": 2,
+          "options": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "answerKey": {
+            "best": "c",
+            "acceptable": [
+              "b"
+            ]
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Bạn khuyên Nam thế nào?",
+              "scenarioMd": "Nam, 17 tuổi, vừa nhận 5.000.000 đồng tiền thưởng học bổng. Nam chưa có quỹ khẩn cấp, đang muốn mua một chiếc tai nghe 2.500.000 đồng, lại được bạn rủ \"gửi vào app đầu tư lãi 30% mỗi tháng, chắc chắn có lời\".",
+              "explanation": "Lời hứa \"chắc chắn lãi 30% mỗi tháng\" là dấu hiệu lừa đảo kinh điển. Thứ tự ưu tiên đúng là lập quỹ khẩn cấp trước, cân nhắc mong muốn sau, và tuyệt đối tránh những khoản đầu tư phi thực tế.",
+              "optionsText": {
+                "a": "Dồn cả 5.000.000 đồng vào app đầu tư, vì lãi 30% mỗi tháng là cơ hội hiếm",
+                "b": "Mua tai nghe trước cho vui, còn lại gửi tiết kiệm ngân hàng",
+                "c": "Lập quỹ khẩn cấp 1 đến 2 triệu đồng, gửi tiết kiệm phần lớn, cân nhắc mua tai nghe bằng phần nhỏ còn lại",
+                "d": "Giữ cả 5.000.000 đồng tiền mặt trong ví cho tiện"
+              },
+              "feedback": {
+                "a": "Mức lợi nhuận \"chắc chắn 30% mỗi tháng\" không tồn tại một cách hợp pháp. Đây là mô hình Ponzi, và Nam sẽ mất trắng.",
+                "b": "Tránh được lừa đảo là tốt, nhưng tiêu một nửa số tiền cho mong muốn khi chưa có quỹ khẩn cấp là làm ngược thứ tự ưu tiên.",
+                "c": "Đúng thứ tự ưu tiên: an toàn trước, mục tiêu sau, mong muốn sau cùng, và tránh xa những lời hứa lãi cao chắc chắn.",
+                "d": "Tiền mặt trong ví không sinh lãi và rất dễ tiêu vặt hết. Ít nhất hãy gửi vào một tài khoản tiết kiệm."
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

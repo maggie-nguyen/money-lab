@@ -1,0 +1,54 @@
+{
+  "type": "BUDGET",
+  "seed": 987654321,
+  "actions": [
+    {
+      "type": "SET_ALLOCATIONS",
+      "allocations": {
+        "cat_food": "1200000",
+        "cat_transport": "300000",
+        "cat_fun": "0",
+        "cat_clothes": "0",
+        "cat_savings": "1300000"
+      }
+    },
+    {
+      "type": "RESOLVE_EVENT",
+      "eventKey": "evt_motorbike_repair",
+      "choiceKey": "ch_pay_now"
+    },
+    {
+      "type": "END_MONTH"
+    },
+    {
+      "type": "SET_ALLOCATIONS",
+      "allocations": {
+        "cat_food": "1200000",
+        "cat_transport": "300000",
+        "cat_fun": "0",
+        "cat_clothes": "0",
+        "cat_savings": "1300000"
+      }
+    },
+    {
+      "type": "END_MONTH"
+    },
+    {
+      "type": "SET_ALLOCATIONS",
+      "allocations": {
+        "cat_food": "1200000",
+        "cat_transport": "300000",
+        "cat_fun": "0",
+        "cat_clothes": "0",
+        "cat_savings": "1300000"
+      }
+    },
+    {
+      "type": "END_MONTH"
+    }
+  ],
+  "turnNumber": 3,
+  "status": "COMPLETED",
+  "finalStateHash": "376e66e168fc0addd0e7db685a96118c9ab92d5434af520660c0845c492507a3",
+  "summaryHash": "fb3be60741b75f0349f54ae9cd98fe3d933f9d68bc62ffcc73d1c27f62f1340b"
+}

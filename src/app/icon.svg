@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="MoneyLab">
+  <rect width="32" height="32" rx="7" fill="#14432f"/>
+  <rect x="7" y="7" width="18" height="18" rx="2" fill="#faf8f3"/>
+  <path d="M7 12.5h18M7 17h18M7 21.5h18" stroke="#ddd7ca" stroke-width="1"/>
+  <path d="M12.5 7v18" stroke="#ddd7ca" stroke-width="1"/>
+  <path d="M16 10.5v11M13.8 13.2c0-1.3 1-2.1 2.2-2.1s2.2.7 2.2 1.9M18.2 19c0 1.2-1 2-2.2 2s-2.2-.8-2.2-2.1"
+        stroke="#14432f" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+</svg>

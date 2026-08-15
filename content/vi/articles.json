@@ -1,0 +1,552 @@
+{
+  "$schema": "moneylab-articles-v1",
+  "articles": [
+    {
+      "slug": "lap-ngan-sach-dau-tien-voi-tien-tieu-vat",
+      "category": "GUIDE",
+      "readMinutes": 6,
+      "authorName": "Ban biên tập MoneyLab",
+      "relatedCourseSlug": "ngan-sach-va-tiet-kiem",
+      "publishedDaysAgo": 2,
+      "i18n": {
+        "vi": {
+          "title": "Lập ngân sách đầu tiên khi bạn chỉ có tiền tiêu vặt",
+          "summary": "Bạn không cần lương tháng mới cần ngân sách. Đây là cách chia 500.000 đồng một tháng sao cho vẫn còn tiền vào ngày 28.",
+          "seoTitle": "Cách lập ngân sách với tiền tiêu vặt cho học sinh",
+          "seoDescription": "Hướng dẫn từng bước lập ngân sách cá nhân đầu tiên cho học sinh trung học, với ví dụ bằng tiền Việt và một bảng mẫu để chép lại.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Phần lớn lời khuyên về ngân sách được viết cho người đi làm. Nếu thu nhập của bạn là tiền tiêu vặt và vài khoản lì xì, những lời khuyên đó có thể không sát với thực tế. Nhưng nguyên tắc vẫn vậy: bạn quyết định trước tiền sẽ được dùng vào đâu, thay vì đến cuối tháng mới cố nhớ mình đã chi những gì."
+            },
+            {
+              "type": "HEADING",
+              "text": "Bắt đầu bằng con số thật",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Ghi lại mọi khoản tiền vào trong bốn tuần: tiền bố mẹ cho hằng tuần, tiền thưởng, tiền bán đồ cũ. Đừng làm tròn cho đẹp. Một ngân sách dựa trên con số phỏng đoán thì sai ngay từ dòng đầu tiên."
+            },
+            {
+              "type": "TABLE",
+              "caption": "Ví dụ một tháng của bạn Linh, lớp 11",
+              "headers": [
+                "Khoản",
+                "Số tiền",
+                "Ghi chú"
+              ],
+              "rows": [
+                [
+                  "Tiền tiêu vặt hằng tuần",
+                  "400.000 ₫",
+                  "100.000 ₫ x 4 tuần"
+                ],
+                [
+                  "Tiền thưởng học kỳ",
+                  "200.000 ₫",
+                  "Không đều, không tính vào kế hoạch cố định"
+                ],
+                [
+                  "Tổng thu nhập tháng",
+                  "600.000 ₫",
+                  ""
+                ]
+              ]
+            },
+            {
+              "type": "HEADING",
+              "text": "Chia theo ba nhóm, không phải mười nhóm",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Ngân sách càng nhiều dòng thì càng dễ bỏ dở. Ba nhóm là đủ: chi bắt buộc, chi cho bản thân và phần để dành. Với thu nhập nhỏ, tỷ lệ 50/30/20 vẫn dùng được; chỉ khác là các con số sẽ nhỏ hơn."
+            },
+            {
+              "type": "TABLE",
+              "caption": "600.000 ₫ chia theo tỷ lệ 50/30/20",
+              "headers": [
+                "Nhóm",
+                "Tỉ lệ",
+                "Số tiền"
+              ],
+              "rows": [
+                [
+                  "Chi bắt buộc (ăn trưa, xe buýt, dụng cụ học)",
+                  "50%",
+                  "300.000 ₫"
+                ],
+                [
+                  "Chi cho bản thân (cà phê, game, quà tặng)",
+                  "30%",
+                  "180.000 ₫"
+                ],
+                [
+                  "Để dành",
+                  "20%",
+                  "120.000 ₫"
+                ]
+              ]
+            },
+            {
+              "type": "KEY_TERM",
+              "term": "Chi bắt buộc",
+              "definition": "Khoản mà nếu cắt đi thì việc học và sinh hoạt hằng ngày bị ảnh hưởng ngay: bữa trưa ở trường, tiền xe, vở bút. Không phải khoản bạn thấy khó bỏ, mà là khoản bạn thật sự không bỏ được."
+            },
+            {
+              "type": "HEADING",
+              "text": "Kiểm tra vào ngày 15",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Giữa tháng, cộng lại xem đã tiêu bao nhiêu ở nhóm thứ hai. Nếu đã tiêu quá nửa, bạn còn hai tuần để điều chỉnh, thay vì phát hiện ra khi ví đã trống. Một lần kiểm tra năm phút là đủ."
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "TIP",
+              "title": "Mẹo nhỏ",
+              "text": "Chuyển phần để dành ra khỏi ví ngay ngày nhận tiền. Tiền không nằm trong tầm tay thì khó tiêu hơn nhiều."
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Ngân sách đầu tiên của bạn có thể chưa sát thực tế. Điều đó hoàn toàn bình thường. Hãy điều chỉnh các con số sau tháng đầu, rồi tiếp tục áp dụng; sau vài tháng, việc lập ngân sách sẽ trở nên dễ dàng hơn."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "lai-kep-hoat-dong-the-nao",
+      "category": "EXPLAINER",
+      "readMinutes": 5,
+      "authorName": "Ban biên tập MoneyLab",
+      "relatedCourseSlug": "ngan-sach-va-tiet-kiem",
+      "publishedDaysAgo": 6,
+      "i18n": {
+        "vi": {
+          "title": "Lãi kép hoạt động thế nào? Giải thích bằng bảng số",
+          "summary": "Lãi kép thường được ví như “kỳ quan thứ tám”. Bảng dưới đây cho thấy nó tác động thế nào đến 1.000.000 đồng theo thời gian.",
+          "seoTitle": "Lãi kép là gì và ảnh hưởng ra sao tới tiền tiết kiệm",
+          "seoDescription": "Giải thích lãi kép bằng ví dụ cụ thể với tiền Việt, so sánh lãi đơn và lãi kép qua mười năm, kèm công cụ tính thử.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Lãi đơn chỉ trả lãi trên số tiền gốc. Lãi kép trả lãi trên cả gốc lẫn phần lãi đã sinh ra trước đó. Chênh lệch nghe có vẻ không đáng kể, nhưng sau vài năm thì khác hẳn."
+            },
+            {
+              "type": "KEY_TERM",
+              "term": "Lãi kép",
+              "definition": "Lãi được cộng vào gốc theo từng kỳ, nên kỳ sau bạn nhận lãi trên một số tiền lớn hơn kỳ trước."
+            },
+            {
+              "type": "HEADING",
+              "text": "Một triệu đồng, lãi 6% một năm",
+              "level": 2
+            },
+            {
+              "type": "TABLE",
+              "caption": "So sánh lãi đơn và lãi kép, làm tròn tới nghìn đồng",
+              "headers": [
+                "Năm",
+                "Lãi đơn",
+                "Lãi kép"
+              ],
+              "rows": [
+                [
+                  "1",
+                  "1.060.000 ₫",
+                  "1.060.000 ₫"
+                ],
+                [
+                  "3",
+                  "1.180.000 ₫",
+                  "1.191.000 ₫"
+                ],
+                [
+                  "5",
+                  "1.300.000 ₫",
+                  "1.338.000 ₫"
+                ],
+                [
+                  "10",
+                  "1.600.000 ₫",
+                  "1.791.000 ₫"
+                ],
+                [
+                  "20",
+                  "2.200.000 ₫",
+                  "3.207.000 ₫"
+                ]
+              ]
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Trong năm đầu, hai cột giống hệt nhau. Đó là lý do lãi kép dễ bị xem nhẹ: tác động rõ rệt thường xuất hiện sau một thời gian dài, chứ không phải ngay từ đầu. Nếu dừng lại quá sớm, bạn sẽ khó thấy được lợi ích đó."
+            },
+            {
+              "type": "HEADING",
+              "text": "Lãi kép cũng có chiều ngược lại",
+              "level": 2
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "WARNING",
+              "title": "Nợ cũng cộng dồn",
+              "text": "Dư nợ thẻ tín dụng và các khoản vay tiêu dùng cũng có thể tăng theo cơ chế đó, nhưng lúc này bạn là người phải trả. Lãi 2,5% một tháng nghe có vẻ nhẹ, nhưng nếu cộng dồn theo tháng thì tương đương hơn 34% một năm."
+            },
+            {
+              "type": "CALCULATOR",
+              "tool": "compound-interest",
+              "presets": {
+                "principalVnd": 1000000,
+                "ratePercent": 6,
+                "years": 10
+              }
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Hãy thử thay số của chính bạn vào công cụ trên. Điều đáng chú ý không phải là lãi suất, mà là số năm: kéo dài thời gian thường có tác dụng mạnh hơn việc cố tìm thêm một phần trăm lãi suất."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "nam-dau-hieu-cua-mot-tin-nhan-lua-dao",
+      "category": "GUIDE",
+      "relatedCourseSlug": "vay-no-va-lua-dao",
+      "readMinutes": 4,
+      "authorName": "Ban biên tập MoneyLab",
+      "publishedDaysAgo": 9,
+      "i18n": {
+        "vi": {
+          "title": "Năm dấu hiệu nhận biết tin nhắn lừa đảo",
+          "summary": "Kẻ lừa đảo không cần bạn thiếu hiểu biết; chúng chỉ cần bạn mất cảnh giác. Dưới đây là năm dấu hiệu giúp bạn nhận ra rủi ro trước khi bấm vào liên kết.",
+          "seoTitle": "Năm dấu hiệu nhận biết tin nhắn lừa đảo qua điện thoại",
+          "seoDescription": "Cách nhận diện tin nhắn và cuộc gọi lừa đảo phổ biến tại Việt Nam, với ví dụ thật và các bước xử lý khi đã lỡ bấm vào liên kết.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Lừa đảo qua tin nhắn thường thành công vì đánh vào phản xạ chứ không phải vì nạn nhân thiếu hiểu biết. Khi hoảng hốt, chúng ta thường khó kiểm tra và đối chiếu thông tin. Vì vậy, cách phòng vệ tốt nhất là ghi nhớ một vài dấu hiệu để nhận ra rủi ro ngay cả khi đang vội."
+            },
+            {
+              "type": "HEADING",
+              "text": "1. Gấp một cách vô lý",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Tài khoản sẽ bị khóa trong 30 phút. Đơn hàng sẽ bị hủy nếu không xác nhận ngay. Ngân hàng thật không đặt đồng hồ đếm ngược cho bạn."
+            },
+            {
+              "type": "HEADING",
+              "text": "2. Liên kết gần giống thật",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "vietcom-bank.info, shopee-vn.top, momo-hotro.com. Tên miền thật của một tổ chức lớn hiếm khi có dấu gạch ngang chen vào giữa hoặc đuôi bất thường. Hãy đọc phần ngay trước dấu chấm cuối cùng, đó mới là tên miền thật."
+            },
+            {
+              "type": "HEADING",
+              "text": "3. Hỏi mã OTP",
+              "level": 2
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "WARNING",
+              "title": "Không có ngoại lệ",
+              "text": "Không nhân viên ngân hàng, sàn thương mại điện tử hay công an nào cần mã OTP của bạn. Ai hỏi mã OTP đều đang lừa bạn, kể cả khi họ đọc đúng tên và địa chỉ của bạn."
+            },
+            {
+              "type": "HEADING",
+              "text": "4. Phần thưởng không rõ nguồn gốc",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Bạn trúng thưởng một cuộc thi chưa từng tham gia. Chỉ cần đóng phí vận chuyển nhỏ để nhận. Khoản phí nhỏ đó là toàn bộ mục tiêu của trò lừa."
+            },
+            {
+              "type": "HEADING",
+              "text": "5. Liên lạc qua kênh không chính thức",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Người gọi tự xưng là ngân hàng hoặc công an qua tài khoản cá nhân, rồi yêu cầu bạn chuyển sang một ứng dụng khác. Khi cần làm việc, tổ chức thật sẽ hướng dẫn bạn qua kênh chính thức."
+            },
+            {
+              "type": "EXAMPLE",
+              "title": "Nếu đã lỡ bấm vào",
+              "text": "Đừng nhập thêm thông tin và hãy đóng trang lại. Nếu đã nhập thông tin đăng nhập, hãy đổi mật khẩu từ một thiết bị khác rồi gọi tổng đài ngân hàng theo số in trên thẻ, không dùng số trong tin nhắn. Nếu đã chuyển tiền, hãy báo ngân hàng càng sớm càng tốt để họ hướng dẫn tra soát giao dịch."
+            },
+            {
+              "type": "SIM_LINK",
+              "simSlug": "san-lua-dao",
+              "label": "Luyện nhận diện lừa đảo trong mô phỏng"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "vay-tra-gop-dien-thoai-co-that-su-0-dong",
+      "category": "EXPLAINER",
+      "relatedCourseSlug": "vay-no-va-lua-dao",
+      "readMinutes": 6,
+      "authorName": "Ban biên tập MoneyLab",
+      "publishedDaysAgo": 14,
+      "i18n": {
+        "vi": {
+          "title": "Trả góp 0% có thật sự miễn phí không?",
+          "summary": "Một chiếc điện thoại 12.000.000 đồng, trả góp 12 tháng, lãi suất 0%. Nghe thì như không mất gì. Hãy đọc kỹ ba dòng phí.",
+          "seoTitle": "Trả góp 0% lãi suất: chi phí thật nằm ở đâu",
+          "seoDescription": "Phân tích chi phí thật của hình thức mua trả góp 0% tại Việt Nam, gồm phí hồ sơ, phí thu hộ và bảo hiểm khoản vay, kèm cách tự tính.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Trả góp 0% không nhất thiết là quảng cáo sai: lãi suất có thể đúng là 0%. Nhưng lãi suất chỉ là một trong các chi phí của khoản vay, còn những khoản khác thường không được quảng cáo nổi bật như vậy."
+            },
+            {
+              "type": "HEADING",
+              "text": "Ba dòng phí thường gặp",
+              "level": 2
+            },
+            {
+              "type": "TABLE",
+              "caption": "Điện thoại 12.000.000 ₫, trả góp 12 tháng",
+              "headers": [
+                "Khoản",
+                "Số tiền",
+                "Ghi chú"
+              ],
+              "rows": [
+                [
+                  "Giá máy trả thẳng",
+                  "11.400.000 ₫",
+                  "Giá khi thanh toán một lần, thường thấp hơn"
+                ],
+                [
+                  "Phí hồ sơ",
+                  "300.000 ₫",
+                  "Thu một lần khi ký"
+                ],
+                [
+                  "Phí thu hộ hằng tháng",
+                  "11.000 ₫ x 12",
+                  "Tổng 132.000 ₫"
+                ],
+                [
+                  "Bảo hiểm khoản vay",
+                  "480.000 ₫",
+                  "Có nơi mặc định chọn sẵn"
+                ],
+                [
+                  "Tổng thực trả",
+                  "12.912.000 ₫",
+                  ""
+                ]
+              ]
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "So với giá trả thẳng 11.400.000 ₫, bạn trả thêm 1.512.000 ₫ cho một năm sử dụng tiền của người khác. Quy đổi theo tổng chi phí, mức này xấp xỉ 25% một năm, không phải 0%."
+            },
+            {
+              "type": "KEY_TERM",
+              "term": "Lãi suất thực (APR)",
+              "definition": "Tổng chi phí vay quy về tỷ lệ phần trăm một năm, gồm cả lãi lẫn phí. Đây là con số dùng để so sánh giữa hai khoản vay, chứ không phải lãi suất quảng cáo."
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "INFO",
+              "title": "Cách kiểm tra trong hai phút",
+              "text": "Hãy hỏi nhân viên hai câu: giá trả thẳng hôm nay là bao nhiêu và tổng số tiền tôi phải trả trong 12 tháng là bao nhiêu. Lấy hiệu hai con số để biết chi phí thực của việc trả góp."
+            },
+            {
+              "type": "CALCULATOR",
+              "tool": "loan-payment",
+              "presets": {
+                "principalVnd": 11400000,
+                "ratePercent": 25,
+                "termMonths": 12
+              }
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Trả góp không phải lúc nào cũng là lựa chọn sai. Với một khoản chi thực sự cần thiết và kế hoạch trả nợ rõ ràng, hình thức này giúp bạn không phải dồn hết tiền trong một tháng. Rủi ro xuất hiện khi bạn tưởng khoản vay là miễn phí và mua thứ mình chưa cần."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "quy-khan-cap-can-bao-nhieu-la-du",
+      "category": "GUIDE",
+      "readMinutes": 5,
+      "authorName": "Ban biên tập MoneyLab",
+      "relatedCourseSlug": "ngan-sach-va-tiet-kiem",
+      "publishedDaysAgo": 20,
+      "i18n": {
+        "vi": {
+          "title": "Quỹ khẩn cấp cần bao nhiêu là đủ?",
+          "summary": "Lời khuyên phổ biến là sáu tháng chi phí sinh hoạt. Với học sinh, con số đó vừa xa vời vừa không đúng trọng tâm.",
+          "seoTitle": "Quỹ khẩn cấp bao nhiêu là đủ cho học sinh",
+          "seoDescription": "Cách xác định quy mô quỹ khẩn cấp phù hợp với thu nhập nhỏ, phân biệt khẩn cấp thật và chi tiêu bất chợt.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Quỹ khẩn cấp không phải để làm giàu. Mục đích của nó là để một sự cố nhỏ không biến thành một khoản nợ. Với người đi làm, mức thường gặp là ba đến sáu tháng chi phí. Với học sinh, phần lớn chi phí sinh hoạt do gia đình lo, nên con số đó không phản ánh đúng rủi ro của bạn."
+            },
+            {
+              "type": "HEADING",
+              "text": "Bắt đầu từ danh sách sự cố thật",
+              "level": 2
+            },
+            {
+              "type": "LIST",
+              "items": [
+                "Điện thoại rơi vỡ màn hình",
+                "Xe đạp hoặc xe máy hỏng cần sửa gấp",
+                "Làm mất sách hoặc thiết bị mượn của trường",
+                "Chi phí phát sinh cho một chuyến đi đã đăng ký"
+              ]
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Hãy cộng chi phí ước tính của hai sự cố tốn kém nhất trong danh sách. Với hầu hết học sinh, tổng nằm trong khoảng 1.500.000 đến 3.000.000 đồng. Đó là mục tiêu đầu tiên, và nó gần hơn nhiều so với sáu tháng sinh hoạt phí."
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "TIP",
+              "title": "Chia nhỏ mục tiêu",
+              "text": "Để dành 120.000 đồng mỗi tháng thì sau một năm bạn có gần 1.500.000 đồng. Mục tiêu cả năm trông xa vời, còn mục tiêu từng tháng thì không."
+            },
+            {
+              "type": "HEADING",
+              "text": "Khẩn cấp và bất chợt không giống nhau",
+              "level": 2
+            },
+            {
+              "type": "TABLE",
+              "headers": [
+                "Tình huống",
+                "Khẩn cấp",
+                "Vì sao"
+              ],
+              "rows": [
+                [
+                  "Màn hình điện thoại vỡ, cần liên lạc",
+                  "Có",
+                  "Không hoãn được, ảnh hưởng việc học"
+                ],
+                [
+                  "Đợt giảm giá giày yêu thích",
+                  "Không",
+                  "Có thể chờ, không gây thiệt hại"
+                ],
+                [
+                  "Sinh nhật bạn thân, muốn mua quà lớn",
+                  "Không",
+                  "Biết trước ngày, nên lên kế hoạch riêng"
+                ]
+              ]
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Nếu dùng quỹ khẩn cấp cho các khoản chi không cấp thiết, bạn sẽ khó xây đủ quỹ. Một cách để giữ ranh giới là đặt quỹ ở nơi mất khoảng một ngày mới rút được: đủ chậm để bạn cân nhắc, nhưng vẫn đủ nhanh khi thật sự cần."
+            }
+          ]
+        }
+      }
+    },
+    {
+      "slug": "mot-thang-luong-dau-tien-cua-nam",
+      "category": "STORY",
+      "readMinutes": 5,
+      "authorName": "Ban biên tập MoneyLab",
+      "publishedDaysAgo": 27,
+      "i18n": {
+        "vi": {
+          "title": "Tháng lương đầu tiên của Nam đã đi đâu?",
+          "summary": "Nam nhận 4.200.000 đồng cho công việc làm thêm mùa hè đầu tiên. Ba tuần sau, tài khoản chỉ còn 180.000 đồng. Đây là một tình huống rất quen thuộc.",
+          "seoTitle": "Câu chuyện: tháng lương làm thêm đầu tiên biến mất thế nào",
+          "seoDescription": "Một câu chuyện điển hình về tháng lương đầu tiên và những bài học chi tiêu rút ra được, kể lại theo dòng tiền thực tế.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Nam, 17 tuổi, làm phục vụ ở một quán cà phê gần nhà trong sáu tuần hè. Lương tháng đầu là 4.200.000 đồng, được chuyển khoản vào một ngày thứ Sáu. Nam nhớ rất rõ cảm giác khi nhìn con số đó hiện trên màn hình."
+            },
+            {
+              "type": "HEADING",
+              "text": "Tuần một",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Nam mua chiếc tai nghe 1.200.000 đồng đã ngắm từ lâu, rồi mời ba người bạn đi ăn hết 600.000 đồng. Lúc đó, trong suy nghĩ của Nam, cả hai khoản đều có lý do chính đáng: đây là tiền tự mình kiếm được, và ai cũng nên tự thưởng cho mình một lần."
+            },
+            {
+              "type": "TABLE",
+              "caption": "Dòng tiền ba tuần của Nam",
+              "headers": [
+                "Tuần",
+                "Chi",
+                "Còn lại"
+              ],
+              "rows": [
+                [
+                  "Nhận lương",
+                  "",
+                  "4.200.000 ₫"
+                ],
+                [
+                  "Tuần 1",
+                  "1.800.000 ₫",
+                  "2.400.000 ₫"
+                ],
+                [
+                  "Tuần 2",
+                  "1.350.000 ₫",
+                  "1.050.000 ₫"
+                ],
+                [
+                  "Tuần 3",
+                  "870.000 ₫",
+                  "180.000 ₫"
+                ]
+              ]
+            },
+            {
+              "type": "HEADING",
+              "text": "Điều Nam nhận ra",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Không có khoản nào trong danh sách là vô lý. Cũng không có khoản nào quá lớn. Vấn đề là chúng nối tiếp nhau mà không hề có một giới hạn nào được đặt ra từ trước. Lần nào Nam cũng chỉ nhìn số dư còn lại để quyết định, mà số dư thì lúc nào cũng trông có vẻ đủ, cho tới khi hết thật."
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "INFO",
+              "title": "Điều Nam làm khác đi ở tháng thứ hai",
+              "text": "Ngay hôm nhận lương, Nam chuyển 800.000 đồng sang một tài khoản tiết kiệm riêng và tự đặt hạn mức 400.000 đồng mỗi tuần cho chi tiêu cá nhân. Cuối tháng đó Nam giữ lại được 1.100.000 đồng, chứ không phải vì tháng ấy kiếm được nhiều hơn."
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Đây là kiểu bài học mà đọc thì thấy hiển nhiên, còn trải qua thì tốn một tháng lương. Nếu bạn sắp nhận khoản tiền tự kiếm đầu tiên, hãy quyết định phần để dành trước khi tiêu đồng đầu tiên, chứ không phải sau đồng cuối cùng."
+            },
+            {
+              "type": "SIM_LINK",
+              "simSlug": "thang-luong-dau-tien",
+              "label": "Thử mô phỏng tháng lương đầu tiên"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    # The test harness starts its own embedded Postgres on 5545, so there is no
+    # service container here. These values only need to be well formed: the
+    # build reads APP_ORIGIN for metadataBase, and config.ts validates the set
+    # at boot.
+    env:
+      DATABASE_URL: postgres://moneylab:moneylab@127.0.0.1:5545/moneylab_test
+      DIRECT_URL: postgres://moneylab:moneylab@127.0.0.1:5545/moneylab_test
+      AUTH_SECRET: ci-secret-0000000000000000000000000000000000000000
+      APP_ORIGIN: http://localhost:3000
+      CRON_SECRET: ci-cron-secret
+      RATE_LIMIT_DISABLED: "true"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+
+      - run: pnpm exec prisma generate
+
+      - run: pnpm lint
+
+      - run: pnpm typecheck
+
+      - run: pnpm test
+
+      - run: pnpm build

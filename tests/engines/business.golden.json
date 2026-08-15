@@ -1,0 +1,53 @@
+{
+  "type": "BUSINESS",
+  "seed": 987654321,
+  "actions": [
+    {
+      "type": "PLAN_WEEK",
+      "priceVnd": "15000",
+      "unitsToStock": 40,
+      "buyUpgradeKeys": [
+        "up_sign"
+      ]
+    },
+    {
+      "type": "PLAN_WEEK",
+      "priceVnd": "15000",
+      "unitsToStock": 40
+    },
+    {
+      "type": "PLAN_WEEK",
+      "priceVnd": "15000",
+      "unitsToStock": 40
+    },
+    {
+      "type": "PLAN_WEEK",
+      "priceVnd": "15000",
+      "unitsToStock": 40
+    },
+    {
+      "type": "PLAN_WEEK",
+      "priceVnd": "15000",
+      "unitsToStock": 40
+    },
+    {
+      "type": "PLAN_WEEK",
+      "priceVnd": "15000",
+      "unitsToStock": 40
+    },
+    {
+      "type": "PLAN_WEEK",
+      "priceVnd": "15000",
+      "unitsToStock": 40
+    },
+    {
+      "type": "PLAN_WEEK",
+      "priceVnd": "15000",
+      "unitsToStock": 40
+    }
+  ],
+  "turnNumber": 8,
+  "status": "COMPLETED",
+  "finalStateHash": "fe41185f4175b1a28c557e28e3d7fe2b992826270d2b43ed20805256f2a47c3f",
+  "summaryHash": "66f8f0fe94e890cf997519460b8cccf8ad92bdf69b8ed26e09b7377013912c5d"
+}

@@ -1,0 +1,171 @@
+@import "tailwindcss";
+
+/*
+ * MoneyLab design tokens - template A "Sổ Cái" (editorial banking).
+ * Warm paper ground, moss-green ink, hairline rules, tabular numerals.
+ * Every color used in the app must come from a token here.
+ */
+
+@theme {
+  /* Ground + ink */
+  --color-paper: #faf8f3;
+  --color-paper-raised: #ffffff;
+  --color-paper-sunken: #f2efe7;
+  --color-ink: #16211c;
+  --color-ink-soft: #4a5651;
+  --color-ink-faint: #7b8681;
+
+  /* Brand: moss green */
+  --color-moss-50: #eef5f1;
+  --color-moss-100: #d5e7dd;
+  --color-moss-200: #a9cebb;
+  --color-moss-400: #3f7d5e;
+  --color-moss-600: #14432f;
+  --color-moss-700: #0e3123;
+
+  /* Semantic (kept apart from the brand accent) */
+  --color-positive: #1f7a4d;
+  --color-caution: #9a6b12;
+  --color-critical: #a32a24;
+  --color-positive-soft: #e6f2ea;
+  --color-caution-soft: #fbf1dc;
+  --color-critical-soft: #f8e7e5;
+
+  /* Rules and edges */
+  --color-rule: #ddd7ca;
+  --color-rule-strong: #c3bcaa;
+
+  /* Type */
+  --font-display: var(--font-serif-display), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-body-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, monospace;
+
+  --radius-card: 8px;
+  --radius-control: 6px;
+}
+
+/* Dark theme: same ledger, printed on dark stock rather than inverted naively. */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-paper: #12160f;
+    --color-paper-raised: #191e18;
+    --color-paper-sunken: #0d110c;
+    --color-ink: #eef1e9;
+    --color-ink-soft: #b3bdb4;
+    --color-ink-faint: #7d877f;
+    --color-moss-50: #16241c;
+    --color-moss-100: #1d3327;
+    --color-moss-200: #2b503c;
+    --color-moss-400: #6db78c;
+    --color-moss-600: #9ed7b4;
+    --color-moss-700: #c3e8d2;
+    --color-positive: #6cc08d;
+    --color-caution: #d8ab4e;
+    --color-critical: #e0736b;
+    --color-positive-soft: #17281e;
+    --color-caution-soft: #2a2113;
+    --color-critical-soft: #2b1817;
+    --color-rule: #2c332b;
+    --color-rule-strong: #414a3f;
+  }
+}
+
+:root[data-theme="dark"] {
+  --color-paper: #12160f;
+  --color-paper-raised: #191e18;
+  --color-paper-sunken: #0d110c;
+  --color-ink: #eef1e9;
+  --color-ink-soft: #b3bdb4;
+  --color-ink-faint: #7d877f;
+  --color-moss-50: #16241c;
+  --color-moss-100: #1d3327;
+  --color-moss-200: #2b503c;
+  --color-moss-400: #6db78c;
+  --color-moss-600: #9ed7b4;
+  --color-moss-700: #c3e8d2;
+  --color-positive: #6cc08d;
+  --color-caution: #d8ab4e;
+  --color-critical: #e0736b;
+  --color-positive-soft: #17281e;
+  --color-caution-soft: #2a2113;
+  --color-critical-soft: #2b1817;
+  --color-rule: #2c332b;
+  --color-rule-strong: #414a3f;
+}
+
+:root[data-theme="light"] {
+  --color-paper: #faf8f3;
+  --color-paper-raised: #ffffff;
+  --color-paper-sunken: #f2efe7;
+  --color-ink: #16211c;
+  --color-ink-soft: #4a5651;
+  --color-ink-faint: #7b8681;
+  --color-moss-50: #eef5f1;
+  --color-moss-100: #d5e7dd;
+  --color-moss-200: #a9cebb;
+  --color-moss-400: #3f7d5e;
+  --color-moss-600: #14432f;
+  --color-moss-700: #0e3123;
+  --color-positive: #1f7a4d;
+  --color-caution: #9a6b12;
+  --color-critical: #a32a24;
+  --color-positive-soft: #e6f2ea;
+  --color-caution-soft: #fbf1dc;
+  --color-critical-soft: #f8e7e5;
+  --color-rule: #ddd7ca;
+  --color-rule-strong: #c3bcaa;
+}
+
+html {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100dvh;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-wrap: balance;
+}
+
+/* Money and any aligned figures. Applied via the .figure utility. */
+.figure {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Small uppercase ledger label above a value or section. */
+.ledger-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-moss-400);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+/* Wide content never pushes the page sideways. */
+.scroll-x {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

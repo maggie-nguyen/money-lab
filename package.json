@@ -1,0 +1,71 @@
+{
+  "name": "moneylab",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "smoke": "tsx --tsconfig tsconfig.json scripts/smoke-ui.ts",
+    "content:verify": "tsx scripts/verify-videos.ts",
+    "content:links": "tsx --tsconfig tsconfig.json scripts/check-lesson-links.ts",
+    "db:generate": "prisma generate",
+    "db:migrate": "prisma migrate dev",
+    "db:push": "prisma db push",
+    "db:seed": "tsx prisma/seed.ts",
+    "db:local": "tsx scripts/local-postgres.ts",
+    "content:lang": "tsx --tsconfig tsconfig.json scripts/check-vi-language.ts"
+  },
+  "dependencies": {
+    "@node-rs/argon2": "^2.0.2",
+    "@prisma/client": "^6.16.2",
+    "@tanstack/react-query": "^5.83.0",
+    "decimal.js": "^10.4.3",
+    "jose": "^5.9.6",
+    "next": "^15.4.5",
+    "pino": "^9.5.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.6",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^22.10.2",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "@vitest/coverage-v8": "^2.1.9",
+    "embedded-postgres": "^17.5.0-beta.15",
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^15.5.23",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "prisma": "^6.16.2",
+    "puppeteer-core": "^23.11.1",
+    "tailwindcss": "^4.1.11",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2",
+    "vitest": "^2.1.8"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@node-rs/argon2",
+      "embedded-postgres",
+      "unrs-resolver",
+      "@prisma/client",
+      "prisma",
+      "esbuild"
+    ],
+    "overrides": {
+      "postcss": ">=8.5.23",
+      "sharp": ">=0.35.0"
+    }
+  },
+  "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"
+}

@@ -1,0 +1,979 @@
+{
+  "$schema": "moneylab-content-v1",
+  "track": {
+    "slug": "nen-tang-tien-bac",
+    "order": 1,
+    "iconKey": "piggy-bank",
+    "i18n": {
+      "vi": {
+        "title": "Nền tảng tiền bạc",
+        "subtitle": "Kiếm tiền, chi tiêu, ngân sách và tiết kiệm",
+        "description": "Điểm khởi đầu cho mọi kỹ năng tài chính: hiểu tiền đến từ đâu, đi về đâu, và làm sao giữ lại một phần cho tương lai."
+      }
+    }
+  },
+  "course": {
+    "slug": "vay-no-va-lua-dao",
+    "order": 2,
+    "level": 2,
+    "estimatedMinutes": 48,
+    "xpReward": 60,
+    "i18n": {
+      "vi": {
+        "title": "Vay nợ và cạm bẫy tài chính",
+        "subtitle": "Hiểu lãi suất trước khi ký, nhận ra lừa đảo trước khi chuyển tiền",
+        "description": "Năm bài học về mặt còn lại của đồng tiền: một khoản vay thật sự tốn bao nhiêu, thẻ tín dụng trở thành bẫy nợ lúc nào, và những chiêu lừa nào đang nhắm vào người trẻ.",
+        "learningObjectives": [
+          "Đọc và hiểu lãi suất cùng tổng chi phí của một khoản vay",
+          "Dùng thẻ tín dụng mà không rơi vào vòng trả lãi",
+          "Quy đổi lãi ngày của app vay nhanh ra lãi năm để so sánh",
+          "Nhận diện sáu dấu hiệu thường gặp trong các vụ lừa đảo",
+          "Biết cần làm gì trong giờ đầu sau khi chuyển tiền nhầm"
+        ]
+      }
+    },
+    "modules": [
+      {
+        "slug": "vay-va-tra-no",
+        "order": 1,
+        "i18n": {
+          "vi": {
+            "title": "Vay và trả nợ"
+          }
+        }
+      },
+      {
+        "slug": "canh-giac-tai-chinh",
+        "order": 2,
+        "i18n": {
+          "vi": {
+            "title": "Cảnh giác tài chính"
+          }
+        }
+      }
+    ],
+    "lessons": [
+      {
+        "slug": "hieu-ve-khoan-vay",
+        "order": 1,
+        "moduleSlug": "vay-va-tra-no",
+        "estimatedMinutes": 9,
+        "xpReward": 20,
+        "i18n": {
+          "vi": {
+            "title": "Một khoản vay thật sự tốn bao nhiêu",
+            "summary": "Con số cần nhìn không phải là khoản trả hằng tháng, mà là tổng số tiền bạn trả cho tới đồng cuối cùng.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=MKszcOwT7cM",
+                "caption": "Bẫy vay tiêu dùng qua ứng dụng (VTV24)"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Người bán hàng luôn nói về khoản trả mỗi tháng, vì con số đó nhỏ và nghe rất dễ chịu. Nhưng điều quyết định bạn mất bao nhiêu tiền là tổng số tiền trả trong cả kỳ hạn, và nó phụ thuộc vào ba yếu tố: số tiền vay, lãi suất và thời gian vay."
+              },
+              {
+                "type": "KEY_TERM",
+                "term": "Lãi suất năm",
+                "definition": "Phần trăm bạn phải trả thêm trên số tiền vay trong một năm. Kéo dài kỳ hạn thì khoản trả hằng tháng nhỏ đi, nhưng tổng tiền lãi lại tăng lên."
+              },
+              {
+                "type": "TABLE",
+                "headers": [
+                  "Kỳ hạn",
+                  "Trả mỗi tháng",
+                  "Tổng tiền trả"
+                ],
+                "rows": [
+                  [
+                    "6 tháng",
+                    "1.777.000 ₫",
+                    "10.662.000 ₫"
+                  ],
+                  [
+                    "12 tháng",
+                    "945.000 ₫",
+                    "11.340.000 ₫"
+                  ],
+                  [
+                    "24 tháng",
+                    "529.000 ₫",
+                    "12.696.000 ₫"
+                  ]
+                ],
+                "caption": "Vay 10.000.000 đồng, lãi 24% một năm, trả góp đều. Kỳ hạn dài gấp bốn thì tiền lãi cũng tăng gần gấp bốn."
+              },
+              {
+                "type": "CALLOUT",
+                "variant": "WARNING",
+                "title": "Câu hỏi cần hỏi trước khi ký",
+                "text": "Trước khi ký bất cứ hợp đồng trả góp nào, hãy hỏi đúng một câu: tổng cộng tôi trả bao nhiêu tiền? Nếu người bán không trả lời được ngay, đó đã là câu trả lời."
+              },
+              {
+                "type": "CALCULATOR",
+                "tool": "loan-payment",
+                "presets": {
+                  "principalVnd": 10000000,
+                  "ratePercent": 24,
+                  "termMonths": 12
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "vay-tong-chi-phi",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Cùng một số tiền vay và cùng lãi suất, kéo dài kỳ hạn từ 12 tháng lên 24 tháng sẽ làm gì?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Giảm khoản trả mỗi tháng và giảm tổng tiền trả"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Giảm khoản trả mỗi tháng nhưng tăng tổng tiền trả"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Không đổi gì cả, chỉ chia nhỏ ra thôi"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "Vay lâu hơn nghĩa là bạn giữ tiền của ngân hàng lâu hơn, nên phải trả lãi nhiều hơn. Khoản trả hằng tháng nhẹ đi chính là cái giá đổi lấy tổng chi phí cao hơn."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "vay-cau-hoi-quan-trong",
+                  "type": "TRUE_FALSE",
+                  "prompt": "Khoản trả hằng tháng thấp là dấu hiệu đáng tin cậy cho thấy khoản vay đó rẻ.",
+                  "answerKey": {
+                    "correct": false
+                  },
+                  "explanation": "Khoản trả hằng tháng thấp thường chỉ có nghĩa là kỳ hạn dài. Muốn biết rẻ hay đắt thì so tổng số tiền phải trả, chứ không so con số hằng tháng."
+                }
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Bài sau nói về hình thức vay mà hầu hết người trẻ tiếp xúc đầu tiên nhưng không nhận ra đó là vay: thẻ tín dụng."
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "SINGLE_CHOICE",
+              "points": 1,
+              "options": [
+                "a",
+                "b",
+                "c"
+              ],
+              "answerKey": {
+                "correct": "c"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Ba yếu tố quyết định tổng tiền lãi của một khoản vay là gì?",
+                  "optionsText": {
+                    "a": "Ngân hàng, người bán và nơi bạn ở",
+                    "b": "Số tiền vay, tuổi của bạn và nghề nghiệp",
+                    "c": "Số tiền vay, lãi suất và kỳ hạn"
+                  },
+                  "explanation": "Tiền lãi sinh ra từ số tiền bạn đang nợ, mức lãi suất áp lên nó, và thời gian bạn còn nợ."
+                }
+              }
+            },
+            {
+              "type": "NUMERIC",
+              "points": 1,
+              "unit": "VND",
+              "inputHint": "Nhập số tiền, không cần dấu chấm",
+              "answerKey": {
+                "value": "1340000",
+                "toleranceAbs": "50000"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Vay 10.000.000 đồng, trả góp 12 tháng, tổng cộng trả 11.340.000 đồng. Bạn đã trả bao nhiêu tiền lãi?",
+                  "explanation": "Tiền lãi là phần vượt trên số tiền gốc: 11.340.000 đồng trừ 10.000.000 đồng bằng 1.340.000 đồng."
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "slug": "the-tin-dung-va-bay-no",
+        "order": 2,
+        "moduleSlug": "vay-va-tra-no",
+        "estimatedMinutes": 9,
+        "xpReward": 20,
+        "i18n": {
+          "vi": {
+            "title": "Thẻ tín dụng và vòng xoáy trả tối thiểu",
+            "summary": "Thẻ tín dụng gần như không tốn phí nếu bạn trả đủ đúng hạn, và rất đắt nếu bạn chỉ trả phần tối thiểu.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=-emd9ksFLVg",
+                "caption": "Bảy nguyên tắc dùng thẻ tín dụng để không ngập trong nợ"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Thẻ tín dụng là khoản tiền ngân hàng cho bạn mượn, không phải tiền bạn đang có. Mỗi lần thanh toán là một lần vay ngắn hạn. Khoảng 45 ngày miễn lãi chỉ áp dụng khi bạn đáp ứng đúng điều kiện và thanh toán đầy đủ đúng hạn."
+              },
+              {
+                "type": "KEY_TERM",
+                "term": "Khoản trả tối thiểu",
+                "definition": "Con số nhỏ nhất, thường là 5% dư nợ, mà bạn phải trả để không bị coi là trễ hạn. Trả đúng bằng con số này nghĩa là toàn bộ phần còn lại bắt đầu chịu lãi."
+              },
+              {
+                "type": "EXAMPLE",
+                "title": "Nam, 19 tuổi",
+                "text": "Nam tiêu 6.000.000 đồng trên thẻ, đến hạn chỉ trả mức tối thiểu 300.000 đồng. Phần còn lại chịu lãi khoảng 30% một năm. Nếu tháng nào Nam cũng chỉ trả tối thiểu và không tiêu thêm, Nam phải mất hơn ba năm mới trả xong, và tốn thêm khoảng 3.000.000 đồng tiền lãi cho một lần mua sắm duy nhất."
+              },
+              {
+                "type": "LIST",
+                "ordered": true,
+                "items": [
+                  "Trả toàn bộ dư nợ trước ngày đến hạn, không phải trả tối thiểu",
+                  "Đặt hạn mức thẻ thấp bằng đúng số tiền bạn thật sự cần",
+                  "Không dùng thẻ tín dụng để rút tiền mặt, vì khoản đó bị tính lãi ngay từ ngày rút",
+                  "Bật thông báo giao dịch để phát hiện sớm mọi khoản lạ"
+                ]
+              },
+              {
+                "type": "SIM_LINK",
+                "simSlug": "vay-khon-ngoan",
+                "label": "Thử ra quyết định vay trong mô phỏng \"Vay khôn ngoan\""
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "the-tra-toi-thieu",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Trả đúng khoản tối thiểu mỗi tháng có nghĩa là gì?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Bạn không bị coi là trễ hạn, nhưng phần dư nợ còn lại vẫn sinh lãi"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Bạn đã trả xong nợ tháng đó, không còn phát sinh gì"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Ngân hàng miễn lãi cho bạn vì bạn đã trả đúng hạn"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "a"
+                  },
+                  "explanation": "Khoản tối thiểu chỉ giữ cho hồ sơ tín dụng của bạn sạch. Toàn bộ phần chưa trả vẫn tính lãi ở mức cao nhất trong các loại vay tiêu dùng."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "the-mien-lai",
+                  "type": "TRUE_FALSE",
+                  "prompt": "Nếu tháng nào bạn cũng trả hết toàn bộ dư nợ trước hạn, thẻ tín dụng gần như không tốn tiền lãi.",
+                  "answerKey": {
+                    "correct": true
+                  },
+                  "explanation": "Trả đủ trong kỳ miễn lãi thì bạn chỉ mượn tiền ngân hàng vài tuần mà không mất đồng lãi nào. Chi phí duy nhất còn lại là phí thường niên, nếu thẻ có thu."
+                }
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "MULTI_CHOICE",
+              "points": 2,
+              "options": [
+                "a",
+                "b",
+                "c",
+                "d"
+              ],
+              "answerKey": {
+                "correct": [
+                  "a",
+                  "c"
+                ]
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Thói quen nào giúp thẻ tín dụng không trở thành khoản nợ đắt đỏ? Chọn tất cả đáp án đúng.",
+                  "optionsText": {
+                    "a": "Trả toàn bộ dư nợ trước ngày đến hạn",
+                    "b": "Rút tiền mặt từ thẻ khi cần gấp",
+                    "c": "Đặt hạn mức thẻ thấp, đúng nhu cầu thật",
+                    "d": "Chỉ trả khoản tối thiểu để giữ tiền mặt"
+                  },
+                  "explanation": "Trả đủ đúng hạn và giữ hạn mức thấp là hai việc kiểm soát được rủi ro. Rút tiền mặt bị tính lãi ngay, còn trả tối thiểu là cách nợ lớn dần."
+                }
+              }
+            },
+            {
+              "type": "TRUE_FALSE",
+              "points": 1,
+              "answerKey": {
+                "correct": false
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Hạn mức thẻ tín dụng là số tiền bạn đang có.",
+                  "explanation": "Hạn mức là số tiền ngân hàng đồng ý cho bạn mượn. Tiêu tới hạn mức nghĩa là bạn đang nợ đúng số đó."
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "slug": "tin-dung-den-va-app-vay",
+        "order": 3,
+        "moduleSlug": "vay-va-tra-no",
+        "estimatedMinutes": 10,
+        "xpReward": 20,
+        "i18n": {
+          "vi": {
+            "title": "Lãi tính theo ngày: cách ứng dụng vay nhanh che giấu chi phí",
+            "summary": "Một con số nghe rất nhỏ nếu tính theo ngày, nhưng khi quy đổi theo năm có thể cao hơn nhiều khoản vay ngân hàng.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=UGIFY-rYCrE",
+                "caption": "Cách lãi chồng lãi biến một khoản vay nhỏ thành nợ xấu khổng lồ"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Quảng cáo vay nhanh thường không nêu lãi suất theo năm. Họ có thể nêu ba nghìn đồng trên một triệu mỗi ngày, hoặc phí dịch vụ mười phần trăm cho kỳ hạn bảy ngày. Để so sánh, hãy quy các con số về cùng một đơn vị: phần trăm một năm."
+              },
+              {
+                "type": "KEY_TERM",
+                "term": "Quy đổi lãi ngày ra lãi năm",
+                "definition": "Lấy lãi mỗi ngày trên một triệu, nhân với 365, rồi chia cho một triệu. Ví dụ 3.000 đồng mỗi ngày trên 1.000.000 đồng tương đương 109,5% một năm."
+              },
+              {
+                "type": "TABLE",
+                "headers": [
+                  "Nguồn vay",
+                  "Cách quảng cáo",
+                  "Quy ra lãi năm"
+                ],
+                "rows": [
+                  [
+                    "Ngân hàng",
+                    "12%/năm",
+                    "12%"
+                  ],
+                  [
+                    "Công ty tài chính",
+                    "2,5%/tháng",
+                    "30%"
+                  ],
+                  [
+                    "App vay nhanh",
+                    "3.000 ₫/triệu/ngày",
+                    "khoảng 110%"
+                  ],
+                  [
+                    "Tín dụng đen",
+                    "10% cho 10 ngày",
+                    "khoảng 365%"
+                  ]
+                ],
+                "caption": "Cùng một khoản vay 10.000.000 đồng, chênh lệch tiền lãi giữa dòng đầu và dòng cuối lên tới hàng chục triệu đồng mỗi năm."
+              },
+              {
+                "type": "CALLOUT",
+                "variant": "WARNING",
+                "title": "Dấu hiệu của tín dụng đen",
+                "text": "Không cần giấy tờ, giải ngân trong mười lăm phút, chỉ liên hệ qua Zalo hoặc số điện thoại cá nhân, và đòi quyền truy cập danh bạ điện thoại của bạn. Danh bạ đó sau này chính là công cụ để họ gây áp lực lên gia đình và bạn bè của bạn."
+              },
+              {
+                "type": "CALCULATOR",
+                "tool": "loan-compare"
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "app-quy-doi-lai",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Một app cho vay quảng cáo lãi 2.000 đồng cho mỗi 1.000.000 đồng mỗi ngày. Mức này gần nhất với bao nhiêu phần trăm một năm?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Khoảng 7%"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Khoảng 24%"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Khoảng 73%"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "c"
+                  },
+                  "explanation": "2.000 đồng mỗi ngày nhân với 365 ngày là 730.000 đồng tiền lãi trên 1.000.000 đồng vay, tức khoảng 73% một năm. Nghe theo ngày thì nhỏ, quy ra năm thì rất lớn."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "app-danh-ba",
+                  "type": "TRUE_FALSE",
+                  "prompt": "Một ứng dụng cho vay yêu cầu quyền đọc toàn bộ danh bạ điện thoại là chuyện bình thường để xét duyệt hồ sơ.",
+                  "answerKey": {
+                    "correct": false
+                  },
+                  "explanation": "Danh bạ không cho biết khả năng trả nợ của bạn. Trong các ứng dụng cho vay bất hợp pháp, danh bạ có thể bị dùng để gọi cho người thân và gây áp lực đòi nợ. Đây là dấu hiệu cảnh báo nghiêm trọng."
+                }
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Bài sau chuyển sang mặt còn lại của rủi ro: không phải chuyện bạn ký nhầm, mà chuyện có người cố tình lấy tiền của bạn."
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "NUMERIC",
+              "points": 2,
+              "unit": "%",
+              "inputHint": "Nhập số phần trăm, làm tròn",
+              "answerKey": {
+                "value": "36",
+                "toleranceAbs": "2"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Một khoản vay tính lãi 3% một tháng thì tương đương bao nhiêu phần trăm một năm?",
+                  "explanation": "3% mỗi tháng nhân 12 tháng là 36% một năm, cao gấp ba lần lãi vay ngân hàng thông thường."
+                }
+              }
+            },
+            {
+              "type": "SINGLE_CHOICE",
+              "points": 1,
+              "options": [
+                "a",
+                "b",
+                "c"
+              ],
+              "answerKey": {
+                "correct": "b"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Cách đúng để so sánh hai khoản vay được quảng cáo bằng hai đơn vị khác nhau là gì?",
+                  "optionsText": {
+                    "a": "Chọn khoản có khoản trả hằng tháng nhỏ hơn",
+                    "b": "Quy cả hai về lãi suất năm rồi so tổng tiền trả",
+                    "c": "Chọn khoản giải ngân nhanh hơn"
+                  },
+                  "explanation": "Chỉ khi cùng đơn vị thì hai con số mới so được với nhau. Lãi suất năm và tổng tiền trả là hai thước đo trung thực nhất."
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "slug": "nhan-dien-lua-dao",
+        "order": 4,
+        "moduleSlug": "canh-giac-tai-chinh",
+        "estimatedMinutes": 10,
+        "xpReward": 20,
+        "i18n": {
+          "vi": {
+            "title": "Sáu dấu hiệu thường gặp trong các vụ lừa đảo",
+            "summary": "Kịch bản lừa đảo đổi liên tục, nhưng các dấu hiệu bên dưới thì gần như không đổi.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=NkcT-2VFWrw",
+                "caption": "Lừa đảo qua tin nhắn, chương trình Cảnh giác 247 của VTV"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Bạn không cần nhớ hết các kịch bản lừa đảo, vì thủ đoạn mới có thể xuất hiện bất cứ lúc nào. Điều cần nhớ là các dấu hiệu thường gặp, dù câu chuyện bên ngoài có thay đổi."
+              },
+              {
+                "type": "LIST",
+                "ordered": true,
+                "items": [
+                  "Gấp gáp: bạn chỉ có vài giờ, vài phút để quyết định",
+                  "Bí mật: bạn bị dặn không được kể với gia đình hay bạn bè",
+                  "Đường dẫn lạ: tên miền na ná ngân hàng nhưng không phải trang chính thức",
+                  "Hỏi mã OTP hoặc số thẻ: không tổ chức hợp pháp nào hỏi những thứ này",
+                  "Phí nhỏ trước, phần thưởng lớn sau: nộp trước rồi mới được nhận",
+                  "Lợi nhuận cam kết chắc chắn và cao bất thường"
+                ]
+              },
+              {
+                "type": "KEY_TERM",
+                "term": "Mã OTP",
+                "definition": "Mã dùng một lần, để xác nhận rằng chính bạn đang thực hiện giao dịch. Đọc mã cho người khác thì chẳng khác gì đưa họ chìa khóa tài khoản của mình, và ngân hàng sẽ coi giao dịch đó là do bạn thực hiện."
+              },
+              {
+                "type": "CALLOUT",
+                "variant": "TIP",
+                "title": "Quy tắc mười phút",
+                "text": "Khi một tin nhắn khiến bạn hoảng hoặc mừng quá mức, hãy đặt điện thoại xuống mười phút và gọi cho người thân hoặc tổng đài chính thức in trên thẻ. Nhiều vụ lừa đảo dựa vào việc bạn quyết định khi đang mất bình tĩnh."
+              },
+              {
+                "type": "SIM_LINK",
+                "simSlug": "san-lua-dao",
+                "label": "Vào mô phỏng \"Nhận diện lừa đảo\" và thử phân loại mười tin nhắn"
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "lua-dao-otp",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Một người tự xưng nhân viên ngân hàng gọi điện, nói tài khoản của bạn có lỗi và cần bạn đọc mã OTP vừa nhận để khắc phục. Bạn nên làm gì?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Đọc mã, vì họ gọi từ tổng đài ngân hàng"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Cúp máy và gọi lại số tổng đài in trên mặt sau thẻ"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Nhắn mã qua Zalo cho chắc chắn hơn gọi điện"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "Ngân hàng không yêu cầu bạn cung cấp mã OTP qua điện thoại, tin nhắn hay bất kỳ kênh nào khác. Số gọi đến có thể bị giả mạo, nên hãy cúp máy và chủ động gọi lại số chính thức."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "lua-dao-loi-nhuan",
+                  "type": "MULTI_CHOICE",
+                  "prompt": "Tin nhắn nào dưới đây có dấu hiệu lừa đảo? Chọn tất cả đáp án đúng.",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Cam kết lãi 30% mỗi tháng, rủ thêm bạn để lên hạng VIP"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Thông báo biến động số dư, hướng dẫn gọi tổng đài in trên thẻ nếu thấy lạ"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Bưu kiện đang bị giữ, đóng 20.000 đồng phí lưu kho qua đường dẫn này"
+                    },
+                    {
+                      "key": "d",
+                      "text": "Trúng thưởng xe máy, nộp 1.500.000 đồng phí hồ sơ để nhận"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": [
+                      "a",
+                      "c",
+                      "d"
+                    ]
+                  },
+                  "explanation": "Ba tin nhắn còn lại lần lượt mắc vào các dấu hiệu: cam kết lợi nhuận bất thường, đòi phí nhỏ trước rồi hứa phần thưởng lớn sau, và thu phí để được nhận thưởng. Tin nhắn thật thì chỉ báo tin và không yêu cầu bạn làm gì qua đường dẫn."
+                }
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "SINGLE_CHOICE",
+              "points": 1,
+              "options": [
+                "a",
+                "b",
+                "c"
+              ],
+              "answerKey": {
+                "correct": "a"
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Dấu hiệu nào xuất hiện trong hầu hết mọi trò lừa, bất kể kịch bản là gì?",
+                  "optionsText": {
+                    "a": "Ép bạn quyết định thật nhanh",
+                    "b": "Tin nhắn viết sai chính tả",
+                    "c": "Người gửi dùng số điện thoại nước ngoài"
+                  },
+                  "explanation": "Sai chính tả và số điện thoại lạ chỉ xuất hiện trong một số vụ. Áp lực thời gian thường được dùng để khiến bạn không kịp kiểm tra lại thông tin."
+                }
+              }
+            },
+            {
+              "type": "TRUE_FALSE",
+              "points": 1,
+              "answerKey": {
+                "correct": false
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Nếu số điện thoại gọi đến hiện đúng tên ngân hàng thì cuộc gọi chắc chắn là thật.",
+                  "explanation": "Tên và số hiển thị đều có thể bị giả mạo. Hãy cúp máy và tự gọi lại số tổng đài chính thức."
+                }
+              }
+            }
+          ]
+        }
+      },
+      {
+        "slug": "khi-lo-bi-lua",
+        "order": 5,
+        "moduleSlug": "canh-giac-tai-chinh",
+        "estimatedMinutes": 10,
+        "xpReward": 25,
+        "i18n": {
+          "vi": {
+            "title": "Giờ đầu tiên sau khi chuyển tiền nhầm",
+            "summary": "Thứ tự việc cần làm, và vì sao giữ im lặng do xấu hổ là phản ứng tốn kém nhất.",
+            "blocks": [
+              {
+                "type": "VIDEO",
+                "url": "https://www.youtube.com/watch?v=eKge8Vro9_w",
+                "caption": "Cần làm gì khi bị lừa chuyển tiền trên mạng"
+              },
+              {
+                "type": "PARAGRAPH",
+                "text": "Bất kỳ ai cũng có thể bị lừa, kể cả người cẩn thận, vì kịch bản thường nhắm vào lúc bạn mệt hoặc đang vội. Sau khi phát hiện sự việc, hãy phản ứng càng sớm càng tốt để giảm thiểu thiệt hại."
+              },
+              {
+                "type": "LIST",
+                "ordered": true,
+                "items": [
+                  "Gọi ngay tổng đài ngân hàng, báo giao dịch bị lừa và yêu cầu tra soát hoặc phong tỏa",
+                  "Chụp màn hình toàn bộ tin nhắn, số tài khoản nhận và biên lai chuyển tiền",
+                  "Đổi mật khẩu ngân hàng và email, bật xác thực hai lớp nếu chưa bật",
+                  "Trình báo công an phường nơi bạn ở, mang theo ảnh chụp làm bằng chứng",
+                  "Kể cho người lớn trong nhà, càng sớm càng tốt"
+                ]
+              },
+              {
+                "type": "CALLOUT",
+                "variant": "WARNING",
+                "title": "Bẫy thứ hai",
+                "text": "Sau khi bạn bị lừa, có thể sẽ có tài khoản nhắn tin hứa lấy lại tiền nếu bạn trả trước một khoản phí. Đây có thể là nhóm lừa đảo cũ hoặc một nhóm khác đang nhắm vào nạn nhân. Hãy chỉ làm việc với ngân hàng và cơ quan công an; đừng chuyển phí cho dịch vụ tự xưng hỗ trợ thu hồi tiền."
+              },
+              {
+                "type": "EXAMPLE",
+                "title": "Vì sao phải xử lý thật nhanh?",
+                "text": "Tiền chuyển đi có thể bị rút hoặc chia nhỏ qua nhiều tài khoản trong thời gian ngắn. Nếu ngân hàng nhận được yêu cầu tra soát khi tiền còn nằm trong tài khoản nhận, khả năng xử lý thường tốt hơn. Vì vậy, hãy liên hệ ngân hàng ngay khi phát hiện giao dịch bất thường."
+              },
+              {
+                "type": "SIM_LINK",
+                "simSlug": "san-lua-dao",
+                "label": "Luyện lại phản xạ trong mô phỏng \"Nhận diện lừa đảo\""
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "bi-lua-viec-dau-tien",
+                  "type": "SINGLE_CHOICE",
+                  "prompt": "Bạn vừa nhận ra mình chuyển nhầm tiền cho một tài khoản lừa đảo. Việc đầu tiên nên làm là gì?",
+                  "options": [
+                    {
+                      "key": "a",
+                      "text": "Nhắn tin cho kẻ lừa đảo yêu cầu trả lại tiền"
+                    },
+                    {
+                      "key": "b",
+                      "text": "Gọi ngay tổng đài ngân hàng để báo và yêu cầu tra soát"
+                    },
+                    {
+                      "key": "c",
+                      "text": "Đợi vài ngày xem tiền có tự quay về không"
+                    }
+                  ],
+                  "answerKey": {
+                    "correct": "b"
+                  },
+                  "explanation": "Chỉ ngân hàng mới can thiệp được vào đường đi của khoản tiền, và khoảng thời gian làm được việc đó rất ngắn. Nhắn tin cho kẻ lừa chỉ khiến chúng biết mà rút tiền đi ngay."
+                }
+              },
+              {
+                "type": "CHECK_QUESTION",
+                "question": {
+                  "id": "bi-lua-dich-vu-lay-lai",
+                  "type": "TRUE_FALSE",
+                  "prompt": "Dịch vụ nhận lấy lại tiền bị lừa với phí trả trước là một lựa chọn đáng cân nhắc.",
+                  "answerKey": {
+                    "correct": false
+                  },
+                  "explanation": "Đây là vòng lừa thứ hai, nhắm thẳng vào chính nạn nhân. Việc thu hồi tiền chỉ đi qua ngân hàng và cơ quan công an, và không ai thu phí trước để làm việc đó."
+                }
+              }
+            ]
+          }
+        },
+        "checkQuiz": {
+          "kind": "LESSON_CHECK",
+          "passThresholdPct": 70,
+          "maxAttempts": null,
+          "timeLimitSec": null,
+          "shuffleQuestions": true,
+          "questions": [
+            {
+              "type": "ORDERING",
+              "points": 2,
+              "items": [
+                "bank",
+                "evidence",
+                "password",
+                "police"
+              ],
+              "answerKey": {
+                "order": [
+                  "bank",
+                  "evidence",
+                  "password",
+                  "police"
+                ]
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Sắp xếp các việc cần làm sau khi phát hiện bị lừa chuyển tiền, theo đúng thứ tự ưu tiên.",
+                  "itemsText": {
+                    "bank": "Gọi tổng đài ngân hàng yêu cầu tra soát",
+                    "evidence": "Chụp màn hình tin nhắn và biên lai",
+                    "password": "Đổi mật khẩu ngân hàng và email",
+                    "police": "Trình báo công an phường"
+                  },
+                  "explanation": "Ngân hàng đứng đầu vì chỉ họ mới chặn được dòng tiền trong vài chục phút đầu. Bằng chứng phải giữ lại trước khi tin nhắn bị xóa, sau đó mới đến việc khóa tài khoản và trình báo."
+                }
+              }
+            },
+            {
+              "type": "TRUE_FALSE",
+              "points": 1,
+              "answerKey": {
+                "correct": true
+              },
+              "i18n": {
+                "vi": {
+                  "prompt": "Kể sớm cho người lớn trong nhà giúp giảm thiệt hại khi bị lừa.",
+                  "explanation": "Giữ im lặng vì xấu hổ làm mất đúng khoảng thời gian quý nhất, trong khi người lớn thường xử lý các bước với ngân hàng nhanh hơn."
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "finalQuiz": {
+      "kind": "COURSE_FINAL",
+      "passThresholdPct": 70,
+      "maxAttempts": null,
+      "timeLimitSec": 900,
+      "shuffleQuestions": true,
+      "questions": [
+        {
+          "type": "SINGLE_CHOICE",
+          "points": 1,
+          "options": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "answerKey": {
+            "correct": "d"
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Con số nào cho biết một khoản vay đắt hay rẻ?",
+              "optionsText": {
+                "a": "Khoản trả mỗi tháng",
+                "b": "Số tiền được giải ngân",
+                "c": "Thời gian duyệt hồ sơ",
+                "d": "Tổng số tiền phải trả trong cả kỳ hạn"
+              },
+              "explanation": "Khoản hằng tháng phụ thuộc vào kỳ hạn nên không so sánh được. Tổng tiền trả là thước đo duy nhất phản ánh đúng chi phí."
+            }
+          }
+        },
+        {
+          "type": "NUMERIC",
+          "points": 2,
+          "unit": "%",
+          "inputHint": "Nhập số phần trăm, làm tròn",
+          "answerKey": {
+            "value": "110",
+            "toleranceAbs": "10"
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "App vay quảng cáo lãi 3.000 đồng cho mỗi 1.000.000 đồng mỗi ngày. Quy ra khoảng bao nhiêu phần trăm một năm?",
+              "explanation": "3.000 đồng nhân với 365 ngày là 1.095.000 đồng tiền lãi trên 1.000.000 đồng vay, tức khoảng 110% một năm."
+            }
+          }
+        },
+        {
+          "type": "MULTI_CHOICE",
+          "points": 2,
+          "options": [
+            "a",
+            "b",
+            "c",
+            "d"
+          ],
+          "answerKey": {
+            "correct": [
+              "a",
+              "b",
+              "d"
+            ]
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Dấu hiệu nào cho thấy một lời mời vay tiền là tín dụng đen? Chọn tất cả đáp án đúng.",
+              "optionsText": {
+                "a": "Không cần bất kỳ giấy tờ nào",
+                "b": "Đòi quyền truy cập danh bạ điện thoại",
+                "c": "Có hợp đồng ghi rõ lãi suất năm",
+                "d": "Chỉ liên hệ qua Zalo và số cá nhân"
+              },
+              "explanation": "Cho vay hợp pháp luôn có hợp đồng, có pháp nhân và ghi rõ lãi suất năm. Ba dấu hiệu còn lại đều nhằm né trách nhiệm pháp lý và tạo công cụ đòi nợ."
+            }
+          }
+        },
+        {
+          "type": "TRUE_FALSE",
+          "points": 1,
+          "answerKey": {
+            "correct": false
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Nhân viên ngân hàng có thể hỏi mã OTP của bạn khi cần xử lý sự cố.",
+                "explanation": "Bạn không cần đọc mã OTP cho người khác để xử lý sự cố. Nếu ai yêu cầu mã, hãy dừng cuộc trò chuyện và liên hệ ngân hàng qua kênh chính thức."
+            }
+          }
+        },
+        {
+          "type": "SCENARIO_CHOICE",
+          "points": 2,
+          "options": [
+            "a",
+            "b",
+            "c"
+          ],
+          "answerKey": {
+            "best": "b",
+            "acceptable": [
+              "c"
+            ]
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Bạn cần 8.000.000 đồng để mua laptop phục vụ việc học. Bạn chọn phương án nào?",
+              "scenarioMd": "Bạn đang có ba lựa chọn: app vay nhanh giải ngân trong 15 phút với lãi 3.000 đồng mỗi triệu mỗi ngày, trả góp qua ngân hàng 12 tháng với lãi 18% một năm, hoặc hoãn lại ba tháng để tiết kiệm thêm rồi mua bằng tiền mặt.",
+              "optionsText": {
+                "a": "Vay app cho nhanh, học sớm ngày nào hay ngày đó",
+                "b": "Hoãn ba tháng, tiết kiệm rồi mua bằng tiền mặt",
+                "c": "Trả góp ngân hàng 12 tháng"
+              },
+              "feedback": {
+                "a": "Lãi của app tương đương hơn 100% một năm, tức là chỉ sau một năm, tiền lãi đã lớn hơn cả giá chiếc laptop.",
+                "b": "Đây là lựa chọn tốt nhất: không tốn đồng lãi nào, và đổi ba tháng chờ đợi để tiết kiệm được vài triệu đồng tiền lãi là hoàn toàn đáng.",
+                "c": "Chấp nhận được nếu bạn thật sự cần máy ngay, vì lãi ngân hàng minh bạch và thấp hơn nhiều lần so với app."
+              },
+              "explanation": "Thứ tự ưu tiên khi cần một khoản tiền lớn: dùng tiền có sẵn, rồi đến nguồn vay chính thức lãi thấp, và không bao giờ dùng vay nhanh lãi ngày."
+            }
+          }
+        },
+        {
+          "type": "MATCHING",
+          "points": 2,
+          "left": [
+            "urgent",
+            "otp",
+            "fee_first",
+            "guaranteed"
+          ],
+          "right": [
+            "r_urgent",
+            "r_otp",
+            "r_fee",
+            "r_guaranteed"
+          ],
+          "answerKey": {
+            "pairs": {
+              "urgent": "r_urgent",
+              "otp": "r_otp",
+              "fee_first": "r_fee",
+              "guaranteed": "r_guaranteed"
+            }
+          },
+          "i18n": {
+            "vi": {
+              "prompt": "Nối mỗi dấu hiệu lừa đảo với lý do nó có mặt trong kịch bản.",
+              "leftText": {
+                "urgent": "Ép quyết định trong vài phút",
+                "otp": "Hỏi mã OTP",
+                "fee_first": "Đòi phí nhỏ trước",
+                "guaranteed": "Cam kết lợi nhuận chắc chắn"
+              },
+              "rightText": {
+                "r_urgent": "Để bạn không kịp kiểm tra lại với người khác",
+                "r_otp": "Để chiếm quyền thực hiện giao dịch trên tài khoản của bạn",
+                "r_fee": "Để lấy được tiền thật trước khi bạn phát hiện phần thưởng không có thật",
+                "r_guaranteed": "Để đánh vào mong muốn giàu nhanh và che đi rủi ro"
+              },
+              "explanation": "Mỗi dấu hiệu phục vụ một mục đích cụ thể trong kịch bản. Nhận ra mục đích thì nhận ra trò lừa, dù câu chuyện bên ngoài có đổi thế nào."
+            }
+          }
+        }
+      ]
+    }
+  }
+}
