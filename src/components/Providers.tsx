@@ -13,8 +13,11 @@ function makeQueryClient() {
         gcTime: 5 * 60_000,
         refetchOnWindowFocus: false,
         retry: (failureCount, error) => {
-          // Auth, validation and rule errors will not fix themselves.
-          if (error instanceof ApiError && error.status < 500 && error.status !== 429) return false;
+          // Auth, validation and rule errors will not fix themselves, and 429 is
+          // in the same group: the server names a retry-after in minutes, so
+          // trying again a second later only spends an allowance that is already
+          // exhausted. The screen shows the error and the learner can retry.
+          if (error instanceof ApiError && error.status < 500) return false;
           return failureCount < 2;
         },
       },
@@ -38,6 +41,13 @@ export interface SessionValue {
   isLoading: boolean;
   /** True once we know there is no usable session. */
   isSignedOut: boolean;
+  /**
+   * A bootstrap failure that signing in again would not fix: the server is down,
+   * the network dropped, or the call was rate limited. Without this the app
+   * cannot tell "no session" from "no answer" and every screen waits forever on
+   * data that is never going to arrive.
+   */
+  error: unknown;
   refresh: () => Promise<void>;
 }
 
@@ -72,18 +82,20 @@ function SessionProvider({ children }: { children: React.ReactNode }) {
     enabled: hint === true,
   });
 
+  const isUnauthenticated =
+    query.isError && query.error instanceof ApiError && query.error.status === 401;
+
   const value = React.useMemo<SessionValue>(
     () => ({
       bootstrap: query.data ?? null,
       isLoading: hint === null || (hint && query.isLoading),
-      isSignedOut:
-        hint === false ||
-        (query.isError && query.error instanceof ApiError && query.error.status === 401),
+      isSignedOut: hint === false || isUnauthenticated,
+      error: query.isError && !isUnauthenticated ? query.error : null,
       refresh: async () => {
         await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
       },
     }),
-    [hint, query.data, query.isLoading, query.isError, query.error, qc],
+    [hint, query.data, query.isLoading, query.isError, query.error, isUnauthenticated, qc],
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

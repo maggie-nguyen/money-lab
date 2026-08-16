@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useSession, BOOTSTRAP_KEY } from "@/components/Providers";
+import { loginHref, readReturnTo } from "@/lib/returnTo";
 import { Button, Chip, Skeleton, Alert, cx } from "@/components/ui";
 import { CenteredAuthShell } from "../CenteredAuthShell";
 
@@ -34,7 +35,7 @@ export default function WelcomePage() {
   const [error, setError] = React.useState<string | null>(null);
 
   React.useEffect(() => {
-    if (isSignedOut) router.replace("/login");
+    if (isSignedOut) router.replace(loginHref("/welcome"));
   }, [isSignedOut, router]);
 
   function toggleTopic(t: string) {
@@ -53,7 +54,8 @@ export default function WelcomePage() {
         window.localStorage.setItem("ml-onboarding-topics", JSON.stringify(topics));
       }
       await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
-      router.push("/learn");
+      // Onboarding is a one way door, so it leaves no history entry behind.
+      router.replace(readReturnTo());
     } catch {
       setError("Không lưu được lựa chọn. Vui lòng thử lại.");
       setSaving(false);

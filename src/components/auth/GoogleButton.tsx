@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { session, ApiError } from "@/lib/api";
 import { BOOTSTRAP_KEY } from "@/components/Providers";
+import { readReturnTo, welcomeHref } from "@/lib/returnTo";
 import { Alert } from "@/components/ui";
 
 /**
@@ -83,7 +84,9 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
       try {
         const data = (await session.google(res.credential as string)) as { isNewUser?: boolean };
         await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
-        router.push(data.isNewUser ? "/welcome" : "/learn");
+        // A returning learner goes back to whatever sent them here. A new one
+        // needs the welcome flow first, so their destination waits.
+        router.replace(data.isNewUser ? welcomeHref(readReturnTo()) : readReturnTo());
       } catch (err) {
         setError(
           err instanceof ApiError && err.status === 401

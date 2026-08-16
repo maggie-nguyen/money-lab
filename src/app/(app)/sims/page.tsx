@@ -53,11 +53,25 @@ function SimCard({ sim, autoStart }: { sim: SimDefinitionSummary; autoStart: boo
       api.post<SimSessionView>(
         `/sims/${sim.id}/sessions`,
         {},
-        { idempotencyKey: idempotencyKey("sim-start", sim.id) },
+        // One key per click, as with tutor messages. A key of just the sim id is
+        // held for 24 hours, so after finishing or abandoning a run the next
+        // start replays the old response and drops the learner back into a
+        // session that has already ended.
+        { idempotencyKey: idempotencyKey("sim-start", `${sim.id}:${crypto.randomUUID()}`) },
       ),
     onSuccess: (session) => {
       void qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
       router.push(`/sims/${segment}/${session.id}`);
+    },
+    onError: (error) => {
+      // A run is already open, usually because it was started in another tab.
+      // The server names it, so continue into it rather than leaving the card
+      // showing a start button that can only ever fail again.
+      if (error instanceof ApiError && error.code === "CONFLICT") {
+        const sessionId = error.details.find((d) => d.path === "sessionId")?.message;
+        void qc.invalidateQueries({ queryKey: ["sims"] });
+        if (sessionId) router.push(`/sims/${segment}/${sessionId}`);
+      }
     },
   });
 
@@ -99,7 +113,7 @@ function SimCard({ sim, autoStart }: { sim: SimDefinitionSummary; autoStart: boo
         {startError && (
           <p className="text-xs text-critical">
             {startError.code === "CONFLICT"
-              ? "Đã có phiên đang chạy cho mô phỏng này."
+              ? "Đã có phiên đang chạy cho mô phỏng này, đang mở lại phiên đó."
               : startError.message}
           </p>
         )}

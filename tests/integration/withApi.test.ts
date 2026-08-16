@@ -154,9 +154,9 @@ describe("rate limiting", () => {
   it("returns 429 with retry-after once the bucket overflows", async () => {
     process.env.RATE_LIMIT_DISABLED = "false";
     resetEnvCache();
-    const handler = withApi({ auth: "none", rateLimit: "auth" }, echo); // 10 / 600s by IP
+    const handler = withApi({ auth: "none", rateLimit: "tutor" }, echo); // 10 / 60s by IP
     const ip = `10.9.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
-    const call = () => handler(req("POST", "/api/auth/login", { headers: { "x-forwarded-for": ip }, body: {} }));
+    const call = () => handler(req("POST", "/api/tutor/messages", { headers: { "x-forwarded-for": ip }, body: {} }));
     for (let i = 0; i < 10; i++) {
       expect((await call()).status).toBe(200);
     }
@@ -171,11 +171,11 @@ describe("rate limiting", () => {
     // real caller. A client writing its own prefix should stay in one bucket.
     process.env.RATE_LIMIT_DISABLED = "false";
     resetEnvCache();
-    const handler = withApi({ auth: "none", rateLimit: "auth" }, echo);
+    const handler = withApi({ auth: "none", rateLimit: "tutor" }, echo);
     const real = `10.7.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
     const call = (forged: string) =>
       handler(
-        req("POST", "/api/auth/login", {
+        req("POST", "/api/tutor/messages", {
           headers: { "x-forwarded-for": `${forged}, ${real}` },
           body: {},
         }),
@@ -189,13 +189,90 @@ describe("rate limiting", () => {
   it("buckets are per-subject - a different IP is unaffected", async () => {
     process.env.RATE_LIMIT_DISABLED = "false";
     resetEnvCache();
-    const handler = withApi({ auth: "none", rateLimit: "auth" }, echo);
+    const handler = withApi({ auth: "none", rateLimit: "tutor" }, echo);
     const hot = "10.8.1.1";
     for (let i = 0; i < 11; i++) {
-      await handler(req("POST", "/api/auth/login", { headers: { "x-forwarded-for": hot }, body: {} }));
+      await handler(req("POST", "/api/tutor/messages", { headers: { "x-forwarded-for": hot }, body: {} }));
     }
-    const other = await handler(req("POST", "/api/auth/login", { headers: { "x-forwarded-for": "10.8.1.2" }, body: {} }));
+    const other = await handler(req("POST", "/api/tutor/messages", { headers: { "x-forwarded-for": "10.8.1.2" }, body: {} }));
     expect(other.status).toBe(200);
+  });
+});
+
+describe("rate limiting on the auth surface", () => {
+  // A school shares one public address, so the login ceiling per address has to
+  // clear a whole class while the strict count follows the account being
+  // guessed at. These two tests are the pair that keeps both halves honest.
+  it("ten wrong answers for one account lock that account, not the address", async () => {
+    process.env.RATE_LIMIT_DISABLED = "false";
+    resetEnvCache();
+    const handler = withApi({ auth: "none", rateLimit: "auth", limitByEmail: true }, echo);
+    const ip = `10.6.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
+    const victim = uniqueEmail("victim");
+    const call = (email: string) =>
+      handler(req("POST", "/api/session/login", { headers: { "x-forwarded-for": ip }, body: { email } }));
+
+    for (let i = 0; i < 10; i++) {
+      expect((await call(victim)).status).toBe(200);
+    }
+    const blocked = await call(victim);
+    expect(blocked.status).toBe(429);
+    expect(Number(blocked.headers.get("retry-after"))).toBeGreaterThan(0);
+
+    // The classmate at the next desk is still able to sign in.
+    expect((await call(uniqueEmail("classmate"))).status).toBe(200);
+  });
+
+  it("the account bucket follows the email across addresses", async () => {
+    process.env.RATE_LIMIT_DISABLED = "false";
+    resetEnvCache();
+    const handler = withApi({ auth: "none", rateLimit: "auth", limitByEmail: true }, echo);
+    const email = uniqueEmail("roaming");
+    const call = (ip: string) =>
+      handler(req("POST", "/api/session/login", { headers: { "x-forwarded-for": ip }, body: { email } }));
+    for (let i = 0; i < 10; i++) {
+      expect((await call(`10.5.0.${i}`)).status).toBe(200);
+    }
+    expect((await call("10.5.9.9")).status).toBe(429);
+  });
+
+  it("the email is read without consuming the body the handler still needs", async () => {
+    process.env.RATE_LIMIT_DISABLED = "false";
+    resetEnvCache();
+    const schema = z.object({ email: z.string(), password: z.string() });
+    const handler = withApi({ auth: "none", rateLimit: "auth", limitByEmail: true }, async (ctx) => ({
+      data: await parseBody(ctx, schema),
+    }));
+    const res = await handler(
+      req("POST", "/api/session/login", {
+        headers: { "x-forwarded-for": "10.4.0.1" },
+        body: { email: uniqueEmail("body"), password: "secret12345" },
+      }),
+    );
+    expect(res.status).toBe(200);
+    expect((await res.json()).data.password).toBe("secret12345");
+  });
+
+  it("refresh does not spend the login allowance", async () => {
+    // The app refreshes every fifteen minutes on its own, so sharing a bucket
+    // with login means an idle classroom locks itself out of signing in.
+    process.env.RATE_LIMIT_DISABLED = "false";
+    resetEnvCache();
+    const ip = `10.3.${Math.floor(Math.random() * 250)}.${Math.floor(Math.random() * 250)}`;
+    const refresh = withApi({ auth: "none", rateLimit: "session-refresh" }, echo);
+    const login = withApi({ auth: "none", rateLimit: "auth", limitByEmail: true }, echo);
+    for (let i = 0; i < 30; i++) {
+      expect(
+        (await refresh(req("POST", "/api/session/refresh", { headers: { "x-forwarded-for": ip } }))).status,
+      ).toBe(200);
+    }
+    const res = await login(
+      req("POST", "/api/session/login", {
+        headers: { "x-forwarded-for": ip },
+        body: { email: uniqueEmail("after-refresh") },
+      }),
+    );
+    expect(res.status).toBe(200);
   });
 });
 

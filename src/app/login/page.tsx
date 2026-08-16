@@ -5,18 +5,40 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { session, ApiError } from "@/lib/api";
-import { BOOTSTRAP_KEY } from "@/components/Providers";
+import { BOOTSTRAP_KEY, useSession } from "@/components/Providers";
+import { readReturnTo } from "@/lib/returnTo";
 import { Button, Field, Input, Alert } from "@/components/ui";
 import { GoogleButton } from "@/components/auth/GoogleButton";
 import { SplitAuthShell } from "../SplitAuthShell";
 
+/** Says what actually went wrong. A rate limit is not a wrong password. */
+function loginErrorMessage(err: unknown): string {
+  if (!(err instanceof ApiError)) return "Không kết nối được máy chủ. Vui lòng thử lại.";
+  if (err.status === 429) {
+    const mins = err.retryAfterSec ? Math.max(1, Math.ceil(err.retryAfterSec / 60)) : null;
+    return mins
+      ? `Bạn đã thử đăng nhập quá nhiều lần. Vui lòng đợi khoảng ${mins} phút rồi thử lại.`
+      : "Bạn đã thử đăng nhập quá nhiều lần. Vui lòng đợi một lát rồi thử lại.";
+  }
+  if (err.status >= 500) return "Máy chủ đang gặp sự cố. Vui lòng thử lại sau ít phút.";
+  // The server returns the same message whether the email exists or not.
+  return "Email hoặc mật khẩu không đúng.";
+}
+
 export default function LoginPage() {
   const router = useRouter();
   const qc = useQueryClient();
+  const { bootstrap } = useSession();
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+
+  // Someone who is already signed in has no business on this screen, whether
+  // they typed the url, hit Back after logging in, or reloaded the tab.
+  React.useEffect(() => {
+    if (bootstrap) router.replace(readReturnTo());
+  }, [bootstrap, router]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -25,14 +47,10 @@ export default function LoginPage() {
     try {
       await session.login(email, password);
       await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
-      router.push("/learn");
+      // replace, so Back from the app does not land on a login form.
+      router.replace(readReturnTo());
     } catch (err) {
-      // The server returns the same message whether the email exists or not.
-      setError(
-        err instanceof ApiError
-          ? "Email hoặc mật khẩu không đúng."
-          : "Không đăng nhập được. Vui lòng thử lại.",
-      );
+      setError(loginErrorMessage(err));
       setLoading(false);
     }
   }

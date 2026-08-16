@@ -28,7 +28,7 @@ import {
   ProgressBar,
   SectionTitle,
   Skeleton,
-  StatStrip,
+  StatRows,
 } from "@/components/ui";
 
 function levelLabel(level: 1 | 2 | 3): string {
@@ -277,7 +277,8 @@ export default function LearnPage() {
 
       <aside className="space-y-4 lg:sticky lg:top-20 lg:self-start">
         {stats && (
-          <StatStrip
+          <StatRows
+            columns={1}
             items={[
               { label: "XP", value: stats.xpTotal },
               { label: "Chuỗi ngày học", value: stats.streakCurrent, hint: "ngày" },

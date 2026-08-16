@@ -23,7 +23,8 @@ import {
   LedgerTable,
   MoneyInput,
   Select,
-  StatStrip,
+  MoneyReadout,
+  StatRows,
 } from "@/components/ui";
 import { formatDate, formatVnd } from "@/lib/format";
 
@@ -215,11 +216,11 @@ function CompoundInterestTool() {
         <ToolError error={mutation.error} />
         {mutation.data && (
           <>
-            <StatStrip
+            <MoneyReadout
               items={[
-                { label: "Số dư cuối kỳ", value: formatVnd(mutation.data.data.finalAmountVnd) },
-                { label: "Tổng đã góp", value: formatVnd(mutation.data.data.totalContributedVnd) },
-                { label: "Tổng tiền lãi", value: formatVnd(mutation.data.data.totalInterestVnd) },
+                { label: "Số dư cuối kỳ", vnd: mutation.data.data.finalAmountVnd, primary: true },
+                { label: "Tổng đã góp", vnd: mutation.data.data.totalContributedVnd },
+                { label: "Tổng tiền lãi", vnd: mutation.data.data.totalInterestVnd },
               ]}
             />
             <LedgerTable
@@ -288,11 +289,11 @@ function LoanPaymentTool() {
         <ToolError error={mutation.error} />
         {mutation.data && (
           <>
-            <StatStrip
+            <MoneyReadout
               items={[
-                { label: "Trả tháng đầu", value: formatVnd(mutation.data.data.monthlyPaymentVnd) },
-                { label: "Tổng đã trả", value: formatVnd(mutation.data.data.totalPaidVnd) },
-                { label: "Tổng tiền lãi", value: formatVnd(mutation.data.data.totalInterestVnd) },
+                { label: "Trả tháng đầu", vnd: mutation.data.data.monthlyPaymentVnd, primary: true },
+                { label: "Tổng đã trả", vnd: mutation.data.data.totalPaidVnd },
+                { label: "Tổng tiền lãi", vnd: mutation.data.data.totalInterestVnd },
               ]}
             />
             <LedgerTable
@@ -489,9 +490,10 @@ function SavingsGoalTool() {
         <ToolError error={mutation.error} />
         {mutation.data && (
           <>
-            <StatStrip
+            <StatRows
+              columns={1}
               items={[
-                { label: "Số tháng cần", value: mutation.data.data.monthsNeeded },
+                { label: "Số tháng cần", value: mutation.data.data.monthsNeeded, hint: "tháng" },
                 { label: "Ngày dự kiến đạt mục tiêu", value: formatDate(mutation.data.data.achievedDate) },
               ]}
             />
@@ -543,10 +545,14 @@ function InflationTool() {
         <ToolError error={mutation.error} />
         {mutation.data && (
           <>
-            <StatStrip
+            <MoneyReadout
               items={[
-                { label: "Số tiền mặt (giữ nguyên số)", value: formatVnd(mutation.data.data.futureValueOfCashVnd) },
-                { label: "Sức mua tương đương hôm nay", value: formatVnd(mutation.data.data.equivalentPurchasingPowerVnd) },
+                {
+                  label: "Sức mua tương đương hôm nay",
+                  vnd: mutation.data.data.equivalentPurchasingPowerVnd,
+                  primary: true,
+                },
+                { label: "Số tiền mặt (giữ nguyên số)", vnd: mutation.data.data.futureValueOfCashVnd },
               ]}
             />
             <FormulaNote meta={mutation.data.meta} />
@@ -589,11 +595,11 @@ function BudgetSplitTool() {
         <ToolError error={mutation.error} />
         {mutation.data && (
           <>
-            <StatStrip
+            <MoneyReadout
               items={[
-                { label: "Nhu cầu thiết yếu (50%)", value: formatVnd(mutation.data.data.needsVnd) },
-                { label: "Mong muốn cá nhân (30%)", value: formatVnd(mutation.data.data.wantsVnd) },
-                { label: "Tiết kiệm và trả nợ (20%)", value: formatVnd(mutation.data.data.savingsVnd) },
+                { label: "Nhu cầu thiết yếu (50%)", vnd: mutation.data.data.needsVnd },
+                { label: "Mong muốn cá nhân (30%)", vnd: mutation.data.data.wantsVnd },
+                { label: "Tiết kiệm và trả nợ (20%)", vnd: mutation.data.data.savingsVnd },
               ]}
             />
             <FormulaNote meta={mutation.data.meta} />

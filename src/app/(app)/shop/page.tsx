@@ -20,13 +20,16 @@ import {
   ErrorPanel,
   LedgerLabel,
   Skeleton,
-  StatStrip,
+  StatRows,
 } from "@/components/ui";
 import type { ShopItem, ShopView } from "@/lib/types";
 
+/** Exactly what POST /shop/items/{id}/purchase returns. It sends no item object. */
 interface PurchaseResult {
+  purchaseId: string;
+  itemCode: string;
   coins: number;
-  item: ShopItem;
+  streakFreezes?: number;
 }
 
 function purchaseErrorMessage(error: ApiError): string {
@@ -74,12 +77,17 @@ export default function ShopPage() {
       api.post<PurchaseResult>(
         `/shop/items/${item.id}/purchase`,
         {},
-        { idempotencyKey: idempotencyKey("shop", item.id) },
+        // Consumables can be bought more than once, so the key has to name the
+        // copy rather than the item. A key of just the item id replays the first
+        // purchase for the next 24 hours: the learner is told it worked, no coins
+        // move and nothing is added. Counting the copies already held makes each
+        // purchase its own request while still collapsing a double click.
+        { idempotencyKey: idempotencyKey("shop", `${item.id}:${item.held}`) },
       ),
-    onSuccess: (result) => {
+    onSuccess: (_result, item) => {
       void qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
       void qc.invalidateQueries({ queryKey: ["shop", "items"] });
-      toast({ tone: "positive", message: `Đã mua ${result.item.title}.` });
+      toast({ tone: "positive", message: `Đã mua ${item.title}.` });
       setConfirmItem(null);
     },
   });
@@ -97,7 +105,7 @@ export default function ShopPage() {
           <h1 className="mt-1 text-2xl">Đổi xu lấy vật phẩm</h1>
           <p className="mt-1 text-sm text-ink-soft">Dùng xu kiếm được từ học tập để đổi lấy vật phẩm trong MoneyLab.</p>
         </div>
-        <StatStrip items={[{ label: "Số xu hiện có", value: coins }]} />
+        <StatRows columns={1} className="min-w-52" items={[{ label: "Số xu hiện có", value: coins }]} />
       </div>
 
       {itemsQuery.isLoading ? (

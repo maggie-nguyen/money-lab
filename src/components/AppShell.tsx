@@ -2,10 +2,9 @@
 
 import * as React from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useQueryClient } from "@tanstack/react-query";
-import { session } from "@/lib/api";
+import { usePathname } from "next/navigation";
 import { useSession } from "@/components/Providers";
+import { signOut } from "@/lib/signOut";
 import { Button, Chip, cx } from "@/components/ui";
 
 const NAV = [
@@ -49,7 +48,7 @@ function Wordmark() {
   return (
     <Link href="/learn" className="flex items-baseline gap-2">
       <span className="font-display text-xl font-semibold tracking-tight">MoneyLab</span>
-          <span className="ledger-label hidden text-ink-faint sm:inline">Tài chính cá nhân</span>
+      <span className="ledger-label hidden text-ink-faint sm:inline">Tài chính cá nhân</span>
     </Link>
   );
 }
@@ -75,8 +74,6 @@ function StreakAndCoins() {
 
 function AccountMenu() {
   const { bootstrap } = useSession();
-  const router = useRouter();
-  const qc = useQueryClient();
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -97,12 +94,6 @@ function AccountMenu() {
         </Button>
       </Link>
     );
-  }
-
-  async function signOut() {
-    await session.logout().catch(() => undefined);
-    qc.clear();
-    router.push("/");
   }
 
   const name = bootstrap.user.displayName;
@@ -150,7 +141,7 @@ function AccountMenu() {
               Quản trị
             </Link>
           )}
-          <button role="menuitem" onClick={signOut} className="block w-full px-3 py-2 text-left text-critical hover:bg-paper-sunken">
+          <button role="menuitem" onClick={() => void signOut("/")} className="block w-full px-3 py-2 text-left text-critical hover:bg-paper-sunken">
             Đăng xuất
           </button>
         </div>

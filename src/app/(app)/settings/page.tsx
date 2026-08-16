@@ -1,10 +1,10 @@
 "use client";
 
 import * as React from "react";
-import { useRouter } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { api, session, ApiError } from "@/lib/api";
+import { api, ApiError } from "@/lib/api";
 import { BOOTSTRAP_KEY, useMe } from "@/components/Providers";
+import { signOut } from "@/lib/signOut";
 import {
   Button,
   Card,
@@ -174,8 +174,6 @@ function PasswordSection() {
 }
 
 function AccountActionsSection() {
-  const router = useRouter();
-  const qc = useQueryClient();
   const [logoutAllLoading, setLogoutAllLoading] = React.useState(false);
   const [logoutAllError, setLogoutAllError] = React.useState<string | null>(null);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
@@ -184,25 +182,27 @@ function AccountActionsSection() {
   const [deleteLoading, setDeleteLoading] = React.useState(false);
 
   async function logout() {
-    try {
-      await session.logout();
-    } finally {
-      await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
-      router.push("/login");
-    }
+    await signOut("/login");
   }
 
+  /**
+   * /auth/logout revokes refresh tokens in the database, which ends every other
+   * device. It cannot end this one: the access cookie is a stateless 15 minute
+   * JWT and the API never sees this browser's cookie jar. Without the session
+   * call below, "log out all devices" leaves the device you clicked it on signed
+   * in until that token expires, and a reload puts you straight back in.
+   */
   async function logoutAllDevices() {
     setLogoutAllLoading(true);
     setLogoutAllError(null);
     try {
       await api.post("/auth/logout", { allDevices: true });
-      await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
-      router.push("/login");
     } catch {
-      setLogoutAllError("Không đăng xuất được tất cả thiết bị. Vui lòng thử lại.");
+      setLogoutAllError("Không đăng xuất được mọi thiết bị. Vui lòng thử lại.");
       setLogoutAllLoading(false);
+      return;
     }
+    await signOut("/login");
   }
 
   async function deleteAccount() {
@@ -210,11 +210,14 @@ function AccountActionsSection() {
     setDeleteError(null);
     try {
       await api.del("/me", { confirm: "DELETE" });
-      router.push("/");
     } catch {
       setDeleteError("Không xóa được tài khoản. Vui lòng thử lại.");
       setDeleteLoading(false);
+      return;
     }
+    // The account is gone, so the cookies must go with it rather than being
+    // left to expire on their own.
+    await signOut("/");
   }
 
   return (

@@ -10,7 +10,7 @@ import {
 
 // Called by the client when an /api/v1 call returns 401. Rotates both cookies.
 // A failed refresh clears them so the app falls back to the login screen.
-export const POST = withApi({ auth: "none", rateLimit: "auth" }, async (ctx) => {
+export const POST = withApi({ auth: "none", rateLimit: "session-refresh" }, async (ctx) => {
   const token = ctx.req.cookies.get(REFRESH_COOKIE)?.value;
   if (!token) throw new AppError("UNAUTHENTICATED", "No session");
   try {

@@ -21,7 +21,7 @@ import {
   ProgressBar,
   SectionTitle,
   Skeleton,
-  StatStrip,
+  StatRows,
 } from "@/components/ui";
 import { formatDate } from "@/lib/format";
 import type { BadgeView, CertificateView } from "@/lib/types";
@@ -191,7 +191,7 @@ export default function ProfilePage() {
         <p className="mt-1 text-sm text-ink-soft">{me.email ?? ""}</p>
       </div>
 
-      <StatStrip
+      <StatRows
         items={[
           { label: "Cấp độ", value: stats.level },
           { label: "Tổng XP", value: stats.xpTotal },
@@ -221,7 +221,7 @@ export default function ProfilePage() {
 
       <section>
         <SectionTitle>Chuỗi ngày học</SectionTitle>
-        <StatStrip
+        <StatRows
           items={[
             { label: "Đang giữ", value: stats.streakCurrent, hint: "ngày" },
             { label: "Dài nhất", value: stats.streakLongest, hint: "ngày" },

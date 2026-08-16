@@ -38,6 +38,32 @@ export function formatVndShort(vnd: string | bigint | null | undefined): string 
   return `${sign}${abs.toString()}`;
 }
 
+/**
+ * A plain language gloss for a large figure: "khoảng 100,1 triệu".
+ *
+ * Thirteen grouped digits are precise but slow to read, and a learner comparing
+ * two results mostly wants the magnitude. Returns null below a million, where
+ * the grouped digits are already easy enough to take in at a glance, and drops
+ * "khoảng" when the short form happens to be exact.
+ */
+export function formatVndApprox(vnd: string | bigint | null | undefined): string | null {
+  if (vnd === null || vnd === undefined || vnd === "") return null;
+  let v: bigint;
+  try {
+    v = typeof vnd === "bigint" ? vnd : BigInt(vnd);
+  } catch {
+    return null;
+  }
+  const neg = v < 0n;
+  const abs = neg ? -v : v;
+  if (abs < 1_000_000n) return null;
+  const unit = abs >= 1_000_000_000n ? 1_000_000_000n : 1_000_000n;
+  const word = unit === 1_000_000_000n ? "tỷ" : "triệu";
+  const tenths = (abs * 10n) / unit;
+  const exact = (tenths * unit) / 10n === abs;
+  return `${exact ? "" : "khoảng "}${neg ? "-" : ""}${oneDecimal(abs, unit)} ${word}`;
+}
+
 function oneDecimal(abs: bigint, unit: bigint): string {
   const whole = abs / unit;
   const tenth = ((abs % unit) * 10n) / unit;

@@ -12,7 +12,7 @@ Endpoint shapes live in `docs/03-API-SPEC.md`; the route map lives in `docs/06-F
 | `src/lib/api.ts` | `api.get/post/patch/put/del`, `session.*`, `ApiError`, `idempotencyKey()` |
 | `src/lib/types.ts` | Every DTO from doc 03 §0 |
 | `src/lib/format.ts` | `formatVnd`, `formatVndShort`, `formatBps`, `formatDate`, `formatRelative`, `formatMinutes` |
-| `src/components/ui/index.tsx` | Button, Card, CardBody, SectionTitle, LedgerLabel, StatStrip, ProgressBar, Chip, Field, Input, Select, Textarea, MoneyInput, Alert, EmptyState, Skeleton, ErrorPanel, Dialog, LedgerTable, `cx()` |
+| `src/components/ui/index.tsx` | Button, Card, CardBody, SectionTitle, LedgerLabel, StatRows, MoneyReadout, ProgressBar, Chip, Field, Input, Select, Textarea, MoneyInput, Alert, EmptyState, Skeleton, ErrorPanel, Dialog, LedgerTable, `cx()` |
 | `src/components/Providers.tsx` | `useSession`, `useMe`, `useStats`, `useFeatureFlag`, `useToast`, `BOOTSTRAP_KEY` |
 | `src/components/AppShell.tsx` | Header, nav, footer |
 | `src/app/(app)/layout.tsx` | Wraps every signed-in page in the shell and the session guard |

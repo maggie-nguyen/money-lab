@@ -4,6 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { session, ApiError } from "@/lib/api";
+import { useSession } from "@/components/Providers";
+import { readReturnTo, welcomeHref } from "@/lib/returnTo";
 import { Button, Field, Input, Select, Alert } from "@/components/ui";
 import { GoogleButton } from "@/components/auth/GoogleButton";
 import { SplitAuthShell } from "../SplitAuthShell";
@@ -11,6 +13,7 @@ import { useProvinces } from "../useProvinces";
 
 export default function SignupPage() {
   const router = useRouter();
+  const { bootstrap } = useSession();
   const [displayName, setDisplayName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -20,6 +23,11 @@ export default function SignupPage() {
   const [formError, setFormError] = React.useState<string | null>(null);
   const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
   const provinces = useProvinces();
+
+  // Already signed in, so there is nothing to sign up for.
+  React.useEffect(() => {
+    if (bootstrap) router.replace(readReturnTo());
+  }, [bootstrap, router]);
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -34,7 +42,7 @@ export default function SignupPage() {
         birthYear: birthYear ? Number(birthYear) : undefined,
         province: province || undefined,
       });
-      router.push("/welcome");
+      router.replace(welcomeHref(readReturnTo()));
     } catch (err) {
       if (err instanceof ApiError) {
         const fe = err.fieldErrors();

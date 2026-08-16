@@ -13,10 +13,31 @@ import { systemClock, type Clock } from "@/server/lib/time";
 // Request lifecycle wrapper - doc 01 §4. Order: requestId → CORS/origin → rate limit →
 // authN → authZ → idempotency → Zod → service → serialize.
 
-export type BucketName = "auth" | "write" | "sim-action" | "tutor" | "events" | "read";
+export type BucketName =
+  | "auth"
+  | "auth-identity"
+  | "session-refresh"
+  | "write"
+  | "sim-action"
+  | "tutor"
+  | "events"
+  | "read";
 
+/**
+ * A school sits behind one NAT address, so anything keyed purely by IP is
+ * really keyed by "the whole class". A single strict per-IP auth bucket locks
+ * the eleventh student out of first period, and a signed-in learner refreshing
+ * every fifteen minutes eats the same allowance. So the auth surface is split:
+ * a loose ceiling per address that a classroom clears comfortably, a strict
+ * bucket per account for the credential guessing it is actually there to stop,
+ * and a separate allowance for refresh, which carries a token nobody guesses.
+ */
 const BUCKETS: Record<BucketName, { limit: number; windowSec: number; byIp?: boolean }> = {
-  auth: { limit: 10, windowSec: 600, byIp: true },
+  auth: { limit: 100, windowSec: 600, byIp: true },
+  // Keyed by the email in the body, never by address, so switching networks
+  // does not reset the count for the account being guessed at.
+  "auth-identity": { limit: 10, windowSec: 600 },
+  "session-refresh": { limit: 240, windowSec: 600, byIp: true },
   write: { limit: 120, windowSec: 60 },
   "sim-action": { limit: 30, windowSec: 60 },
   tutor: { limit: 10, windowSec: 60 },
@@ -44,6 +65,12 @@ interface ApiOptions {
   auth: "required" | "optional" | "none";
   roles?: Array<"LEARNER" | "ADMIN">;
   rateLimit?: BucketName;
+  /**
+   * Also count this request against the per-account bucket, keyed by the email
+   * in the body. Set on the routes where a wrong answer is a guess at someone's
+   * password, so the strict limit follows the account rather than the address.
+   */
+  limitByEmail?: boolean;
   idempotent?: boolean;
 }
 
@@ -170,14 +197,41 @@ export function withApi(opts: ApiOptions, handler: Handler) {
         }
       }
 
+      let rawBody: string | null = null;
+
+      // Per-account limit for credential guessing. The IP bucket above is loose
+      // enough for a whole classroom, so the strict count has to follow the
+      // account being guessed at instead of the address doing the guessing. An
+      // unreadable or nameless body is left to Zod, which rejects it anyway.
+      if (opts.limitByEmail) {
+        rawBody = await req.text();
+        let email: string | null = null;
+        try {
+          const parsed: unknown = JSON.parse(rawBody);
+          if (parsed && typeof parsed === "object") {
+            const candidate = (parsed as { email?: unknown }).email;
+            if (typeof candidate === "string" && candidate.length > 0) email = candidate.toLowerCase();
+          }
+        } catch {
+          email = null;
+        }
+        if (email) {
+          const retryAfter = await checkRateLimit("auth-identity", `id:${email}`, now());
+          if (retryAfter !== null) {
+            return errorResponse("RATE_LIMITED", "Too many requests", 429, requestId, undefined, {
+              "retry-after": String(retryAfter),
+            });
+          }
+        }
+      }
+
       // Idempotency replay (doc 01 §3.5)
       let idemKey: string | null = null;
       let requestHash: string | null = null;
-      let rawBody: string | null = null;
       if (opts.idempotent && user) {
         idemKey = req.headers.get("idempotency-key");
         if (idemKey) {
-          rawBody = await req.text();
+          rawBody ??= await req.text();
           requestHash = createHash("sha256").update(`${req.method} ${req.nextUrl.pathname}\n${rawBody}`).digest("hex");
           const existing = await prisma.idempotencyKey.findUnique({
             where: { userId_key: { userId: user.id, key: idemKey } },

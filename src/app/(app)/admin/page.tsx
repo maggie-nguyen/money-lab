@@ -8,7 +8,7 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { Card, CardBody, EmptyState, ErrorPanel, LedgerTable, SectionTitle, Skeleton, StatStrip } from "@/components/ui";
+import { Card, CardBody, EmptyState, ErrorPanel, LedgerTable, SectionTitle, Skeleton, StatRows } from "@/components/ui";
 import { formatDate, formatInt, formatPct } from "@/lib/format";
 
 interface SeriesPoint {
@@ -79,7 +79,7 @@ export default function AdminOverviewPage() {
         Khoảng thời gian {formatDate(data.range.from)} đến {formatDate(data.range.to)}.
       </p>
 
-      <StatStrip
+      <StatRows
         items={[
           { label: "Người dùng", value: formatInt(data.totals.users) },
           { label: "Lượt đăng ký khóa học đang hoạt động", value: formatInt(data.totals.activeEnrollments) },

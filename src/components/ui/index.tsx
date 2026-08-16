@@ -10,6 +10,8 @@
 
 import * as React from "react";
 
+import { formatVnd, formatVndApprox } from "@/lib/format";
+
 export function cx(...parts: Array<string | false | null | undefined>): string {
   return parts.filter(Boolean).join(" ");
 }
@@ -113,7 +115,7 @@ export function LedgerLabel({ children, className }: { children: React.ReactNode
   return <div className={cx("ledger-label", className)}>{children}</div>;
 }
 
-/* -------------------------------------------------------------- Stat strip */
+/* ------------------------------------------------------ Figures and readouts */
 
 export interface StatItem {
   label: string;
@@ -121,20 +123,89 @@ export interface StatItem {
   hint?: React.ReactNode;
 }
 
-/** The ledger strip used on the home and profile screens. */
-export function StatStrip({ items }: { items: StatItem[] }) {
+function StatRow({ item, size }: { item: StatItem; size: "md" | "sm" }) {
   return (
-    <div className="grid grid-cols-2 divide-rule border-y border-rule sm:grid-cols-4 sm:divide-x">
-      {items.map((s) => (
-        <div key={s.label} className="px-4 py-3 max-sm:border-b max-sm:border-rule max-sm:last:border-b-0 max-sm:[&:nth-last-child(2)]:border-b-0">
-          <LedgerLabel>{s.label}</LedgerLabel>
-          <div className="figure mt-1 text-2xl font-semibold">
-            {s.value}
-            {s.hint && <span className="ml-1.5 text-xs font-normal text-moss-400">{s.hint}</span>}
-          </div>
-        </div>
-      ))}
+    <div className="flex items-baseline justify-between gap-4 border-t border-rule py-2.5">
+      <dt className="min-w-0 text-sm text-ink-soft">{item.label}</dt>
+      <dd className={cx("figure shrink-0 font-semibold", size === "md" ? "text-lg" : "text-base")}>
+        {item.value}
+        {item.hint && <span className="ml-1 text-xs font-normal text-ink-faint">{item.hint}</span>}
+      </dd>
     </div>
+  );
+}
+
+/**
+ * A ledger row list: label on the left, figure on the right, one pair per row.
+ *
+ * The strip this replaces stacked a label above its value inside an equal
+ * quarter of the width, which got the proportion backwards in both directions
+ * at once. A single digit sat alone in a cell nearly three hundred pixels wide,
+ * while a label like "Lượt đăng ký khóa học đang hoạt động" wrapped three times
+ * in that same cell. Reading across instead gives the label exactly the slack
+ * the figure does not need, so one list works in a full width header and in the
+ * narrow sidebar of the learn screen without touching the type size.
+ *
+ * Labels are sentence case rather than the uppercase ledger label, because
+ * uppercase Vietnamese at eleven pixels puts the diacritics on top of the cap
+ * height and they stop being readable.
+ */
+export function StatRows({
+  items,
+  columns = 2,
+  className,
+}: {
+  items: StatItem[];
+  columns?: 1 | 2;
+  className?: string;
+}) {
+  return (
+    <dl className={cx("grid border-b border-rule", columns === 2 && "sm:grid-cols-2 sm:gap-x-10", className)}>
+      {items.map((s) => (
+        <StatRow key={s.label} item={s} size="md" />
+      ))}
+    </dl>
+  );
+}
+
+export interface MoneyStat {
+  label: string;
+  /** Đồng as a decimal string, exactly as the API returns it. */
+  vnd: string;
+  /** The figure the learner actually asked for. Rendered large, above the rest. */
+  primary?: boolean;
+}
+
+/**
+ * The result panel for anything that answers in đồng.
+ *
+ * Money here runs to eight and nine digits, so it cannot share a component with
+ * counters that top out at two. The one figure the learner asked for gets a
+ * line of its own at full reading size with a plain language gloss underneath,
+ * because "khoảng 100,1 triệu" lands before "100.133.641 ₫" has been counted.
+ * Everything that only supports that answer drops to a row beneath it, where a
+ * long figure has the whole right edge to itself instead of a quarter column.
+ */
+export function MoneyReadout({ items }: { items: MoneyStat[] }) {
+  const head = items.find((i) => i.primary);
+  const rest = head ? items.filter((i) => i !== head) : items;
+  const approx = head ? formatVndApprox(head.vnd) : null;
+
+  return (
+    <dl className="border-b border-rule">
+      {head && (
+        <div className="border-t border-rule py-3">
+          <dt>
+            <LedgerLabel>{head.label}</LedgerLabel>
+          </dt>
+          <dd className="figure mt-1 text-3xl font-semibold tracking-tight">{formatVnd(head.vnd)}</dd>
+          {approx && <dd className="mt-0.5 text-xs text-ink-faint">{approx}</dd>}
+        </div>
+      )}
+      {rest.map((m) => (
+        <StatRow key={m.label} item={{ label: m.label, value: formatVnd(m.vnd) }} size="sm" />
+      ))}
+    </dl>
   );
 }
 
