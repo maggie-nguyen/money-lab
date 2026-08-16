@@ -48,7 +48,6 @@ function Wordmark() {
   return (
     <Link href="/learn" className="flex items-baseline gap-2">
       <span className="font-display text-xl font-semibold tracking-tight">MoneyLab</span>
-      <span className="ledger-label hidden text-ink-faint sm:inline">Tài chính cá nhân</span>
     </Link>
   );
 }
