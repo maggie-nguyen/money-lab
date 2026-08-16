@@ -46,4 +46,30 @@ jobs:
 
       - run: pnpm test
 
-      - run: pnpm build
+      # The test harness owns and stops its disposable database at the end of
+      # `pnpm test`. Next statically renders the public library during build,
+      # so give that step a separate, persistent database with the schema.
+      - name: Start Postgres for build
+        run: |
+          pnpm db:local > "$RUNNER_TEMP/moneylab-build-postgres.log" 2>&1 &
+          echo $! > "$RUNNER_TEMP/moneylab-build-postgres.pid"
+          for attempt in {1..30}; do
+            if (echo > /dev/tcp/127.0.0.1/5544) >/dev/null 2>&1; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat "$RUNNER_TEMP/moneylab-build-postgres.log"
+          exit 1
+
+      - name: Prepare build database
+        run: pnpm exec prisma migrate deploy
+        env:
+          DATABASE_URL: postgres://moneylab:moneylab@127.0.0.1:5544/moneylab
+          DIRECT_URL: postgres://moneylab:moneylab@127.0.0.1:5544/moneylab
+
+      - name: Build
+        run: pnpm build
+        env:
+          DATABASE_URL: postgres://moneylab:moneylab@127.0.0.1:5544/moneylab
+          DIRECT_URL: postgres://moneylab:moneylab@127.0.0.1:5544/moneylab
