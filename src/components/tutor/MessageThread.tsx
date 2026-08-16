@@ -1,6 +1,7 @@
 "use client";
 
 import { EmptyState, Skeleton, Spinner, cx } from "@/components/ui";
+import { useT } from "@/components/Providers";
 import { formatRelative } from "@/lib/format";
 import type { TutorMessageView } from "@/lib/types";
 
@@ -33,6 +34,8 @@ export function MessageThread({
   /** The learner's message shown optimistically while the reply is pending. */
   pendingContent: string | null;
 }) {
+  const t = useT();
+
   if (isLoading) {
     return (
       <div className="space-y-3" aria-busy="true">
@@ -45,10 +48,7 @@ export function MessageThread({
 
   if (messages.length === 0 && !pendingContent) {
     return (
-      <EmptyState
-        title="Bắt đầu hỏi trợ giảng"
-        description="Hỏi về khái niệm tài chính, một bài học, hoặc một mô phỏng bạn đang làm."
-      />
+      <EmptyState title={t("tutor.message.emptyTitle")} description={t("tutor.message.emptyDescription")} />
     );
   }
 
@@ -66,7 +66,7 @@ export function MessageThread({
           </div>
           <div className="flex items-center gap-2 text-sm text-ink-faint">
             <Spinner />
-            <span>Trợ giảng đang trả lời...</span>
+            <span>{t("tutor.message.replying")}</span>
           </div>
         </>
       )}

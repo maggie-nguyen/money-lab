@@ -9,7 +9,7 @@
 import * as React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, api, idempotencyKey } from "@/lib/api";
-import { useFeatureFlag, useMe } from "@/components/Providers";
+import { useFeatureFlag, useMe, useT } from "@/components/Providers";
 import { Alert, EmptyState, ErrorPanel, LedgerLabel, Skeleton } from "@/components/ui";
 import { Composer } from "@/components/tutor/Composer";
 import { MessageThread } from "@/components/tutor/MessageThread";
@@ -28,6 +28,7 @@ interface SendMessageResult {
 
 export default function TutorPage() {
   const me = useMe();
+  const t = useT();
   const tutorEnabled = useFeatureFlag("ai_tutor_enabled");
   const qc = useQueryClient();
 
@@ -70,7 +71,7 @@ export default function TutorPage() {
 
   const sendMessage = useMutation({
     mutationFn: (content: string) => {
-      if (!selectedId) throw new Error("Chưa chọn cuộc trò chuyện");
+      if (!selectedId) throw new Error(t("tutor.noThreadSelected"));
       return api.post<SendMessageResult>(
         `/tutor/threads/${selectedId}/messages`,
         { content },
@@ -96,11 +97,9 @@ export default function TutorPage() {
   let composerDisabledReason: string | undefined;
   if (sendError) {
     composerDisabledReason =
-      sendError.status === 429
-        ? "Bạn đã dùng hết lượt hỏi hôm nay. Quay lại vào ngày mai."
-        : sendError.message;
+      sendError.status === 429 ? t("tutor.rateLimited") : sendError.message;
   } else if (usedUp) {
-    composerDisabledReason = "Bạn đã dùng hết lượt hỏi hôm nay. Quay lại vào ngày mai.";
+    composerDisabledReason = t("tutor.rateLimited");
   }
 
   if (!me) {
@@ -116,10 +115,10 @@ export default function TutorPage() {
     return (
       <div className="space-y-5">
         <div>
-          <LedgerLabel>Trợ giảng</LedgerLabel>
-          <h1 className="mt-1 text-2xl">Trợ giảng AI</h1>
+          <LedgerLabel>{t("nav.tutor")}</LedgerLabel>
+          <h1 className="mt-1 text-2xl">{t("nav.tutor")}</h1>
         </div>
-        <EmptyState title="Trợ giảng AI hiện chưa bật" description="Tính năng này sẽ sớm được mở cho tài khoản của bạn." />
+        <EmptyState title={t("tutor.disabledTitle")} description={t("tutor.disabledDescription")} />
       </div>
     );
   }
@@ -128,20 +127,20 @@ export default function TutorPage() {
     <div className="space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <LedgerLabel>Trợ giảng</LedgerLabel>
-          <h1 className="mt-1 text-2xl">Trợ giảng AI</h1>
+          <LedgerLabel>{t("tutor.label")}</LedgerLabel>
+          <h1 className="mt-1 text-2xl">{t("tutor.title")}</h1>
         </div>
         {usageQuery.data && (
           <p className="figure text-sm text-ink-soft">
-            Còn lại hôm nay: {usageQuery.data.remainingToday}/{usageQuery.data.limitPerDay} tin nhắn
+            {t("tutor.remainingToday", {
+              remaining: usageQuery.data.remainingToday,
+              limit: usageQuery.data.limitPerDay,
+            })}
           </p>
         )}
       </div>
 
-      <Alert tone="info">
-        Trợ giảng hỗ trợ học tập, không phải lời khuyên đầu tư hay tài chính cá nhân. Hãy kiểm tra lại
-        thông tin quan trọng với người lớn đáng tin cậy.
-      </Alert>
+      <Alert tone="info">{t("tutor.disclaimer")}</Alert>
 
       <div className="grid gap-4 md:grid-cols-[260px_1fr]">
         <div className="md:h-[560px]">
@@ -159,7 +158,10 @@ export default function TutorPage() {
           {threadsQuery.isError ? (
             <ErrorPanel error={threadsQuery.error} onRetry={() => threadsQuery.refetch()} />
           ) : !selectedId ? (
-            <EmptyState title="Chưa có cuộc trò chuyện nào" description="Bấm “Cuộc trò chuyện mới” để bắt đầu hỏi trợ giảng." />
+            <EmptyState
+              title={t("tutor.emptyNoThreadTitle")}
+              description={t("tutor.emptyNoThreadDescription")}
+            />
           ) : threadQuery.isError ? (
             <ErrorPanel error={threadQuery.error} onRetry={() => threadQuery.refetch()} />
           ) : (

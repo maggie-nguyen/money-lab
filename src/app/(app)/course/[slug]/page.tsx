@@ -16,7 +16,8 @@ import type { AttemptState, CourseDetail, LessonSummary } from "@/lib/types";
 import { formatMinutes } from "@/lib/format";
 import { coverStyle } from "@/lib/cover";
 import { CoverArt } from "@/components/art/CoverArt";
-import { useToast } from "@/components/Providers";
+import { useT, useToast } from "@/components/Providers";
+import type { TranslateFn } from "@/lib/i18n";
 import {
   Button,
   Card,
@@ -29,16 +30,25 @@ import {
   Skeleton,
 } from "@/components/ui";
 
-function levelLabel(level: 1 | 2 | 3): string {
-  return level === 1 ? "Cơ bản" : level === 2 ? "Trung cấp" : "Nâng cao";
+function levelLabel(level: 1 | 2 | 3, t: TranslateFn): string {
+  if (level === 1) return t("course.level.basic");
+  if (level === 2) return t("course.level.intermediate");
+  return t("course.level.advanced");
 }
 
 /** What the lesson is made of, from LessonSummary.media and hasCheckQuiz. */
 function MediaGlyphs({ lesson }: { lesson: LessonSummary }) {
+  const t = useT();
   const marks: Array<{ key: string; label: string; title: string }> = [];
-  if (lesson.media.video) marks.push({ key: "v", label: "Video", title: "Có video" });
-  if (lesson.media.sim) marks.push({ key: "s", label: "Mô phỏng", title: "Có hoạt động mô phỏng" });
-  if (lesson.hasCheckQuiz) marks.push({ key: "q", label: "Kiểm tra", title: "Có bài kiểm tra nhanh" });
+  if (lesson.media.video) {
+    marks.push({ key: "v", label: t("course.mark.video"), title: t("course.mark.videoTitle") });
+  }
+  if (lesson.media.sim) {
+    marks.push({ key: "s", label: t("course.mark.sim"), title: t("course.mark.simTitle") });
+  }
+  if (lesson.hasCheckQuiz) {
+    marks.push({ key: "q", label: t("course.mark.quiz"), title: t("course.mark.quizTitle") });
+  }
   if (marks.length === 0) return null;
   return (
     <span className="flex flex-wrap gap-1.5">
@@ -93,6 +103,7 @@ export default function CourseDetailPage() {
   const slug = params.slug;
   const router = useRouter();
   const toast = useToast();
+  const t = useT();
 
   const courseQuery = useQuery({
     queryKey: ["course", slug],
@@ -120,7 +131,10 @@ export default function CourseDetailPage() {
           return;
         }
       }
-      toast({ tone: "critical", message: err instanceof ApiError ? err.message : "Không bắt đầu được bài kiểm tra." });
+      toast({
+        tone: "critical",
+        message: err instanceof ApiError ? err.message : t("course.quizStartFailed"),
+      });
     },
   });
 
@@ -140,7 +154,7 @@ export default function CourseDetailPage() {
 
   const course = courseQuery.data;
   if (!course) {
-    return <EmptyState title="Không tìm thấy khóa học" />;
+    return <EmptyState title={t("course.notFound")} />;
   }
 
   const completedLessons = course.progress?.completedLessons ?? 0;
@@ -155,7 +169,11 @@ export default function CourseDetailPage() {
   const resume = ordered.find((l) => l.progress?.status !== "COMPLETED") ?? ordered[0];
   const started = ordered.some((l) => l.progress && l.progress.status !== "NOT_STARTED");
   const ctaLabel =
-    course.progress?.status === "COMPLETED" ? "Xem lại" : started ? "Học tiếp" : "Bắt đầu học";
+    course.progress?.status === "COMPLETED"
+      ? t("course.review")
+      : started
+        ? t("course.continue")
+        : t("course.start");
 
   return (
     <div className="space-y-8">
@@ -175,16 +193,22 @@ export default function CourseDetailPage() {
               the banner they read as white on white. */}
           <div className="ledger-label flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-white/40 bg-white/15 px-2.5 py-0.5">
-              {levelLabel(course.level)}
+              {levelLabel(course.level, t)}
             </span>
             {course.progress?.status === "COMPLETED" && (
-              <span className="rounded-full border border-white/40 bg-white/15 px-2.5 py-0.5">Hoàn thành</span>
+              <span className="rounded-full border border-white/40 bg-white/15 px-2.5 py-0.5">
+                {t("course.completed")}
+              </span>
             )}
           </div>
           <h1 className="font-display text-3xl font-semibold">{course.title}</h1>
           {course.subtitle && <p className="max-w-2xl text-white/85">{course.subtitle}</p>}
           <p className="figure text-sm text-white/75">
-            {formatMinutes(course.estimatedMinutes)} · {course.lessonCount} bài học · {course.xpReward} XP
+            {t("course.lessonsMeta", {
+              minutes: formatMinutes(course.estimatedMinutes),
+              count: course.lessonCount,
+              xp: course.xpReward,
+            })}
           </p>
         </div>
       </div>
@@ -197,9 +221,13 @@ export default function CourseDetailPage() {
         )}
         {course.progress && (
           <div className="min-w-[12rem] flex-1 space-y-1">
-            <ProgressBar value={completedLessons} max={course.lessonCount} label="Tiến độ khóa học" />
+            <ProgressBar
+              value={completedLessons}
+              max={course.lessonCount}
+              label={t("course.progressLabel")}
+            />
             <p className="figure text-xs text-ink-faint">
-              {completedLessons}/{course.lessonCount} bài đã hoàn thành
+              {t("course.progressDone", { done: completedLessons, total: course.lessonCount })}
             </p>
           </div>
         )}
@@ -209,7 +237,7 @@ export default function CourseDetailPage() {
 
       {course.learningObjectives.length > 0 && (
         <section>
-          <SectionTitle>Sau khóa học bạn sẽ</SectionTitle>
+          <SectionTitle>{t("course.objectivesTitle")}</SectionTitle>
           <div className="grid gap-3 sm:grid-cols-2">
             {course.learningObjectives.map((obj, i) => (
               <Card key={i} tone="flat">
@@ -226,10 +254,10 @@ export default function CourseDetailPage() {
       )}
 
       {ordered.length === 0 ? (
-        <EmptyState title="Chưa có bài học" description="Khóa học này chưa có nội dung." />
+        <EmptyState title={t("course.emptyTitle")} description={t("course.emptyDescription")} />
       ) : (
         <section>
-          <SectionTitle>Nội dung khóa học</SectionTitle>
+          <SectionTitle>{t("course.contentTitle")}</SectionTitle>
           <div className="space-y-6">
             {course.modules.map((mod) => (
               <div key={mod.id}>
@@ -237,7 +265,7 @@ export default function CourseDetailPage() {
                 <Card tone="flat" className="mt-2">
                   <CardBody className="py-0">
                     {mod.lessons.length === 0 ? (
-                      <p className="py-4 text-sm text-ink-faint">Chưa có bài học trong phần này.</p>
+                      <p className="py-4 text-sm text-ink-faint">{t("course.emptyModule")}</p>
                     ) : (
                       mod.lessons.map((lesson) => (
                         <LessonRow key={lesson.id} lesson={lesson} number={numberOf.get(lesson.id) ?? 1} />
@@ -250,7 +278,7 @@ export default function CourseDetailPage() {
 
             {course.unmoduledLessons.length > 0 && (
               <div>
-                {course.modules.length > 0 && <LedgerLabel>Bài học khác</LedgerLabel>}
+                {course.modules.length > 0 && <LedgerLabel>{t("course.otherLessons")}</LedgerLabel>}
                 <Card tone="flat" className={course.modules.length > 0 ? "mt-2" : undefined}>
                   <CardBody className="py-0">
                     {course.unmoduledLessons.map((lesson) => (
@@ -266,12 +294,16 @@ export default function CourseDetailPage() {
 
       {course.finalQuiz && (
         <section>
-          <SectionTitle>Kiểm tra cuối khóa</SectionTitle>
+          <SectionTitle>{t("course.finalQuizTitle")}</SectionTitle>
           <Card tone="ink">
             <CardBody className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <p className="font-medium">{course.finalQuiz.questionCount} câu hỏi</p>
-                <p className="figure text-sm opacity-80">Cần đạt {course.finalQuiz.passThresholdPct}% để qua</p>
+                <p className="font-medium">
+                  {t("course.finalQuizQuestions", { count: course.finalQuiz.questionCount })}
+                </p>
+                <p className="figure text-sm opacity-80">
+                  {t("course.finalQuizPass", { pct: course.finalQuiz.passThresholdPct })}
+                </p>
               </div>
               <Button
                 variant="secondary"
@@ -279,7 +311,7 @@ export default function CourseDetailPage() {
                 loading={startFinalQuiz.isPending}
                 onClick={() => startFinalQuiz.mutate(course.finalQuiz!.id)}
               >
-                Bắt đầu kiểm tra
+                {t("course.startQuiz")}
               </Button>
             </CardBody>
           </Card>

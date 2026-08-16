@@ -3,19 +3,13 @@
 import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useSession } from "@/components/Providers";
+import { useSession, useT } from "@/components/Providers";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { signOut } from "@/lib/signOut";
 import { Button, Chip, cx } from "@/components/ui";
 
-const NAV = [
-  { href: "/learn", label: "Khóa học" },
-  { href: "/library", label: "Thư viện" },
-  { href: "/sims", label: "Mô phỏng" },
-  { href: "/tools", label: "Công cụ" },
-  { href: "/tutor", label: "Trợ giảng" },
-] as const;
-
 function ThemeToggle() {
+  const t = useT();
   const [theme, setTheme] = React.useState<"light" | "dark" | null>(null);
 
   React.useEffect(() => {
@@ -36,8 +30,8 @@ function ThemeToggle() {
     <button
       onClick={toggle}
       className="rounded-[var(--radius-control)] px-2 py-1 text-sm text-ink-soft hover:bg-paper-sunken hover:text-ink"
-      aria-label="Chuyển giao diện sáng/tối"
-      title="Chuyển giao diện sáng/tối"
+      aria-label={t("theme.toggle")}
+      title={t("theme.toggle")}
     >
       {theme === "dark" ? "☾" : "☀"}
     </button>
@@ -54,18 +48,19 @@ function Wordmark() {
 
 function StreakAndCoins() {
   const { bootstrap } = useSession();
+  const t = useT();
   if (!bootstrap) return null;
   const { stats } = bootstrap;
   return (
     <div className="flex items-center gap-3 text-sm">
-      <span className="figure text-ink-soft" title="Chuỗi ngày học">
-        {stats.streakCurrent} ngày
+      <span className="figure text-ink-soft" title={t("stats.streakTitle")}>
+        {t("stats.streakDays", { count: stats.streakCurrent })}
       </span>
-      <span className="figure text-ink-soft" title="Xu">
-        {stats.coins} xu
+      <span className="figure text-ink-soft" title={t("stats.coinsTitle")}>
+        {t("stats.coins", { count: stats.coins })}
       </span>
       <Chip tone="moss" className="figure">
-        Cấp {stats.level}
+        {t("stats.level", { level: stats.level })}
       </Chip>
     </div>
   );
@@ -73,6 +68,7 @@ function StreakAndCoins() {
 
 function AccountMenu() {
   const { bootstrap } = useSession();
+  const t = useT();
   const [open, setOpen] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
 
@@ -89,13 +85,21 @@ function AccountMenu() {
     return (
       <Link href="/login">
         <Button size="sm" variant="secondary">
-          Đăng nhập
+          {t("nav.signIn")}
         </Button>
       </Link>
     );
   }
 
   const name = bootstrap.user.displayName;
+  const menu = [
+    { href: "/profile", label: t("nav.profile") },
+    { href: "/quests", label: t("nav.quests") },
+    { href: "/leaderboard", label: t("nav.leaderboard") },
+    { href: "/shop", label: t("nav.shop") },
+    { href: "/settings", label: t("nav.settings") },
+  ];
+
   return (
     <div className="relative" ref={ref}>
       <button
@@ -103,7 +107,7 @@ function AccountMenu() {
         className="flex h-9 w-9 items-center justify-center rounded-full border border-rule-strong bg-paper-raised text-sm font-semibold"
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label="Tài khoản"
+        aria-label={t("nav.account")}
       >
         {name.slice(0, 1).toUpperCase()}
       </button>
@@ -118,13 +122,7 @@ function AccountMenu() {
               {bootstrap.user.email}
             </div>
           </div>
-          {[
-            { href: "/profile", label: "Hồ sơ" },
-            { href: "/quests", label: "Nhiệm vụ" },
-            { href: "/leaderboard", label: "Bảng xếp hạng" },
-            { href: "/shop", label: "Cửa hàng" },
-            { href: "/settings", label: "Cài đặt" },
-          ].map((i) => (
+          {menu.map((i) => (
             <Link
               key={i.href}
               href={i.href}
@@ -137,11 +135,11 @@ function AccountMenu() {
           ))}
           {bootstrap.user.role === "ADMIN" && (
             <Link href="/admin" role="menuitem" className="block px-3 py-2 hover:bg-paper-sunken" onClick={() => setOpen(false)}>
-              Quản trị
+              {t("nav.admin")}
             </Link>
           )}
           <button role="menuitem" onClick={() => void signOut("/")} className="block w-full px-3 py-2 text-left text-critical hover:bg-paper-sunken">
-            Đăng xuất
+            {t("nav.signOut")}
           </button>
         </div>
       )}
@@ -151,13 +149,22 @@ function AccountMenu() {
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const t = useT();
+  const nav = [
+    { href: "/learn", label: t("nav.courses") },
+    { href: "/library", label: t("nav.library") },
+    { href: "/sims", label: t("nav.sims") },
+    { href: "/tools", label: t("nav.tools") },
+    { href: "/tutor", label: t("nav.tutor") },
+  ] as const;
+
   return (
     <div className="flex min-h-dvh flex-col">
       <header className="sticky top-0 z-30 border-b border-rule bg-paper/95 backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4">
           <Wordmark />
-          <nav className="hidden items-center gap-1 md:flex" aria-label="Điều hướng chính">
-            {NAV.map((item) => {
+          <nav className="hidden items-center gap-1 md:flex" aria-label={t("nav.main")}>
+            {nav.map((item) => {
               const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
               return (
                 <Link
@@ -178,6 +185,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="hidden lg:block">
               <StreakAndCoins />
             </div>
+            <LanguageSwitcher className="hidden sm:inline-flex" />
             <ThemeToggle />
             <AccountMenu />
           </div>
@@ -191,9 +199,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <nav
         className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-rule bg-paper-raised md:hidden"
-        aria-label="Điều hướng chính"
+        aria-label={t("nav.main")}
       >
-        {NAV.map((item) => {
+        {nav.map((item) => {
           const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
           return (
             <Link
@@ -210,8 +218,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
       <footer className="hidden border-t border-rule px-4 py-6 text-xs text-ink-faint md:block">
         <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-2">
-          <span>MoneyLab. Nội dung mang tính giáo dục, không phải lời khuyên đầu tư.</span>
-          <span>Mọi số liệu trong mô phỏng đều là giả lập.</span>
+          <span>{t("footer.disclaimer")}</span>
+          <span>{t("footer.simDisclaimer")}</span>
         </div>
       </footer>
     </div>

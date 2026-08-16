@@ -190,7 +190,7 @@ export async function getBootstrap(userId: string, now: Clock) {
     featureFlags: await allFlags(),
     // Same DailyQuest shape as /me/quests/today, doc 03 §6.1. It has to be:
     // the client types both as DailyQuest and reads title and targetInt off it.
-    dailyQuests: dailyQuests.map(serializeQuest),
+    dailyQuests: dailyQuests.map((q) => serializeQuest(q, user.localePref)),
     activeSimSessions: activeSims.map((s) => ({
       sessionId: s.id,
       simSlug: s.sim.slug,

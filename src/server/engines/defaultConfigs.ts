@@ -180,6 +180,7 @@ export const SIM_SEEDS: Array<{
   estimatedMinutes: number;
   config: object;
   vi: { title: string; subtitle: string; description: string };
+  en: { title: string; subtitle: string; description: string };
 }> = [
   {
     slug: "thang-luong-dau-tien",
@@ -192,6 +193,12 @@ export const SIM_SEEDS: Array<{
       subtitle: "Cân đối chi tiêu trong ba tháng đầu đi làm",
       description:
         "Phân bổ thu nhập cho nhu cầu, mong muốn và tiết kiệm, xử lý các sự cố bất ngờ và giữ cho số dư không bị âm.",
+    },
+    en: {
+      title: "First paycheck month",
+      subtitle: "Balance spending in your first three months of work",
+      description:
+        "Allocate income across needs, wants, and savings, handle surprise expenses, and keep the balance from going negative.",
     },
   },
   {
@@ -206,6 +213,12 @@ export const SIM_SEEDS: Array<{
       description:
         "So sánh lãi suất, phí ẩn và kỳ hạn. Nhận diện tín dụng đen và học cách trả nợ sớm.",
     },
+    en: {
+      title: "Borrow wisely",
+      subtitle: "Pick the best loan to buy a laptop",
+      description:
+        "Compare interest rates, hidden fees, and terms. Spot illegal lenders and learn how early repayment works.",
+    },
   },
   {
     slug: "san-lua-dao",
@@ -218,6 +231,12 @@ export const SIM_SEEDS: Array<{
       subtitle: "Phân biệt tin nhắn thật và tin nhắn lừa đảo",
       description:
         "Mười tình huống thường gặp: lấy cắp mã OTP, đa cấp Ponzi, giả danh công an, việc nhẹ lương cao.",
+    },
+    en: {
+      title: "Spot the scam",
+      subtitle: "Tell real messages from scam messages",
+      description:
+        "Ten common situations: OTP theft, Ponzi schemes, fake police, and easy-money job offers.",
     },
   },
   {
@@ -232,6 +251,12 @@ export const SIM_SEEDS: Array<{
       description:
         "Định giá, nhập hàng và nâng cấp quán, qua đó hiểu doanh thu, chi phí và lợi nhuận trên mỗi sản phẩm.",
     },
+    en: {
+      title: "My drink stall",
+      subtitle: "Run a lemonade shop for 8 weeks",
+      description:
+        "Price, stock, and upgrade the stall to learn revenue, costs, and profit per product.",
+    },
   },
   {
     slug: "danh-muc-dau-tien",
@@ -244,6 +269,12 @@ export const SIM_SEEDS: Array<{
       subtitle: "12 quý đầu tư với tài sản mô phỏng",
       description:
         "Rủi ro và lợi nhuận, đa dạng hóa, phí giao dịch, và cách tin tức đánh lừa cảm xúc nhà đầu tư.",
+    },
+    en: {
+      title: "First portfolio",
+      subtitle: "12 quarters of investing with simulated assets",
+      description:
+        "Risk and return, diversification, trading fees, and how news can trick an investor's emotions.",
     },
   },
 ];

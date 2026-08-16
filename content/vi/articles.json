@@ -114,6 +114,112 @@
               "text": "Ngân sách đầu tiên của bạn có thể chưa sát thực tế. Điều đó hoàn toàn bình thường. Hãy điều chỉnh các con số sau tháng đầu, rồi tiếp tục áp dụng; sau vài tháng, việc lập ngân sách sẽ trở nên dễ dàng hơn."
             }
           ]
+        },
+        "en": {
+          "title": "Build Your First Budget When You Only Have Pocket Money",
+          "summary": "You do not need a monthly salary to need a budget. Here is how to split 500,000 VND a month and still have money on the 28th.",
+          "seoTitle": "How students can budget with pocket money",
+          "seoDescription": "A step-by-step first personal budget guide for high-school students, with Vietnamese currency examples and a sample table to copy.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Most budgeting advice is written for people with jobs. If your income is pocket money and the occasional lucky-money envelope, that advice can feel disconnected from reality. But the principle still holds: you decide in advance where your money will go, instead of trying to remember at month's end where it all went."
+            },
+            {
+              "type": "HEADING",
+              "text": "Start With Real Numbers",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Track every bit of money coming in over four weeks: weekly allowance from your parents, bonuses, money from selling old items. Don't round numbers to make them look nicer. A budget built on guessed numbers is wrong from the very first line."
+            },
+            {
+              "type": "TABLE",
+              "caption": "One month for Linh, an 11th grader",
+              "headers": [
+                "Item",
+                "Amount",
+                "Note"
+              ],
+              "rows": [
+                [
+                  "Weekly allowance",
+                  "400,000 ₫",
+                  "100,000 ₫ × 4 weeks"
+                ],
+                [
+                  "End-of-term bonus",
+                  "200,000 ₫",
+                  "Irregular, not counted in the fixed plan"
+                ],
+                [
+                  "Total monthly income",
+                  "600,000 ₫",
+                  ""
+                ]
+              ]
+            },
+            {
+              "type": "HEADING",
+              "text": "Split Into Three Groups, Not Ten",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "The more line items a budget has, the easier it is to abandon. Three groups are enough: required spending, spending on yourself, and savings. With a small income, the 50/30/20 ratio still works — the numbers are just smaller."
+            },
+            {
+              "type": "TABLE",
+              "caption": "600,000 ₫ split by the 50/30/20 ratio",
+              "headers": [
+                "Group",
+                "Ratio",
+                "Amount"
+              ],
+              "rows": [
+                [
+                  "Required spending (lunch, bus, school supplies)",
+                  "50%",
+                  "300,000 ₫"
+                ],
+                [
+                  "Spending on yourself (coffee, games, gifts)",
+                  "30%",
+                  "180,000 ₫"
+                ],
+                [
+                  "Savings",
+                  "20%",
+                  "120,000 ₫"
+                ]
+              ]
+            },
+            {
+              "type": "KEY_TERM",
+              "term": "Required spending",
+              "definition": "An expense that, if cut, immediately disrupts your schooling and daily life: school lunch, bus fare, notebooks and pens. Not something you find hard to give up, but something you genuinely cannot give up."
+            },
+            {
+              "type": "HEADING",
+              "text": "Check In on the 15th",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Mid-month, add up how much you've spent in the second group. If you've already spent more than half, you still have two weeks to adjust, instead of finding out only when your wallet is empty. A five-minute check is enough."
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "TIP",
+              "title": "A small tip",
+              "text": "Move your savings out of your wallet the day you receive money. Money that isn't within easy reach is much harder to spend."
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Your first budget might not match reality very well. That's completely normal. Adjust the numbers after the first month and keep going; after a few months, budgeting will become much easier."
+            }
+          ]
         }
       }
     },
@@ -210,6 +316,92 @@
               "text": "Hãy thử thay số của chính bạn vào công cụ trên. Điều đáng chú ý không phải là lãi suất, mà là số năm: kéo dài thời gian thường có tác dụng mạnh hơn việc cố tìm thêm một phần trăm lãi suất."
             }
           ]
+        },
+        "en": {
+          "title": "How Compound Interest Works — Explained With a Number Table",
+          "summary": "Compound interest is often called the \"eighth wonder.\" The table below shows what it does to 1,000,000 VND over time.",
+          "seoTitle": "What compound interest is and how it affects savings",
+          "seoDescription": "Compound interest explained with concrete Vietnamese currency examples, comparing simple and compound interest over ten years, plus a try-it calculator.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Simple interest pays interest only on the principal. Compound interest pays interest on both the principal and the interest already earned. The difference sounds minor at first, but after a few years it's anything but."
+            },
+            {
+              "type": "KEY_TERM",
+              "term": "Compound interest",
+              "definition": "Interest that gets added to the principal each period, so in the next period you earn interest on a larger amount than before."
+            },
+            {
+              "type": "HEADING",
+              "text": "One Million VND at 6% a Year",
+              "level": 2
+            },
+            {
+              "type": "TABLE",
+              "caption": "Comparing simple and compound interest, rounded to the nearest thousand VND",
+              "headers": [
+                "Year",
+                "Simple interest",
+                "Compound interest"
+              ],
+              "rows": [
+                [
+                  "1",
+                  "1,060,000 ₫",
+                  "1,060,000 ₫"
+                ],
+                [
+                  "3",
+                  "1,180,000 ₫",
+                  "1,191,000 ₫"
+                ],
+                [
+                  "5",
+                  "1,300,000 ₫",
+                  "1,338,000 ₫"
+                ],
+                [
+                  "10",
+                  "1,600,000 ₫",
+                  "1,791,000 ₫"
+                ],
+                [
+                  "20",
+                  "2,200,000 ₫",
+                  "3,207,000 ₫"
+                ]
+              ]
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "In the first year, the two columns are identical. That's why compound interest is easy to underestimate: its real impact usually shows up after a long stretch of time, not right away. If you stop too early, you'll rarely see that benefit."
+            },
+            {
+              "type": "HEADING",
+              "text": "Compound Interest Also Works in Reverse",
+              "level": 2
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "WARNING",
+              "title": "Debt Compounds Too",
+              "text": "Credit card balances and consumer loans can grow through the same mechanism — except now you're the one paying. 2.5% a month sounds light, but compounded monthly it works out to more than 34% a year."
+            },
+            {
+              "type": "CALCULATOR",
+              "tool": "compound-interest",
+              "presets": {
+                "principalVnd": 1000000,
+                "ratePercent": 6,
+                "years": 10
+              }
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Try plugging your own numbers into the tool above. What matters most isn't the interest rate — it's the number of years: stretching out time usually has a stronger effect than chasing an extra percentage point of rate."
+            }
+          ]
         }
       }
     },
@@ -287,6 +479,75 @@
               "type": "SIM_LINK",
               "simSlug": "san-lua-dao",
               "label": "Luyện nhận diện lừa đảo trong mô phỏng"
+            }
+          ]
+        },
+        "en": {
+          "title": "Five Signs of a Scam Message",
+          "summary": "Scammers do not need you to be uninformed — they only need you to let your guard down. Here are five signs that help you spot risk before you tap a link.",
+          "seoTitle": "Five signs of phone scam messages",
+          "seoDescription": "How to recognize common scam texts and calls in Vietnam, with real examples and steps if you already clicked a link.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Message scams usually succeed by exploiting reflexes, not because victims lack knowledge. When we panic, it's hard to stop and verify information. So the best defense is memorizing a few signs that let you spot risk even when you're in a hurry."
+            },
+            {
+              "type": "HEADING",
+              "text": "1. Unreasonable Urgency",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Your account will be locked in 30 minutes. Your order will be canceled if you don't confirm right now. A real bank never puts a countdown timer on you."
+            },
+            {
+              "type": "HEADING",
+              "text": "2. Links That Look Almost Real",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "vietcom-bank.info, shopee-vn.top, momo-hotro.com. A large organization's real domain rarely has a hyphen wedged into the middle or an unusual ending. Read the part right before the last dot — that's the actual domain."
+            },
+            {
+              "type": "HEADING",
+              "text": "3. Asking for Your OTP",
+              "level": 2
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "WARNING",
+              "title": "No Exceptions",
+              "text": "No bank employee, e-commerce platform, or police officer ever needs your OTP. Anyone who asks for it is scamming you, even if they correctly recite your name and address."
+            },
+            {
+              "type": "HEADING",
+              "text": "4. Prizes From Nowhere",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "You've won a contest you never entered. Just pay a small shipping fee to claim it. That small fee is the entire point of the scam."
+            },
+            {
+              "type": "HEADING",
+              "text": "5. Contact Through Unofficial Channels",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Someone claiming to be from a bank or the police contacts you from a personal account, then asks you to switch to another app. When a real organization needs to reach you, it does so through official channels."
+            },
+            {
+              "type": "EXAMPLE",
+              "title": "If You Already Clicked",
+              "text": "Don't enter any more information, and close the page. If you already entered login details, change your password from a different device, then call the bank hotline using the number printed on your card — not the number from the message. If you already transferred money, report it to the bank as soon as possible so they can guide you through disputing the transaction."
+            },
+            {
+              "type": "SIM_LINK",
+              "simSlug": "san-lua-dao",
+              "label": "Practice spotting scams in the simulation"
             }
           ]
         }
@@ -380,6 +641,87 @@
               "text": "Trả góp không phải lúc nào cũng là lựa chọn sai. Với một khoản chi thực sự cần thiết và kế hoạch trả nợ rõ ràng, hình thức này giúp bạn không phải dồn hết tiền trong một tháng. Rủi ro xuất hiện khi bạn tưởng khoản vay là miễn phí và mua thứ mình chưa cần."
             }
           ]
+        },
+        "en": {
+          "title": "Is 0% Installment Financing Really Free?",
+          "summary": "A 12,000,000 VND phone on 12-month, 0% interest installments sounds like you pay nothing extra. Read the three fee lines carefully.",
+          "seoTitle": "0% interest installments: where the real cost hides",
+          "seoDescription": "A breakdown of the true cost of 0% installment plans in Vietnam — application fees, collection fees, and loan insurance — plus how to calculate it yourself.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "0% installment financing isn't necessarily false advertising — the interest rate really can be 0%. But interest is just one of several costs in a loan, and the others are usually not advertised as prominently."
+            },
+            {
+              "type": "HEADING",
+              "text": "Three Common Fee Lines",
+              "level": 2
+            },
+            {
+              "type": "TABLE",
+              "caption": "A 12,000,000 ₫ phone, 12-month installments",
+              "headers": [
+                "Item",
+                "Amount",
+                "Note"
+              ],
+              "rows": [
+                [
+                  "Cash price",
+                  "11,400,000 ₫",
+                  "The price when paying in full, usually lower"
+                ],
+                [
+                  "Application fee",
+                  "300,000 ₫",
+                  "Charged once when you sign"
+                ],
+                [
+                  "Monthly collection fee",
+                  "11,000 ₫ × 12",
+                  "Total 132,000 ₫"
+                ],
+                [
+                  "Loan insurance",
+                  "480,000 ₫",
+                  "Some places select it by default"
+                ],
+                [
+                  "Total actually paid",
+                  "12,912,000 ₫",
+                  ""
+                ]
+              ]
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Compared to the 11,400,000 ₫ cash price, you pay an extra 1,512,000 ₫ for a year of using someone else's money. Converted to a total-cost basis, that's roughly 25% a year, not 0%."
+            },
+            {
+              "type": "KEY_TERM",
+              "term": "Effective interest rate (APR)",
+              "definition": "The total cost of borrowing converted into a yearly percentage, including both interest and fees. This is the number to use when comparing two loans — not the advertised rate."
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "INFO",
+              "title": "A Two-Minute Check",
+              "text": "Ask the salesperson two questions: what's the cash price today, and what's the total I'll pay over 12 months? The difference between the two numbers is the real cost of the installment plan."
+            },
+            {
+              "type": "CALCULATOR",
+              "tool": "loan-payment",
+              "presets": {
+                "principalVnd": 11400000,
+                "ratePercent": 25,
+                "termMonths": 12
+              }
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Installment financing isn't always the wrong choice. For a genuinely necessary expense with a clear repayment plan, it keeps you from having to pay everything in a single month. The risk shows up when you assume the loan is free and buy something you don't actually need yet."
+            }
+          ]
         }
       }
     },
@@ -458,6 +800,76 @@
             {
               "type": "PARAGRAPH",
               "text": "Nếu dùng quỹ khẩn cấp cho các khoản chi không cấp thiết, bạn sẽ khó xây đủ quỹ. Một cách để giữ ranh giới là đặt quỹ ở nơi mất khoảng một ngày mới rút được: đủ chậm để bạn cân nhắc, nhưng vẫn đủ nhanh khi thật sự cần."
+            }
+          ]
+        },
+        "en": {
+          "title": "How Much Emergency Fund Is Enough?",
+          "summary": "Common advice is six months of living costs. For students, that figure is both distant and off-target.",
+          "seoTitle": "How much emergency fund is enough for students",
+          "seoDescription": "How to size an emergency fund for small incomes, and how to tell true emergencies from impulse spending.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "An emergency fund isn't for getting rich. Its purpose is to keep a small mishap from turning into debt. For working adults, the common guideline is three to six months of expenses. For students, your family covers most living costs, so that figure doesn't reflect your actual risk."
+            },
+            {
+              "type": "HEADING",
+              "text": "Start From a List of Real Mishaps",
+              "level": 2
+            },
+            {
+              "type": "LIST",
+              "items": [
+                "A dropped phone with a cracked screen",
+                "A bike or motorbike that breaks down and needs urgent repair",
+                "Losing a book or equipment borrowed from school",
+                "Unexpected costs for a trip you already signed up for"
+              ]
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Add up the estimated cost of the two most expensive mishaps on your list. For most students, the total falls between 1,500,000 and 3,000,000 VND. That's your first target, and it's far more attainable than six months of living expenses."
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "TIP",
+              "title": "Break the Goal Into Pieces",
+              "text": "Save 120,000 VND a month and after a year you'll have nearly 1,500,000 VND. A year-long goal looks distant, but a monthly one doesn't."
+            },
+            {
+              "type": "HEADING",
+              "text": "Emergencies and Impulses Are Not the Same",
+              "level": 2
+            },
+            {
+              "type": "TABLE",
+              "headers": [
+                "Situation",
+                "Emergency?",
+                "Why"
+              ],
+              "rows": [
+                [
+                  "A cracked phone screen, needed to stay in contact",
+                  "Yes",
+                  "Cannot be postponed, affects your schooling"
+                ],
+                [
+                  "A sale on shoes you like",
+                  "No",
+                  "Can wait, causes no harm"
+                ],
+                [
+                  "A close friend's birthday, wanting a big gift",
+                  "No",
+                  "The date is known in advance, so plan for it separately"
+                ]
+              ]
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "If you dip into your emergency fund for non-urgent expenses, you'll struggle to build it up. One way to keep the boundary is to keep the fund somewhere that takes about a day to withdraw from: slow enough to make you think twice, but fast enough for when you truly need it."
             }
           ]
         }
@@ -543,6 +955,82 @@
               "type": "SIM_LINK",
               "simSlug": "thang-luong-dau-tien",
               "label": "Thử mô phỏng tháng lương đầu tiên"
+            }
+          ]
+        },
+        "en": {
+          "title": "Where Did Nam's First Paycheck Go?",
+          "summary": "Nam received 4,200,000 VND for his first summer side job. Three weeks later, only 180,000 VND remained. A very familiar situation.",
+          "seoTitle": "Story: how a first side-job paycheck disappeared",
+          "seoDescription": "A typical first-paycheck story and the spending lessons that follow, told through the actual cash flow.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Nam, 17, worked as a server at a coffee shop near his home for six weeks over the summer. His first paycheck was 4,200,000 VND, deposited on a Friday. He remembers exactly how it felt seeing that number appear on his screen."
+            },
+            {
+              "type": "HEADING",
+              "text": "Week One",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Nam bought the 1,200,000 VND headphones he had wanted for a long time, then treated three friends to a meal that cost 600,000 VND. At the time, both purchases felt perfectly justified to him: this was money he'd earned himself, and everyone deserves to treat themselves once."
+            },
+            {
+              "type": "TABLE",
+              "caption": "Nam's cash flow over three weeks",
+              "headers": [
+                "Week",
+                "Spent",
+                "Remaining"
+              ],
+              "rows": [
+                [
+                  "Paycheck received",
+                  "",
+                  "4,200,000 ₫"
+                ],
+                [
+                  "Week 1",
+                  "1,800,000 ₫",
+                  "2,400,000 ₫"
+                ],
+                [
+                  "Week 2",
+                  "1,350,000 ₫",
+                  "1,050,000 ₫"
+                ],
+                [
+                  "Week 3",
+                  "870,000 ₫",
+                  "180,000 ₫"
+                ]
+              ]
+            },
+            {
+              "type": "HEADING",
+              "text": "What Nam Realized",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "None of these purchases were unreasonable. None were huge either. The problem was that they piled up one after another with no limit set in advance. Every time, Nam just looked at his remaining balance to decide, and the balance always looked like enough — until it truly wasn't."
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "INFO",
+              "title": "What Nam Did Differently in Month Two",
+              "text": "The moment he got paid, Nam transferred 800,000 VND into a separate savings account and set himself a limit of 400,000 VND a week for personal spending. By the end of that month he had 1,100,000 VND left — not because he earned more that month, but because of the plan."
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "This is the kind of lesson that seems obvious to read but costs a full paycheck to learn firsthand. If you're about to receive your first self-earned money, decide on your savings amount before you spend the first cent, not after the last one."
+            },
+            {
+              "type": "SIM_LINK",
+              "simSlug": "thang-luong-dau-tien",
+              "label": "Try the First Paycheck Month simulation"
             }
           ]
         }

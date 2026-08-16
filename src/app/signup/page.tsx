@@ -4,7 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { session, ApiError } from "@/lib/api";
-import { useSession } from "@/components/Providers";
+import { useSession, useT } from "@/components/Providers";
 import { readReturnTo, welcomeHref } from "@/lib/returnTo";
 import { Button, Field, Input, Select, Alert } from "@/components/ui";
 import { GoogleButton } from "@/components/auth/GoogleButton";
@@ -14,6 +14,7 @@ import { useProvinces } from "../useProvinces";
 export default function SignupPage() {
   const router = useRouter();
   const { bootstrap } = useSession();
+  const t = useT();
   const [displayName, setDisplayName] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -24,7 +25,6 @@ export default function SignupPage() {
   const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
   const provinces = useProvinces();
 
-  // Already signed in, so there is nothing to sign up for.
   React.useEffect(() => {
     if (bootstrap) router.replace(readReturnTo());
   }, [bootstrap, router]);
@@ -49,23 +49,23 @@ export default function SignupPage() {
         if (Object.keys(fe).length > 0) {
           setFieldErrors(fe);
         } else if (err.status === 409) {
-          setFormError("Email này đã được đăng ký. Hãy đăng nhập hoặc dùng email khác.");
+          setFormError(t("auth.signup.emailTaken"));
         } else {
           setFormError(err.message);
         }
       } else {
-        setFormError("Không đăng ký được. Vui lòng thử lại.");
+        setFormError(t("auth.signup.failed"));
       }
       setLoading(false);
     }
   }
 
   return (
-    <SplitAuthShell title="Tạo tài khoản" subtitle="Miễn phí, chỉ mất khoảng một phút.">
+    <SplitAuthShell title={t("auth.signup.title")} subtitle={t("auth.signup.subtitle")}>
       <GoogleButton label="signup_with" />
       <form onSubmit={onSubmit} className="space-y-4" noValidate>
         {formError && <Alert tone="critical">{formError}</Alert>}
-        <Field label="Tên hiển thị" htmlFor="displayName" error={fieldErrors.displayName}>
+        <Field label={t("auth.signup.displayName")} htmlFor="displayName" error={fieldErrors.displayName}>
           <Input
             id="displayName"
             name="displayName"
@@ -88,7 +88,7 @@ export default function SignupPage() {
             onChange={(e) => setEmail(e.target.value)}
           />
         </Field>
-        <Field label="Mật khẩu" htmlFor="password" hint="Ít nhất 8 ký tự." error={fieldErrors.password}>
+        <Field label={t("auth.signup.password")} htmlFor="password" error={fieldErrors.password}>
           <Input
             id="password"
             name="password"
@@ -100,7 +100,7 @@ export default function SignupPage() {
             onChange={(e) => setPassword(e.target.value)}
           />
         </Field>
-        <Field label="Năm sinh (không bắt buộc)" htmlFor="birthYear" error={fieldErrors.birthYear}>
+        <Field label={t("auth.signup.birthYear")} htmlFor="birthYear" error={fieldErrors.birthYear}>
           <Input
             id="birthYear"
             name="birthYear"
@@ -112,9 +112,9 @@ export default function SignupPage() {
             onChange={(e) => setBirthYear(e.target.value)}
           />
         </Field>
-        <Field label="Tỉnh/thành (không bắt buộc)" htmlFor="province" error={fieldErrors.province}>
+        <Field label={t("auth.signup.province")} htmlFor="province" error={fieldErrors.province}>
           <Select id="province" name="province" value={province} onChange={(e) => setProvince(e.target.value)}>
-            <option value="">Chọn tỉnh/thành</option>
+            <option value="">{t("auth.signup.provinceNone")}</option>
             {(provinces.data ?? []).map((p) => (
               <option key={p.key} value={p.key}>
                 {p.label}
@@ -123,13 +123,13 @@ export default function SignupPage() {
           </Select>
         </Field>
         <Button type="submit" className="w-full" loading={loading}>
-          Bắt đầu miễn phí
+          {t("nav.startFree")}
         </Button>
       </form>
       <p className="mt-6 text-center text-sm text-ink-soft">
-        Đã có tài khoản?{" "}
+        {t("auth.signup.hasAccount")}{" "}
         <Link href="/login" className="text-moss-400 underline hover:text-moss-600">
-          Đăng nhập
+          {t("auth.signup.loginLink")}
         </Link>
       </p>
     </SplitAuthShell>

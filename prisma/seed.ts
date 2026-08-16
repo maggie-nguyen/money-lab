@@ -135,6 +135,23 @@ const BUDGET_TEXT_BUNDLE = {
   ch_decline: "Từ chối khéo",
 };
 
+const BUDGET_TEXT_BUNDLE_EN = {
+  bill_rent: "Rent",
+  bill_phone: "Phone and internet",
+  cat_food: "Food",
+  cat_transport: "Transport",
+  cat_fun: "Fun",
+  cat_clothes: "Clothes",
+  cat_savings: "Savings",
+  evt_motorbike_repair: "Motorbike broke down — needs urgent repair",
+  evt_bonus: "Extra bonus at month end",
+  evt_friend_borrow: "A close friend asks to borrow money",
+  ch_pay_now: "Fix it now, pay in full",
+  ch_delay: "Temporary fix, pay the rest next month",
+  ch_lend: "Lend to your friend",
+  ch_decline: "Decline politely",
+};
+
 const LOANS_TEXT_BUNDLE = {
   goal_laptop: "Máy tính xách tay để học",
   offer_bank: "Vay ngân hàng",
@@ -148,6 +165,19 @@ const LOANS_TEXT_BUNDLE = {
   evt_income_drop: "Thu nhập tháng này giảm",
 };
 
+const LOANS_TEXT_BUNDLE_EN = {
+  goal_laptop: "Laptop for school",
+  offer_bank: "Bank loan",
+  offer_retail: "Store installment plan",
+  offer_app: "Quick loan via an app",
+  mk_zero_percent: "Advertised 0% interest",
+  rf_no_license: "No license to lend money",
+  rf_contact_access: "Demands access to your phone contacts",
+  rf_daily_calls: "Calls every day to collect, including relatives",
+  evt_overtime: "You get extra overtime this month",
+  evt_income_drop: "Income drops this month",
+};
+
 const BUSINESS_TEXT_BUNDLE = {
   prod_tra_chanh: "Trà chanh",
   up_sign: "Biển hiệu mới",
@@ -156,6 +186,16 @@ const BUSINESS_TEXT_BUNDLE = {
   w_cloudy: "Trời nhiều mây",
   w_rain: "Trời mưa",
   evt_inspection: "Đoàn kiểm tra vệ sinh ghé quán",
+};
+
+const BUSINESS_TEXT_BUNDLE_EN = {
+  prod_tra_chanh: "Lemon tea",
+  up_sign: "New shop sign",
+  up_fridge: "Cold fridge",
+  w_sunny: "Sunny",
+  w_cloudy: "Cloudy",
+  w_rain: "Rainy",
+  evt_inspection: "Hygiene inspectors visit the stall",
 };
 
 const INVEST_TEXT_BUNDLE = {
@@ -170,6 +210,69 @@ const INVEST_TEXT_BUNDLE = {
   news_bluechip_earnings: "Nhóm cổ phiếu lớn báo lãi tốt",
 };
 
+const INVEST_TEXT_BUNDLE_EN = {
+  quarter: "Quarter",
+  as_savings: "Savings account",
+  as_bond: "Bonds",
+  as_bluechip: "Large-company stocks",
+  as_hotcoin: "Crypto",
+  news_hotcoin_hype: "Crypto is being hyped hard",
+  news_rate_cut: "Rates fall; bonds benefit",
+  news_market_calm: "No notable market news",
+  news_bluechip_earnings: "Large stocks report strong earnings",
+};
+
+/** English labels for scam cues/explanations; message bodies stay Vietnamese (realistic bait). */
+const SCAM_TEXT_BUNDLE_EN: Record<string, unknown> = {
+  ...SCAM_TEXT_BUNDLE,
+  cue_urgent: "Creates urgent time pressure",
+  cue_link_odd: "Odd link, not an official domain",
+  cue_asks_otp: "Asks for an OTP code",
+  cue_guaranteed_return: "Promises a sure, unusually high return",
+  cue_pressure_recruit: "Pressures you to recruit others",
+  cue_unexpected_parcel: "A parcel you never ordered",
+  cue_small_fee_first: "Asks for a small fee before a big payoff",
+  cue_authority_pressure: "Impersonates an authority to intimidate",
+  cue_secrecy: "Demands secrecy — tell no one",
+  cue_transfer_now: "Pressures an immediate transfer",
+  cue_easy_money: "Work that is too easy and pays too much",
+  cue_deposit_first: "Requires a deposit before pay or a job",
+  cue_never_entered: "Prize for a contest you never joined",
+  cue_fee_to_claim: "Fee required to claim a prize",
+  cue_odd_wording: "Wording unlike the person you know",
+  cue_new_account_number: "A \"new\" account number unlike before",
+  cue_friend_pressure: "Uses a personal relationship as pressure",
+  cue_odd_sender: "Unusual sender address",
+  cue_no_paperwork: "No paperwork — a sign of illegal lending",
+  cue_daily_interest: "Daily interest that is usurious yearly",
+  cue_urgency_network: "Fake carrier creating an emergency",
+  cue_personal_info_ask: "Asks for ID/card numbers nobody should request by message",
+  expl_msg_bank_otp: "Banks never ask for OTP codes or use odd domains. A two-hour lock threat is meant to panic you.",
+  expl_msg_real_promo: "A normal promo: no data request, no rush, and links go to the official site.",
+  expl_msg_invest_30pct: "No legal investment promises 30% a month. Recruiting others is a classic pyramid signal.",
+  expl_msg_parcel_fee: "If you did not order it, there is no held parcel. A small fee for a big prize is a classic scam.",
+  expl_msg_real_bank_notice: "Real balance alerts only report a transaction and point you to the printed hotline — no links.",
+  expl_msg_fake_police: "Police use written summonses at stations; they do not call for money transfers or demand secrecy from family.",
+  expl_msg_job_like_video: "Easy high pay that requires an activation fee is a trap. Real employers do not charge applicants first.",
+  expl_msg_real_school_fee: "Real tuition notices come from the school domain and send you to the official payment portal.",
+  expl_msg_lottery_win: "You cannot win a contest you never entered. Real prizes never charge a fee to claim.",
+  expl_msg_real_delivery: "Real delivery notices have a trackable order id, a driver name, and no extra fee beyond COD.",
+  expl_msg_bank_upgrade_link: "An odd domain and a 24-hour deadline are enough to stop. Banks do not upgrade cards via SMS links.",
+  expl_msg_friend_borrow_fb: "Hijacked friend accounts often ask for urgent money to a new account. Call your friend before sending.",
+  expl_msg_real_promo_momo: "Real offers apply automatically, need no odd codes, and keep you inside the app.",
+  expl_msg_crypto_double: "Nobody doubles assets for strangers. Crypto transfers are irreversible.",
+  expl_msg_real_bill_reminder: "Real utility reminders name the period, due date, and familiar payment channels — no odd links.",
+  expl_msg_hui_invite: "Informal rotating savings with guaranteed profit is high risk and not protected like bank deposits.",
+  expl_msg_visa_lottery: "Visa programs do not collect fees by email or use personal mailboxes. Urgent wording is a red flag.",
+  expl_msg_real_2fa_notice: "This is a verification code you requested, with a reminder not to share it. The message asks for nothing else.",
+  expl_msg_loan_instant: "Interest of 3,000 đồng per million per day is over 100% a year. Paperless Zalo loans are illegal lending.",
+  expl_msg_real_survey: "A real survey states its purpose, asks for no personal data, and involves no payment.",
+  expl_msg_sim_swap: "Carriers never ask for OTP. Reading a code to a stranger hands over your number and linked accounts.",
+  expl_msg_real_refund: "Real refund notices tie to a real order and ask you to do nothing more.",
+  expl_msg_gov_subsidy: "Government agencies do not pay via odd websites or collect card numbers over SMS.",
+  expl_msg_real_event_ticket: "Real tickets come from the official seller with a QR code and no extra payment demand.",
+};
+
 const TEXT_BUNDLES: Record<string, object> = {
   SCAM: SCAM_TEXT_BUNDLE,
   BUDGET: BUDGET_TEXT_BUNDLE,
@@ -178,31 +281,40 @@ const TEXT_BUNDLES: Record<string, object> = {
   INVEST: INVEST_TEXT_BUNDLE,
 };
 
+const TEXT_BUNDLES_EN: Record<string, object> = {
+  SCAM: SCAM_TEXT_BUNDLE_EN,
+  BUDGET: BUDGET_TEXT_BUNDLE_EN,
+  LOANS: LOANS_TEXT_BUNDLE_EN,
+  BUSINESS: BUSINESS_TEXT_BUNDLE_EN,
+  INVEST: INVEST_TEXT_BUNDLE_EN,
+};
+
 const BADGES: Array<{
   code: string;
   kind: "PROGRESS" | "STREAK" | "MASTERY" | "SIM" | "SPECIAL";
   coinReward: number;
   criteria: object;
   vi: { title: string; description: string };
+  en: { title: string; description: string };
 }> = [
-  { code: "FIRST_LESSON", kind: "PROGRESS", coinReward: 10, criteria: { lessonsCompleted: 1 }, vi: { title: "Bước chân đầu tiên", description: "Hoàn thành bài học đầu tiên" } },
-  { code: "TEN_LESSONS", kind: "PROGRESS", coinReward: 30, criteria: { lessonsCompleted: 10 }, vi: { title: "Học sinh chăm chỉ", description: "Hoàn thành 10 bài học" } },
-  { code: "FIRST_COURSE", kind: "PROGRESS", coinReward: 50, criteria: { coursesCompleted: 1 }, vi: { title: "Tốt nghiệp khóa đầu", description: "Hoàn thành trọn vẹn một khóa học" } },
-  { code: "STREAK_7", kind: "STREAK", coinReward: 20, criteria: { streak: 7 }, vi: { title: "Tuần lễ vàng", description: "Chuỗi 7 ngày học liên tiếp" } },
-  { code: "STREAK_30", kind: "STREAK", coinReward: 100, criteria: { streak: 30 }, vi: { title: "Thói quen thép", description: "Chuỗi 30 ngày học liên tiếp" } },
-  { code: "QUIZ_PERFECT", kind: "MASTERY", coinReward: 15, criteria: { quizPerfect: 1 }, vi: { title: "Điểm tuyệt đối", description: "Đạt 100% một bài kiểm tra" } },
-  { code: "SIM_BUDGET_SURPLUS", kind: "SIM", coinReward: 25, criteria: { sim: "BUDGET", savingsRatePctGte: 20 }, vi: { title: "Vua tiết kiệm", description: "Hoàn thành mô phỏng ngân sách với tỷ lệ tiết kiệm ≥ 20%" } },
-  { code: "SIM_LOANS_SAVER", kind: "SIM", coinReward: 25, criteria: { sim: "LOANS", withinPctOfBest: 5 }, vi: { title: "Người vay khôn ngoan", description: "Trả nợ với tổng chi phí sát phương án tối ưu" } },
-  { code: "SIM_SCAM_DETECTIVE", kind: "SIM", coinReward: 25, criteria: { sim: "SCAM", accuracyPctGte: 90 }, vi: { title: "Thám tử chống lừa đảo", description: "Độ chính xác ≥ 90% trong Nhận diện lừa đảo" } },
-  { code: "SIM_BUSINESS_PROFIT", kind: "SIM", coinReward: 25, criteria: { sim: "BUSINESS", profitGt: 0 }, vi: { title: "Doanh nhân nhí", description: "Kết thúc kinh doanh có lãi" } },
-  { code: "SIM_INVEST_DIVERSIFIED", kind: "SIM", coinReward: 25, criteria: { sim: "INVEST", hhiLte: 4000 }, vi: { title: "Nhà đầu tư đa dạng", description: "Danh mục đa dạng hóa suốt trò chơi" } },
-  { code: "LEADERBOARD_TOP10", kind: "SPECIAL", coinReward: 0, criteria: { leaderboardRankLte: 10 }, vi: { title: "Top 10 tuần", description: "Lọt vào top 10 bảng xếp hạng tuần" } },
+  { code: "FIRST_LESSON", kind: "PROGRESS", coinReward: 10, criteria: { lessonsCompleted: 1 }, vi: { title: "Bước chân đầu tiên", description: "Hoàn thành bài học đầu tiên" }, en: { title: "First steps", description: "Complete your first lesson" } },
+  { code: "TEN_LESSONS", kind: "PROGRESS", coinReward: 30, criteria: { lessonsCompleted: 10 }, vi: { title: "Học sinh chăm chỉ", description: "Hoàn thành 10 bài học" }, en: { title: "Diligent learner", description: "Complete 10 lessons" } },
+  { code: "FIRST_COURSE", kind: "PROGRESS", coinReward: 50, criteria: { coursesCompleted: 1 }, vi: { title: "Tốt nghiệp khóa đầu", description: "Hoàn thành trọn vẹn một khóa học" }, en: { title: "First course graduate", description: "Fully complete a course" } },
+  { code: "STREAK_7", kind: "STREAK", coinReward: 20, criteria: { streak: 7 }, vi: { title: "Tuần lễ vàng", description: "Chuỗi 7 ngày học liên tiếp" }, en: { title: "Golden week", description: "A 7-day learning streak" } },
+  { code: "STREAK_30", kind: "STREAK", coinReward: 100, criteria: { streak: 30 }, vi: { title: "Thói quen thép", description: "Chuỗi 30 ngày học liên tiếp" }, en: { title: "Iron habit", description: "A 30-day learning streak" } },
+  { code: "QUIZ_PERFECT", kind: "MASTERY", coinReward: 15, criteria: { quizPerfect: 1 }, vi: { title: "Điểm tuyệt đối", description: "Đạt 100% một bài kiểm tra" }, en: { title: "Perfect score", description: "Score 100% on a quiz" } },
+  { code: "SIM_BUDGET_SURPLUS", kind: "SIM", coinReward: 25, criteria: { sim: "BUDGET", savingsRatePctGte: 20 }, vi: { title: "Vua tiết kiệm", description: "Hoàn thành mô phỏng ngân sách với tỷ lệ tiết kiệm ≥ 20%" }, en: { title: "Savings champion", description: "Finish the budget sim with a savings rate ≥ 20%" } },
+  { code: "SIM_LOANS_SAVER", kind: "SIM", coinReward: 25, criteria: { sim: "LOANS", withinPctOfBest: 5 }, vi: { title: "Người vay khôn ngoan", description: "Trả nợ với tổng chi phí sát phương án tối ưu" }, en: { title: "Wise borrower", description: "Repay near the optimal total cost" } },
+  { code: "SIM_SCAM_DETECTIVE", kind: "SIM", coinReward: 25, criteria: { sim: "SCAM", accuracyPctGte: 90 }, vi: { title: "Thám tử chống lừa đảo", description: "Độ chính xác ≥ 90% trong Nhận diện lừa đảo" }, en: { title: "Scam detective", description: "≥ 90% accuracy in Spot the scam" } },
+  { code: "SIM_BUSINESS_PROFIT", kind: "SIM", coinReward: 25, criteria: { sim: "BUSINESS", profitGt: 0 }, vi: { title: "Doanh nhân nhí", description: "Kết thúc kinh doanh có lãi" }, en: { title: "Junior entrepreneur", description: "End the business sim in profit" } },
+  { code: "SIM_INVEST_DIVERSIFIED", kind: "SIM", coinReward: 25, criteria: { sim: "INVEST", hhiLte: 4000 }, vi: { title: "Nhà đầu tư đa dạng", description: "Danh mục đa dạng hóa suốt trò chơi" }, en: { title: "Diversified investor", description: "Keep a diversified portfolio throughout" } },
+  { code: "LEADERBOARD_TOP10", kind: "SPECIAL", coinReward: 0, criteria: { leaderboardRankLte: 10 }, vi: { title: "Top 10 tuần", description: "Lọt vào top 10 bảng xếp hạng tuần" }, en: { title: "Weekly top 10", description: "Reach the weekly top 10" } },
 ];
 
-const SHOP_ITEMS: Array<{ code: string; kind: string; priceCoins: number; vi: string }> = [
-  { code: "STREAK_FREEZE", kind: "STREAK_FREEZE", priceCoins: 50, vi: "Đóng băng chuỗi (1 ngày)" },
-  { code: "AVATAR_PACK_ANIMALS", kind: "AVATAR", priceCoins: 80, vi: "Bộ avatar Thú cưng" },
-  { code: "AVATAR_PACK_HEROES", kind: "AVATAR", priceCoins: 120, vi: "Bộ avatar Siêu anh hùng" },
+const SHOP_ITEMS: Array<{ code: string; kind: string; priceCoins: number; vi: string; en: string }> = [
+  { code: "STREAK_FREEZE", kind: "STREAK_FREEZE", priceCoins: 50, vi: "Đóng băng chuỗi (1 ngày)", en: "Streak freeze (1 day)" },
+  { code: "AVATAR_PACK_ANIMALS", kind: "AVATAR", priceCoins: 80, vi: "Bộ avatar Thú cưng", en: "Pet avatar pack" },
+  { code: "AVATAR_PACK_HEROES", kind: "AVATAR", priceCoins: 120, vi: "Bộ avatar Siêu anh hùng", en: "Hero avatar pack" },
 ];
 
 async function main() {
@@ -256,7 +368,8 @@ async function main() {
 
   // 2) Sim definitions (PUBLISHED) - must exist before content import (SIM_LAUNCHER cross-ref)
   for (const sim of SIM_SEEDS) {
-    const textBundle = TEXT_BUNDLES[sim.type] ?? {};
+    const textBundleVi = TEXT_BUNDLES[sim.type] ?? {};
+    const textBundleEn = TEXT_BUNDLES_EN[sim.type] ?? textBundleVi;
     const existing = await prisma.simDefinition.findUnique({ where: { slug: sim.slug } });
     const simRow = existing
       ? await prisma.simDefinition.update({
@@ -280,23 +393,28 @@ async function main() {
             config: sim.config as Prisma.InputJsonValue,
           },
         });
-    await prisma.simDefinitionTranslation.upsert({
-      where: { simId_locale: { simId: simRow.id, locale: "vi" } },
-      create: {
-        simId: simRow.id,
-        locale: "vi",
-        title: sim.vi.title,
-        subtitle: sim.vi.subtitle,
-        description: sim.vi.description,
-        textBundle: textBundle as Prisma.InputJsonValue,
-      },
-      update: {
-        title: sim.vi.title,
-        subtitle: sim.vi.subtitle,
-        description: sim.vi.description,
-        textBundle: textBundle as Prisma.InputJsonValue,
-      },
-    });
+    for (const [locale, copy, bundle] of [
+      ["vi", sim.vi, textBundleVi],
+      ["en", sim.en, textBundleEn],
+    ] as const) {
+      await prisma.simDefinitionTranslation.upsert({
+        where: { simId_locale: { simId: simRow.id, locale } },
+        create: {
+          simId: simRow.id,
+          locale,
+          title: copy.title,
+          subtitle: copy.subtitle,
+          description: copy.description,
+          textBundle: bundle as Prisma.InputJsonValue,
+        },
+        update: {
+          title: copy.title,
+          subtitle: copy.subtitle,
+          description: copy.description,
+          textBundle: bundle as Prisma.InputJsonValue,
+        },
+      });
+    }
   }
   console.log(`✔ ${SIM_SEEDS.length} sim definitions`);
 
@@ -313,11 +431,16 @@ async function main() {
       },
       update: { kind: b.kind, coinReward: b.coinReward, criteria: b.criteria as Prisma.InputJsonValue },
     });
-    await prisma.badgeTranslation.upsert({
-      where: { badgeId_locale: { badgeId: badge.id, locale: "vi" } },
-      create: { badgeId: badge.id, locale: "vi", title: b.vi.title, description: b.vi.description },
-      update: { title: b.vi.title, description: b.vi.description },
-    });
+    for (const [locale, copy] of [
+      ["vi", b.vi],
+      ["en", b.en],
+    ] as const) {
+      await prisma.badgeTranslation.upsert({
+        where: { badgeId_locale: { badgeId: badge.id, locale } },
+        create: { badgeId: badge.id, locale, title: copy.title, description: copy.description },
+        update: { title: copy.title, description: copy.description },
+      });
+    }
   }
   console.log(`✔ ${BADGES.length} badges`);
 
@@ -328,11 +451,16 @@ async function main() {
       create: { id: uuidv7(), code: s.code, kind: s.kind, priceCoins: s.priceCoins, status: "PUBLISHED" },
       update: { kind: s.kind, priceCoins: s.priceCoins, status: "PUBLISHED" },
     });
-    await prisma.shopItemTranslation.upsert({
-      where: { itemId_locale: { itemId: item.id, locale: "vi" } },
-      create: { itemId: item.id, locale: "vi", title: s.vi },
-      update: { title: s.vi },
-    });
+    for (const [locale, title] of [
+      ["vi", s.vi],
+      ["en", s.en],
+    ] as const) {
+      await prisma.shopItemTranslation.upsert({
+        where: { itemId_locale: { itemId: item.id, locale } },
+        create: { itemId: item.id, locale, title },
+        update: { title },
+      });
+    }
   }
   console.log(`✔ ${SHOP_ITEMS.length} shop items`);
 

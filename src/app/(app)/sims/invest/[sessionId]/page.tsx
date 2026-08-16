@@ -9,6 +9,7 @@ import * as React from "react";
 import { useParams } from "next/navigation";
 import { SimFrame, KeyValueGrid } from "@/components/sim/SimFrame";
 import { useSimSession } from "@/components/sim/useSimSession";
+import { useT } from "@/components/Providers";
 import {
   Alert,
   Button,
@@ -24,6 +25,7 @@ import {
   Skeleton,
 } from "@/components/ui";
 import { formatBps, formatVnd } from "@/lib/format";
+import type { TranslateFn } from "@/lib/i18n";
 
 interface AssetView {
   key: string;
@@ -52,21 +54,15 @@ function hasAction(actions: Array<{ type: string }>, type: string): boolean {
   return actions.some((a) => a.type === type);
 }
 
-const RULE_MESSAGE: Record<string, string> = {
-  BAD_ASSET: "Tài sản không tồn tại.",
-  SELL_EXCEEDS_HOLDING: "Không thể bán nhiều hơn số đang nắm giữ.",
-  INSUFFICIENT_CASH: "Không đủ tiền mặt cho các lệnh này.",
-  BAD_CHOICE: "Lệnh không hợp lệ.",
-  WRONG_PHASE: "Không thể đặt lệnh lúc này.",
-};
-
 /** Hand-rolled SVG line chart: portfolio value vs. the savings benchmark. */
 function PortfolioChart({
   portfolio,
   benchmark,
+  t,
 }: {
   portfolio: number[];
   benchmark: number[];
+  t: TranslateFn;
 }) {
   if (portfolio.length === 0) return null;
   const width = 480;
@@ -85,33 +81,40 @@ function PortfolioChart({
       <svg
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label="Biểu đồ giá trị danh mục so với gửi tiết kiệm"
+        aria-label={t("sims.invest.chartAria")}
         className="h-40 w-full min-w-[320px]"
       >
-        <polyline points={toPoints(benchmark)} fill="none" style={{ stroke: "var(--color-ink-faint)" }} strokeWidth={1.5} strokeDasharray="4 3" />
+        <polyline
+          points={toPoints(benchmark)}
+          fill="none"
+          style={{ stroke: "var(--color-ink-faint)" }}
+          strokeWidth={1.5}
+          strokeDasharray="4 3"
+        />
         <polyline points={toPoints(portfolio)} fill="none" style={{ stroke: "var(--color-moss-400)" }} strokeWidth={2} />
       </svg>
       <div className="mt-1 flex gap-4 text-xs text-ink-faint">
         <span className="flex items-center gap-1">
-          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: "var(--color-moss-400)" }} /> Danh mục của bạn
+          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: "var(--color-moss-400)" }} />{" "}
+          {t("sims.invest.legendPortfolio")}
         </span>
         <span className="flex items-center gap-1">
-          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: "var(--color-ink-faint)" }} /> Gửi tiết kiệm (đối chiếu)
+          <span className="inline-block h-2 w-2 rounded-full" style={{ backgroundColor: "var(--color-ink-faint)" }} />{" "}
+          {t("sims.invest.legendBenchmark")}
         </span>
       </div>
     </div>
   );
 }
 
-/** Asset classes arrive as engine enum names (doc 04 §6). */
-const ASSET_CLASS_LABEL: Record<string, string> = {
-  DEPOSIT: "Tiền gửi",
-  BOND: "Trái phiếu",
-  STOCK: "Cổ phiếu",
-  CRYPTO: "Tiền mã hóa",
-};
+function assetClassLabel(cls: string, t: TranslateFn): string {
+  const key = `sims.invest.class.${cls}`;
+  const translated = t(key);
+  return translated === key ? cls : translated;
+}
 
 export default function InvestSimPage() {
+  const t = useT();
   const { sessionId } = useParams<{ sessionId: string }>();
   const { session, isLoading, isError, error, refetch, act, isActing, staleNotice, dismissStaleNotice, ruleCode } =
     useSimSession(sessionId);
@@ -123,7 +126,6 @@ export default function InvestSimPage() {
   React.useEffect(() => {
     setBuyAmounts({});
     setSellAmounts({});
-     
   }, [view?.turn]);
 
   if (isLoading) {
@@ -135,11 +137,19 @@ export default function InvestSimPage() {
     );
   }
   if (isError) return <ErrorPanel error={error} onRetry={() => refetch()} />;
-  if (!session || !view) return <EmptyState title="Không tìm thấy phiên mô phỏng" />;
+  if (!session || !view) return <EmptyState title={t("sims.sessionNotFound")} />;
 
   const availableActions = session.availableActions;
   const portfolioSeries = view.valueHistory.map((v) => Number(v));
   const benchmarkSeries = view.history.map((h) => Number(h.benchmarkValueVnd));
+
+  const ruleMessage: Record<string, string> = {
+    BAD_ASSET: t("sims.invest.rules.BAD_ASSET"),
+    SELL_EXCEEDS_HOLDING: t("sims.invest.rules.SELL_EXCEEDS_HOLDING"),
+    INSUFFICIENT_CASH: t("sims.invest.rules.INSUFFICIENT_CASH"),
+    BAD_CHOICE: t("sims.invest.rules.BAD_CHOICE"),
+    WRONG_PHASE: t("sims.invest.rules.WRONG_PHASE"),
+  };
 
   function submitOrders() {
     const orders = view!.assets.flatMap((a) => {
@@ -155,48 +165,46 @@ export default function InvestSimPage() {
 
   return (
     <SimFrame
-      title="Danh mục đầu tiên"
-      subtitle="Phân bổ vốn giữa các tài sản giả lập và theo dõi kết quả qua từng kỳ."
+      title={t("sims.invest.title")}
+      subtitle={t("sims.invest.subtitle")}
       turnLabel={`${view.turnLabel} ${view.turn}/${view.turns}`}
       session={session}
       staleNotice={staleNotice}
       onDismissStaleNotice={dismissStaleNotice}
       turnReport={session.turnReport ? <KeyValueGrid data={session.turnReport} /> : undefined}
     >
-      <Alert tone="warning">
-        Tất cả tài sản trong mô phỏng này là hư cấu. Đây không phải lời khuyên đầu tư thật.
-      </Alert>
+      <Alert tone="warning">{t("sims.invest.fictionWarning")}</Alert>
 
       {ruleCode && (
-        <Alert tone="critical" title="Không thực hiện được">
-          {RULE_MESSAGE[ruleCode] ?? ruleCode}
+        <Alert tone="critical" title={t("sims.actionFailed")}>
+          {ruleMessage[ruleCode] ?? ruleCode}
         </Alert>
       )}
 
       <Card>
         <CardBody className="space-y-3">
-          <SectionTitle>Tổng quan</SectionTitle>
+          <SectionTitle>{t("sims.overview")}</SectionTitle>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>
-              <LedgerLabel>Tiền mặt</LedgerLabel>
+              <LedgerLabel>{t("sims.cash")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.cashVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>Giá trị danh mục</LedgerLabel>
+              <LedgerLabel>{t("sims.invest.portfolioValue")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.portfolioValueVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>So với gửi tiết kiệm</LedgerLabel>
+              <LedgerLabel>{t("sims.invest.vsSavings")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.benchmarkValueVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>Phí mỗi lệnh</LedgerLabel>
+              <LedgerLabel>{t("sims.invest.feePerOrder")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.rebalanceFeeVnd)}</div>
             </div>
           </div>
           {view.news && (
             <p className="text-sm text-ink-soft">
-              Tin tức kỳ này: <span className="text-ink">{view.news.label}</span>
+              {t("sims.invest.newsPrefix")} <span className="text-ink">{view.news.label}</span>
             </p>
           )}
         </CardBody>
@@ -205,22 +213,29 @@ export default function InvestSimPage() {
       {portfolioSeries.length > 0 && (
         <Card>
           <CardBody>
-            <SectionTitle>Giá trị danh mục theo kỳ</SectionTitle>
-            <PortfolioChart portfolio={portfolioSeries} benchmark={benchmarkSeries} />
+            <SectionTitle>{t("sims.invest.valueByTurn")}</SectionTitle>
+            <PortfolioChart portfolio={portfolioSeries} benchmark={benchmarkSeries} t={t} />
           </CardBody>
         </Card>
       )}
 
       <Card>
         <CardBody>
-          <SectionTitle>Tài sản</SectionTitle>
+          <SectionTitle>{t("sims.invest.assets")}</SectionTitle>
           <LedgerTable
-            headers={["Tài sản", "Loại", "Phí", "Đang nắm giữ", "Lệnh mua", "Lệnh bán"]}
+            headers={[
+              t("sims.invest.col.asset"),
+              t("sims.invest.col.class"),
+              t("sims.invest.col.fee"),
+              t("sims.invest.col.holding"),
+              t("sims.invest.col.buy"),
+              t("sims.invest.col.sell"),
+            ]}
             align={["left", "left", "right", "right", "right", "right"]}
             rows={view.assets.map((a) => [
               a.label,
               <Chip key={`${a.key}-class`} tone="neutral">
-                {ASSET_CLASS_LABEL[a.class] ?? a.class}
+                {assetClassLabel(a.class, t)}
               </Chip>,
               formatBps(a.feeBps),
               formatVnd(a.holdingVnd),
@@ -251,10 +266,10 @@ export default function InvestSimPage() {
           {hasAction(availableActions, "REBALANCE") && (
             <div className="mt-4 flex flex-wrap gap-2">
               <Button onClick={submitOrders} loading={isActing} disabled={isActing}>
-                Đặt lệnh
+                {t("sims.invest.placeOrders")}
               </Button>
               <Button variant="secondary" disabled={isActing} onClick={() => act({ type: "REBALANCE", orders: [] })}>
-                Giữ nguyên kỳ này
+                {t("sims.invest.hold")}
               </Button>
             </div>
           )}

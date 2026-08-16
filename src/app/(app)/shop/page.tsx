@@ -9,7 +9,7 @@
 import * as React from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, api, idempotencyKey } from "@/lib/api";
-import { BOOTSTRAP_KEY, useStats, useToast } from "@/components/Providers";
+import { BOOTSTRAP_KEY, useStats, useToast, useT } from "@/components/Providers";
 import {
   Button,
   Card,
@@ -23,6 +23,7 @@ import {
   StatRows,
 } from "@/components/ui";
 import type { ShopItem, ShopView } from "@/lib/types";
+import type { TranslateFn } from "@/lib/i18n";
 
 /** Exactly what POST /shop/items/{id}/purchase returns. It sends no item object. */
 interface PurchaseResult {
@@ -32,28 +33,34 @@ interface PurchaseResult {
   streakFreezes?: number;
 }
 
-function purchaseErrorMessage(error: ApiError): string {
-  if (error.ruleCode === "INSUFFICIENT_COINS") return "Bạn không đủ xu để mua vật phẩm này.";
-  if (error.status === 409) return "Bạn đã sở hữu vật phẩm này rồi.";
+function purchaseErrorMessage(error: ApiError, t: TranslateFn): string {
+  if (error.ruleCode === "INSUFFICIENT_COINS") return t("shop.error.insufficientCoins");
+  if (error.status === 409) return t("shop.error.alreadyOwned");
   return error.message;
 }
 
-function ShopItemCard({ item, onBuy }: { item: ShopItem; onBuy: (item: ShopItem) => void }) {
+function ShopItemCard({
+  item,
+  onBuy,
+  t,
+}: {
+  item: ShopItem;
+  onBuy: (item: ShopItem) => void;
+  t: TranslateFn;
+}) {
   return (
     <Card>
       <CardBody className="flex flex-col gap-3">
         <div className="flex items-start justify-between gap-3">
           <h2 className="text-base font-semibold">{item.title}</h2>
-          {item.owned && <Chip tone="positive">Đã sở hữu</Chip>}
+          {item.owned && <Chip tone="positive">{t("shop.owned")}</Chip>}
         </div>
         {item.description && <p className="text-sm text-ink-soft">{item.description}</p>}
-        {item.held > 0 && (
-          <p className="figure text-xs text-ink-faint">Đang có: {item.held}</p>
-        )}
+        {item.held > 0 && <p className="figure text-xs text-ink-faint">{t("shop.held", { count: item.held })}</p>}
         <div className="mt-auto flex items-center justify-between gap-3 pt-1">
-          <span className="figure text-lg font-semibold">{item.priceCoins} xu</span>
+          <span className="figure text-lg font-semibold">{t("shop.priceCoins", { count: item.priceCoins })}</span>
           <Button size="sm" disabled={item.owned} onClick={() => onBuy(item)}>
-            {item.owned ? "Đã mua" : "Mua"}
+            {item.owned ? t("shop.bought") : t("shop.buy")}
           </Button>
         </div>
       </CardBody>
@@ -63,6 +70,7 @@ function ShopItemCard({ item, onBuy }: { item: ShopItem; onBuy: (item: ShopItem)
 
 export default function ShopPage() {
   const stats = useStats();
+  const t = useT();
   const qc = useQueryClient();
   const toast = useToast();
   const [confirmItem, setConfirmItem] = React.useState<ShopItem | null>(null);
@@ -87,7 +95,7 @@ export default function ShopPage() {
     onSuccess: (_result, item) => {
       void qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
       void qc.invalidateQueries({ queryKey: ["shop", "items"] });
-      toast({ tone: "positive", message: `Đã mua ${item.title}.` });
+      toast({ tone: "positive", message: t("shop.purchasedToast", { title: item.title }) });
       setConfirmItem(null);
     },
   });
@@ -101,11 +109,11 @@ export default function ShopPage() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <LedgerLabel>Cửa hàng</LedgerLabel>
-          <h1 className="mt-1 text-2xl">Đổi xu lấy vật phẩm</h1>
-          <p className="mt-1 text-sm text-ink-soft">Dùng xu kiếm được từ học tập để đổi lấy vật phẩm trong MoneyLab.</p>
+          <LedgerLabel>{t("shop.label")}</LedgerLabel>
+          <h1 className="mt-1 text-2xl">{t("shop.title")}</h1>
+          <p className="mt-1 text-sm text-ink-soft">{t("shop.subtitle")}</p>
         </div>
-        <StatRows columns={1} className="min-w-52" items={[{ label: "Số xu hiện có", value: coins }]} />
+        <StatRows columns={1} className="min-w-52" items={[{ label: t("shop.coinsOnHand"), value: coins }]} />
       </div>
 
       {itemsQuery.isLoading ? (
@@ -117,13 +125,14 @@ export default function ShopPage() {
       ) : itemsQuery.isError ? (
         <ErrorPanel error={itemsQuery.error} onRetry={() => itemsQuery.refetch()} />
       ) : items.length === 0 ? (
-        <EmptyState title="Cửa hàng chưa có vật phẩm nào" description="Quay lại sau khi có vật phẩm mới." />
+        <EmptyState title={t("shop.emptyTitle")} description={t("shop.emptyDescription")} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((item) => (
             <ShopItemCard
               key={item.id}
               item={item}
+              t={t}
               onBuy={(it) => {
                 purchase.reset();
                 setConfirmItem(it);
@@ -139,7 +148,7 @@ export default function ShopPage() {
           purchase.reset();
           setConfirmItem(null);
         }}
-        title="Xác nhận mua"
+        title={t("shop.confirmTitle")}
         footer={
           <>
             <Button
@@ -149,14 +158,14 @@ export default function ShopPage() {
                 setConfirmItem(null);
               }}
             >
-              Hủy
+              {t("common.cancel")}
             </Button>
             <Button
               onClick={() => confirmItem && purchase.mutate(confirmItem)}
               loading={purchase.isPending}
               disabled={purchase.isPending}
             >
-              Xác nhận mua
+              {t("shop.confirmBuy")}
             </Button>
           </>
         }
@@ -164,13 +173,15 @@ export default function ShopPage() {
         {confirmItem && (
           <div className="space-y-3 text-sm">
             <p>
-              Bạn sắp đổi <span className="font-medium">{confirmItem.priceCoins} xu</span> để nhận{" "}
-              <span className="font-medium">{confirmItem.title}</span>.
+              {t("shop.confirmBody", {
+                coins: confirmItem.priceCoins,
+                title: confirmItem.title,
+              })}
             </p>
             <p className="text-ink-soft">
-              Số xu hiện có: <span className="figure">{coins}</span>
+              {t("shop.coinsOnHand")}: <span className="figure">{coins}</span>
             </p>
-            {purchaseError && <p className="text-critical">{purchaseErrorMessage(purchaseError)}</p>}
+            {purchaseError && <p className="text-critical">{purchaseErrorMessage(purchaseError, t)}</p>}
           </div>
         )}
       </Dialog>

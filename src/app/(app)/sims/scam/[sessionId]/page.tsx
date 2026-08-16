@@ -9,6 +9,7 @@ import * as React from "react";
 import { useParams } from "next/navigation";
 import { SimFrame } from "@/components/sim/SimFrame";
 import { useSimSession } from "@/components/sim/useSimSession";
+import { useT } from "@/components/Providers";
 import {
   Alert,
   Button,
@@ -48,6 +49,7 @@ function hasAction(actions: Array<{ type: string }>, type: string): boolean {
 }
 
 export default function ScamSimPage() {
+  const t = useT();
   const { sessionId } = useParams<{ sessionId: string }>();
   const { session, isLoading, isError, error, refetch, act, isActing, staleNotice, dismissStaleNotice } =
     useSimSession(sessionId);
@@ -63,16 +65,16 @@ export default function ScamSimPage() {
     );
   }
   if (isError) return <ErrorPanel error={error} onRetry={() => refetch()} />;
-  if (!session || !view) return <EmptyState title="Không tìm thấy phiên mô phỏng" />;
+  if (!session || !view) return <EmptyState title={t("sims.sessionNotFound")} />;
 
   const availableActions = session.availableActions;
   const lastDecision = view.decisions[view.decisions.length - 1];
 
   return (
     <SimFrame
-      title="Nhận diện lừa đảo"
-      subtitle="Đọc từng tin nhắn và quyết định đó là lừa đảo hay an toàn."
-      turnLabel={`Vòng ${view.round}/${view.rounds}`}
+      title={t("sims.scam.title")}
+      subtitle={t("sims.scam.subtitle")}
+      turnLabel={t("sims.scam.turnLabel", { round: view.round, rounds: view.rounds })}
       session={session}
       staleNotice={staleNotice}
       onDismissStaleNotice={dismissStaleNotice}
@@ -80,7 +82,7 @@ export default function ScamSimPage() {
       <Card>
         <CardBody className="flex items-center justify-between gap-4">
           <div>
-            <LedgerLabel>Điểm hiện tại</LedgerLabel>
+            <LedgerLabel>{t("sims.scam.score")}</LedgerLabel>
             <div className="figure mt-1 text-2xl font-semibold">{view.score}</div>
           </div>
           <div className="w-40">
@@ -90,13 +92,20 @@ export default function ScamSimPage() {
       </Card>
 
       {lastDecision && (
-        <Alert tone={lastDecision.correct ? "positive" : "critical"} title={lastDecision.correct ? "Chính xác" : "Chưa chính xác"}>
+        <Alert
+          tone={lastDecision.correct ? "positive" : "critical"}
+          title={lastDecision.correct ? t("sims.scam.correct") : t("sims.scam.incorrect")}
+        >
           <p>{lastDecision.explanation}</p>
           <p className="mt-1 text-xs">
-            Đây {lastDecision.isScam ? "là tin lừa đảo" : "là tin an toàn"}
-            {lastDecision.isScam && lastDecision.cues.length > 0 ? `, dấu hiệu: ${lastDecision.cues.join(", ")}` : ""}.
-            {" "}Điểm: {lastDecision.pointsDelta >= 0 ? "+" : ""}
-            {lastDecision.pointsDelta}
+            {lastDecision.isScam ? t("sims.scam.feedbackScam") : t("sims.scam.feedbackSafe")}
+            {lastDecision.isScam && lastDecision.cues.length > 0
+              ? t("sims.scam.cues", { cues: lastDecision.cues.join(", ") })
+              : ""}
+            .{" "}
+            {t("sims.scam.points", {
+              delta: `${lastDecision.pointsDelta >= 0 ? "+" : ""}${lastDecision.pointsDelta}`,
+            })}
           </p>
         </Alert>
       )}
@@ -104,7 +113,9 @@ export default function ScamSimPage() {
       {view.current && (
         <Card>
           <CardBody className="space-y-4">
-            <SectionTitle action={<Chip tone="neutral">{view.current.channel}</Chip>}>Tin nhắn mới</SectionTitle>
+            <SectionTitle action={<Chip tone="neutral">{view.current.channel}</Chip>}>
+              {t("sims.scam.newMessage")}
+            </SectionTitle>
             <div className="rounded-[var(--radius-control)] border border-rule bg-paper-sunken p-4">
               <p className="text-sm font-medium text-ink">{view.current.sender}</p>
               <p className="mt-2 whitespace-pre-wrap text-sm text-ink-soft">{view.current.text}</p>
@@ -117,14 +128,14 @@ export default function ScamSimPage() {
                   loading={isActing}
                   onClick={() => act({ type: "DECIDE", verdict: "SCAM" })}
                 >
-                  Lừa đảo
+                  {t("sims.scam.verdictScam")}
                 </Button>
                 <Button
                   variant="secondary"
                   disabled={isActing}
                   onClick={() => act({ type: "DECIDE", verdict: "SAFE" })}
                 >
-                  An toàn
+                  {t("sims.scam.verdictSafe")}
                 </Button>
               </div>
             )}

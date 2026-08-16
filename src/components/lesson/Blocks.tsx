@@ -15,6 +15,7 @@ import Link from "next/link";
 import { Alert, Button, Card, CardBody, LedgerLabel, LedgerTable, cx } from "@/components/ui";
 import { api } from "@/lib/api";
 import type { Block } from "@/lib/types";
+import { useT } from "@/components/Providers";
 
 function isYoutube(url: string): boolean {
   return /youtube\.com|youtu\.be/.test(url);
@@ -36,39 +37,40 @@ function youtubeEmbedUrl(url: string): string {
   return url;
 }
 
-/** Same titles as the tools index, so the block names the tool it opens. */
-const TOOL_TITLE: Record<string, string> = {
-  "compound-interest": "Lãi kép",
-  "loan-payment": "Tính khoản trả góp",
-  "loan-compare": "So sánh khoản vay",
-  "savings-goal": "Mục tiêu tiết kiệm",
-  inflation: "Lạm phát",
-  "budget-503020": "Ngân sách 50/30/20",
-};
+const TOOL_SLUGS = new Set([
+  "compound-interest",
+  "loan-payment",
+  "loan-compare",
+  "savings-goal",
+  "inflation",
+  "budget-503020",
+]);
 
 function CalculatorBlock({ block }: { block: Extract<Block, { type: "CALCULATOR" }> }) {
+  const t = useT();
   // Presets ride along as query parameters, which the tool page reads for its
   // initial field values, so the learner lands on the numbers from the lesson
   // instead of the generic defaults.
   const qs = new URLSearchParams();
   for (const [k, v] of Object.entries(block.presets ?? {})) qs.set(k, String(v));
   const query = qs.toString();
+  const toolTitle = TOOL_SLUGS.has(block.tool) ? t(`tools.${block.tool}.title`) : null;
   return (
     <Card>
       <CardBody className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <LedgerLabel>Công cụ tính toán</LedgerLabel>
+          <LedgerLabel>{t("blocks.calculatorLabel")}</LedgerLabel>
           <p className="mt-1 text-sm">
-            {TOOL_TITLE[block.tool]
-              ? `Mở công cụ ${TOOL_TITLE[block.tool]} với số liệu của bài này.`
-              : "Thử ngay công cụ liên quan đến bài học này."}
+            {toolTitle
+              ? t("blocks.openToolNamed", { name: toolTitle })
+              : t("blocks.openToolGeneric")}
           </p>
         </div>
         <Link
           href={`/tools/${encodeURIComponent(block.tool)}${query ? `?${query}` : ""}`}
           className="text-sm font-medium text-moss-600 underline underline-offset-2"
         >
-          Mở công cụ
+          {t("blocks.openTool")}
         </Link>
       </CardBody>
     </Card>
@@ -103,13 +105,14 @@ function CheckQuestionBlock({
   block: Extract<Block, { type: "CHECK_QUESTION" }>;
   lessonSlug?: string;
 }) {
+  const t = useT();
   const q = block.question;
   // TRUE_FALSE carries no options, so the renderer supplies the two it implies.
   const options: Array<{ key: string; text: string }> =
     q.type === "TRUE_FALSE"
       ? [
-          { key: "true", text: "Đúng" },
-          { key: "false", text: "Sai" },
+          { key: "true", text: t("quiz.true") },
+          { key: "false", text: t("quiz.false") },
         ]
       : (q.options ?? []);
 
@@ -140,7 +143,7 @@ function CheckQuestionBlock({
   return (
     <Card tone="flat">
       <CardBody className="space-y-3">
-        <LedgerLabel>Câu hỏi ôn tập</LedgerLabel>
+        <LedgerLabel>{t("blocks.checkLabel")}</LedgerLabel>
         <p className="font-medium">{q.prompt}</p>
 
         {options.length > 0 && (
@@ -186,11 +189,11 @@ function CheckQuestionBlock({
         {answerable && (
           <div className="flex items-center gap-3">
             <Button size="sm" variant="secondary" onClick={submit} disabled={!choice} loading={pending}>
-              Kiểm tra
+              {t("blocks.check")}
             </Button>
             {result && (
               <span className={cx("text-sm font-medium", result.isCorrect ? "text-positive" : "text-critical")}>
-                {result.isCorrect ? "Chính xác" : "Chưa chính xác"}
+                {result.isCorrect ? t("blocks.correct") : t("blocks.incorrect")}
               </span>
             )}
           </div>
@@ -198,12 +201,10 @@ function CheckQuestionBlock({
 
         {result?.explanation && <p className="text-sm text-ink-soft">{result.explanation}</p>}
 
-        {failed && <p className="text-xs text-critical">Không kiểm tra được câu trả lời. Thử lại sau.</p>}
+        {failed && <p className="text-xs text-critical">{t("blocks.checkFailed")}</p>}
 
         {!answerable && (
-          <p className="text-xs text-ink-faint">
-            Câu hỏi này để bạn tự ôn lại. Hãy đối chiếu với nội dung bài học phía trên.
-          </p>
+          <p className="text-xs text-ink-faint">{t("blocks.selfReview")}</p>
         )}
       </CardBody>
     </Card>
@@ -218,6 +219,7 @@ function buildResponse(type: string, choice: string): Record<string, unknown> {
 }
 
 export function LessonBlock({ block, lessonSlug }: { block: Block; lessonSlug?: string }) {
+  const t = useT();
   switch (block.type) {
     case "HEADING": {
       const Tag = block.level === 3 ? "h3" : "h2";
@@ -252,7 +254,7 @@ export function LessonBlock({ block, lessonSlug }: { block: Block; lessonSlug?: 
             {isYoutube(block.url) ? (
               <iframe
                 src={youtubeEmbedUrl(block.url)}
-                title={block.caption ?? "Video bài học"}
+                title={block.caption ?? t("blocks.videoTitle")}
                 className="aspect-video w-full rounded-[var(--radius-card)] border border-rule"
                 allowFullScreen
               />
@@ -277,7 +279,7 @@ export function LessonBlock({ block, lessonSlug }: { block: Block; lessonSlug?: 
       return (
         <Card tone="flat">
           <CardBody>
-            <LedgerLabel>Thuật ngữ</LedgerLabel>
+            <LedgerLabel>{t("blocks.term")}</LedgerLabel>
             <p className="mt-1 font-display text-base font-semibold">{block.term}</p>
             <p className="mt-1 text-sm text-ink-soft">{block.definition}</p>
           </CardBody>
@@ -287,7 +289,7 @@ export function LessonBlock({ block, lessonSlug }: { block: Block; lessonSlug?: 
       return (
         <Card>
           <CardBody>
-            <LedgerLabel>{block.title ?? "Ví dụ"}</LedgerLabel>
+            <LedgerLabel>{block.title ?? t("blocks.example")}</LedgerLabel>
             <p className="mt-1 text-sm leading-relaxed">{block.text}</p>
           </CardBody>
         </Card>
@@ -300,14 +302,14 @@ export function LessonBlock({ block, lessonSlug }: { block: Block; lessonSlug?: 
       return (
         <Card tone="ink">
           <CardBody className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-sm">{block.label ?? "Thử ngay trong mô phỏng"}</p>
+            <p className="text-sm">{block.label ?? t("blocks.simDefault")}</p>
             <Link
               // The sim screens live under /sims/<type>/<sessionId>, so the hub
               // is what opens a sim by slug and creates the session.
               href={`/sims?start=${encodeURIComponent(block.simSlug)}`}
               className="rounded-[var(--radius-control)] border border-paper/40 px-3 py-1.5 text-sm font-medium"
             >
-              Vào mô phỏng
+              {t("blocks.enterSim")}
             </Link>
           </CardBody>
         </Card>

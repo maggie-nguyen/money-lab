@@ -12,6 +12,8 @@ import Link from "next/link";
 import { Alert, Button, Card, CardBody, Chip, LedgerLabel, SectionTitle } from "@/components/ui";
 import { formatBps, formatPct, formatVnd } from "@/lib/format";
 import type { Awards, SimSessionView } from "@/lib/types";
+import { useT } from "@/components/Providers";
+import type { TranslateFn } from "@/lib/i18n";
 
 const GRADE_TONE: Record<string, "positive" | "moss" | "caution" | "critical"> = {
   A: "positive",
@@ -34,6 +36,7 @@ function labelForKey(key: string): string {
 /** Renders a summary/report object generically: money, bps and pct fields
  * are recognized by their key suffix; everything else prints as text. */
 export function KeyValueGrid({ data }: { data: Record<string, unknown> }) {
+  const t = useT();
   const entries = Object.entries(data).filter(
     ([k, v]) => v !== null && v !== undefined && !["awardBadge", "grade"].includes(k) && typeof v !== "object",
   );
@@ -43,15 +46,15 @@ export function KeyValueGrid({ data }: { data: Record<string, unknown> }) {
       {entries.map(([key, value]) => (
         <div key={key}>
           <dt className="ledger-label">{labelForKey(key)}</dt>
-          <dd className="figure mt-0.5 text-sm text-ink">{formatValue(key, value)}</dd>
+          <dd className="figure mt-0.5 text-sm text-ink">{formatValue(key, value, t)}</dd>
         </div>
       ))}
     </dl>
   );
 }
 
-function formatValue(key: string, value: unknown): string {
-  if (typeof value === "boolean") return value ? "Có" : "Không";
+function formatValue(key: string, value: unknown, t: TranslateFn): string {
+  if (typeof value === "boolean") return value ? t("sim.yes") : t("sim.no");
   if (key.endsWith("Vnd") && (typeof value === "string" || typeof value === "number")) {
     return formatVnd(String(value));
   }
@@ -61,6 +64,7 @@ function formatValue(key: string, value: unknown): string {
 }
 
 export function AwardsLine({ awards }: { awards: Awards }) {
+  const t = useT();
   const hasAny = awards.xp > 0 || awards.coins > 0 || awards.badges.length > 0 || awards.levelUp;
   if (!hasAny) return null;
   return (
@@ -72,17 +76,17 @@ export function AwardsLine({ awards }: { awards: Awards }) {
       )}
       {awards.coins > 0 && (
         <Chip tone="moss" className="figure">
-          +{awards.coins} xu
+          {t("lesson.awardedCoins", { count: awards.coins })}
         </Chip>
       )}
       {awards.badges.map((b) => (
         <Chip key={b.code} tone="positive">
-          Huy hiệu: {b.title}
+          {t("sim.award.badge", { title: b.title })}
         </Chip>
       ))}
       {awards.levelUp && (
         <Chip tone="positive" className="figure">
-          Lên cấp {awards.levelUp.to}
+          {t("lesson.levelUp", { level: awards.levelUp.to })}
         </Chip>
       )}
     </div>
@@ -111,11 +115,19 @@ export function SimFrame({
   onDismissStaleNotice,
   children,
 }: SimFrameProps) {
+  const t = useT();
   const finished = session.status !== "ACTIVE";
   const summary = session.summary;
   const grade = summary && typeof summary.grade === "string" ? (summary.grade as string) : null;
   const insights = summary && Array.isArray(summary.insights) ? (summary.insights as string[]) : [];
   const tips = summary && Array.isArray(summary.tips) ? (summary.tips as string[]) : [];
+
+  const statusLabel =
+    session.status === "COMPLETED"
+      ? t("sim.status.completed")
+      : session.status === "FAILED"
+        ? t("sim.status.failed")
+        : t("sim.status.cancelled");
 
   return (
     <div className="space-y-5">
@@ -131,17 +143,15 @@ export function SimFrame({
         )}
       </div>
 
-      <Alert tone="info">
-        Đây là dữ liệu mô phỏng, không phải tài khoản tiền thật hay lời khuyên đầu tư.
-      </Alert>
+      <Alert tone="info">{t("sim.disclaimer")}</Alert>
 
       {staleNotice && (
-        <Alert tone="warning" title="Phiên đã thay đổi">
-          Phiên đã thay đổi, đã tải lại. Vui lòng kiểm tra lại trước khi thao tác tiếp.
+        <Alert tone="warning" title={t("sim.staleTitle")}>
+          {t("sim.staleBody")}
           {onDismissStaleNotice && (
             <div className="mt-2">
               <Button variant="secondary" size="sm" onClick={onDismissStaleNotice}>
-                Đã hiểu
+                {t("sim.gotIt")}
               </Button>
             </div>
           )}
@@ -152,23 +162,17 @@ export function SimFrame({
         <Card>
           <CardBody className="space-y-4">
             <div className="flex items-center justify-between gap-3">
-              <SectionTitle>
-                {session.status === "COMPLETED"
-                  ? "Đã hoàn thành"
-                  : session.status === "FAILED"
-                    ? "Chưa thành công"
-                    : "Đã hủy phiên"}
-              </SectionTitle>
+              <SectionTitle>{statusLabel}</SectionTitle>
               {grade && (
                 <Chip tone={GRADE_TONE[grade] ?? "neutral"} className="figure">
-                  Xếp loại {grade}
+                  {t("sim.grade", { grade })}
                 </Chip>
               )}
             </div>
-            {summary ? <KeyValueGrid data={summary} /> : <p className="text-sm text-ink-soft">Không có tóm tắt.</p>}
+            {summary ? <KeyValueGrid data={summary} /> : <p className="text-sm text-ink-soft">{t("sim.noSummary")}</p>}
             {insights.length > 0 && (
               <div>
-                <LedgerLabel>Bài học rút ra</LedgerLabel>
+                <LedgerLabel>{t("sim.insights")}</LedgerLabel>
                 <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-ink-soft">
                   {insights.map((k) => (
                     <li key={k}>{k}</li>
@@ -178,7 +182,7 @@ export function SimFrame({
             )}
             {tips.length > 0 && (
               <div>
-                <LedgerLabel>Gợi ý</LedgerLabel>
+                <LedgerLabel>{t("sim.tips")}</LedgerLabel>
                 <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-ink-soft">
                   {tips.map((k) => (
                     <li key={k}>{k}</li>
@@ -189,7 +193,7 @@ export function SimFrame({
             {session.awards && <AwardsLine awards={session.awards} />}
             <div>
               <Link href="/sims">
-                <Button variant="secondary">Quay lại danh sách mô phỏng</Button>
+                <Button variant="secondary">{t("sim.backToList")}</Button>
               </Link>
             </div>
           </CardBody>
@@ -201,7 +205,7 @@ export function SimFrame({
           {turnReport && (
             <Card>
               <CardBody className="space-y-3">
-                <SectionTitle>Kết quả lượt này</SectionTitle>
+                <SectionTitle>{t("sim.turnReport")}</SectionTitle>
                 {turnReport}
               </CardBody>
             </Card>

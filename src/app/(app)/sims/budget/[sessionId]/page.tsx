@@ -10,6 +10,7 @@ import * as React from "react";
 import { useParams } from "next/navigation";
 import { SimFrame, KeyValueGrid } from "@/components/sim/SimFrame";
 import { useSimSession } from "@/components/sim/useSimSession";
+import { useT } from "@/components/Providers";
 import {
   Alert,
   Button,
@@ -62,13 +63,12 @@ interface BudgetView {
   hint: string | null;
 }
 
-const KIND_LABEL: Record<string, string> = { NEED: "Thiết yếu", WANT: "Mong muốn", SAVING: "Tiết kiệm" };
-
 function hasAction(actions: Array<{ type: string }>, type: string): boolean {
   return actions.some((a) => a.type === type);
 }
 
 export default function BudgetSimPage() {
+  const t = useT();
   const { sessionId } = useParams<{ sessionId: string }>();
   const { session, isLoading, isError, error, refetch, act, isActing, staleNotice, dismissStaleNotice, ruleCode } =
     useSimSession(sessionId);
@@ -95,7 +95,7 @@ export default function BudgetSimPage() {
     );
   }
   if (isError) return <ErrorPanel error={error} onRetry={() => refetch()} />;
-  if (!session || !view) return <EmptyState title="Không tìm thấy phiên mô phỏng" />;
+  if (!session || !view) return <EmptyState title={t("sims.sessionNotFound")} />;
 
   const availableActions = session.availableActions;
   const remainingRaw =
@@ -106,18 +106,25 @@ export default function BudgetSimPage() {
       : null;
 
   const ruleMessage: Record<string, string> = {
-    ALLOC_BELOW_MIN: "Khoản chi thiết yếu chưa đạt mức tối thiểu.",
-    OVERSPEND_LIMIT: "Tổng phân bổ vượt quá số tiền bạn có trong tháng này.",
-    EVENT_NOT_PENDING: "Sự kiện này không còn chờ xử lý.",
-    BAD_CHOICE: "Lựa chọn không hợp lệ.",
-    WRONG_PHASE: "Không thể thực hiện ở giai đoạn hiện tại.",
+    ALLOC_BELOW_MIN: t("sims.budget.rules.ALLOC_BELOW_MIN"),
+    OVERSPEND_LIMIT: t("sims.budget.rules.OVERSPEND_LIMIT"),
+    EVENT_NOT_PENDING: t("sims.budget.rules.EVENT_NOT_PENDING"),
+    BAD_CHOICE: t("sims.rules.BAD_CHOICE"),
+    WRONG_PHASE: t("sims.rules.WRONG_PHASE"),
+  };
+
+  const kindLabel = (kind: string) => {
+    if (kind === "NEED") return t("sims.budget.kind.NEED");
+    if (kind === "WANT") return t("sims.budget.kind.WANT");
+    if (kind === "SAVING") return t("sims.budget.kind.SAVING");
+    return kind;
   };
 
   return (
     <SimFrame
-      title="Tháng lương đầu tiên"
-      subtitle="Phân bổ lương, xử lý sự kiện bất ngờ và giữ số dư dương qua từng tháng."
-      turnLabel={`Tháng ${view.month}/${view.months}`}
+      title={t("sims.budget.title")}
+      subtitle={t("sims.budget.subtitle")}
+      turnLabel={t("sims.budget.turnLabel", { month: view.month, months: view.months })}
       session={session}
       staleNotice={staleNotice}
       onDismissStaleNotice={dismissStaleNotice}
@@ -128,7 +135,9 @@ export default function BudgetSimPage() {
             {Array.isArray((session.turnReport as { events?: unknown[] }).events) &&
               (session.turnReport as { events: unknown[] }).events.length > 0 && (
                 <p className="text-xs text-ink-faint">
-                  Sự kiện trong tháng: {(session.turnReport as { events: { key: string }[] }).events.length}
+                  {t("sims.budget.eventsInMonth", {
+                    count: (session.turnReport as { events: { key: string }[] }).events.length,
+                  })}
                 </p>
               )}
           </>
@@ -136,7 +145,7 @@ export default function BudgetSimPage() {
       }
     >
       {ruleCode && (
-        <Alert tone="critical" title="Không thực hiện được">
+        <Alert tone="critical" title={t("sims.actionFailed")}>
           {ruleMessage[ruleCode] ?? ruleCode}
         </Alert>
       )}
@@ -144,39 +153,39 @@ export default function BudgetSimPage() {
       {view.hint && (
         <Alert tone="info">
           {view.hint === "hint_wants_high"
-            ? "Bạn đang chi cho nhóm mong muốn hơn 30% thu nhập. Hãy cân nhắc giảm bớt."
+            ? t("sims.budget.hintWantsHigh")
             : view.hint === "hint_start_saving"
-              ? "Bạn chưa có khoản tiết kiệm nào. Hãy dành một phần thu nhập cho tiết kiệm."
+              ? t("sims.budget.hintStartSaving")
               : view.hint}
         </Alert>
       )}
 
       <Card>
         <CardBody className="space-y-3">
-          <SectionTitle>Tổng quan</SectionTitle>
+          <SectionTitle>{t("sims.overview")}</SectionTitle>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>
-              <LedgerLabel>Tiền mặt</LedgerLabel>
+              <LedgerLabel>{t("sims.cash")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.cashVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>Tiết kiệm</LedgerLabel>
+              <LedgerLabel>{t("sims.budget.savings")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.savingsVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>Lương tháng</LedgerLabel>
+              <LedgerLabel>{t("sims.budget.monthlyIncome")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.monthlyIncomeVnd)}</div>
             </div>
             {BigInt(view.carryoverExtraVnd) > 0n && (
               <div>
-                <LedgerLabel>Nợ dồn từ tháng trước</LedgerLabel>
+                <LedgerLabel>{t("sims.budget.carryover")}</LedgerLabel>
                 <div className="figure mt-1 text-lg">{formatVnd(view.carryoverExtraVnd)}</div>
               </div>
             )}
           </div>
           {view.fixedBills.length > 0 && (
             <div>
-              <LedgerLabel>Hóa đơn cố định</LedgerLabel>
+              <LedgerLabel>{t("sims.budget.fixedBills")}</LedgerLabel>
               <ul className="mt-1 space-y-0.5 text-sm">
                 {view.fixedBills.map((b) => (
                   <li key={b.key} className="flex justify-between">
@@ -197,7 +206,7 @@ export default function BudgetSimPage() {
               action={
                 remainingRaw !== null && (
                   <div className="text-right">
-                    <LedgerLabel>Còn lại</LedgerLabel>
+                    <LedgerLabel>{t("sims.budget.remaining")}</LedgerLabel>
                     <div className={`figure text-lg ${remainingRaw < 0n ? "text-critical" : "text-ink"}`}>
                       {formatVnd(remainingRaw.toString())}
                     </div>
@@ -205,7 +214,7 @@ export default function BudgetSimPage() {
                 )
               }
             >
-              Phân bổ ngân sách
+              {t("sims.budget.allocate")}
             </SectionTitle>
             <div className="space-y-3">
               {view.categories.map((cat) => (
@@ -215,8 +224,16 @@ export default function BudgetSimPage() {
                       {cat.label}
                     </label>
                     <p className="mt-0.5 text-xs text-ink-faint">
-                      {KIND_LABEL[cat.kind]}
-                      {cat.kind === "NEED" ? `, tối thiểu ${formatVnd(cat.minVnd)}` : ""}, gợi ý {formatVnd(cat.recommendedVnd)}
+                      {cat.kind === "NEED"
+                        ? t("sims.budget.catMetaMin", {
+                            kind: kindLabel(cat.kind),
+                            min: formatVnd(cat.minVnd),
+                            recommended: formatVnd(cat.recommendedVnd),
+                          })
+                        : t("sims.budget.catMeta", {
+                            kind: kindLabel(cat.kind),
+                            recommended: formatVnd(cat.recommendedVnd),
+                          })}
                     </p>
                   </div>
                   <div className="w-full sm:w-48">
@@ -236,7 +253,7 @@ export default function BudgetSimPage() {
                 loading={isActing}
                 disabled={isActing}
               >
-                Chốt phân bổ
+                {t("sims.budget.confirmAlloc")}
               </Button>
             )}
           </CardBody>
@@ -246,7 +263,7 @@ export default function BudgetSimPage() {
       {view.phase === "EVENTS" && view.pendingEvents.length > 0 && (
         <Card>
           <CardBody className="space-y-4">
-            <SectionTitle>Sự kiện tháng này</SectionTitle>
+            <SectionTitle>{t("sims.budget.eventsTitle")}</SectionTitle>
             {view.pendingEvents.map((evt) => (
               <div key={evt.key} className="space-y-2 border-b border-rule pb-4 last:border-b-0">
                 <p className="text-sm text-ink">
@@ -276,12 +293,10 @@ export default function BudgetSimPage() {
       {view.phase === "REVIEW" && hasAction(availableActions, "END_MONTH") && (
         <Card>
           <CardBody className="space-y-3">
-            <SectionTitle>Kết thúc tháng</SectionTitle>
-            <p className="text-sm text-ink-soft">
-              Xem lại số dư rồi kết thúc tháng {view.month} để chuyển sang tháng tiếp theo.
-            </p>
+            <SectionTitle>{t("sims.budget.endMonthTitle")}</SectionTitle>
+            <p className="text-sm text-ink-soft">{t("sims.budget.endMonthBody", { month: view.month })}</p>
             <Button onClick={() => act({ type: "END_MONTH" })} loading={isActing} disabled={isActing}>
-              Kết thúc tháng
+              {t("sims.budget.endMonth")}
             </Button>
           </CardBody>
         </Card>
@@ -290,9 +305,14 @@ export default function BudgetSimPage() {
       {view.history.length > 0 && (
         <Card>
           <CardBody>
-            <SectionTitle>Lịch sử các tháng</SectionTitle>
+            <SectionTitle>{t("sims.budget.history")}</SectionTitle>
             <LedgerTable
-              headers={["Tháng", "Thu nhập", "Tiết kiệm", "Tiền mặt cuối tháng"]}
+              headers={[
+                t("sims.budget.col.month"),
+                t("sims.budget.col.income"),
+                t("sims.budget.col.savings"),
+                t("sims.budget.col.cashEnd"),
+              ]}
               align={["left", "right", "right", "right"]}
               rows={view.history.map((h) => {
                 const r = h as { month: number; incomeVnd: string; savedVnd: string; cashEndVnd: string };

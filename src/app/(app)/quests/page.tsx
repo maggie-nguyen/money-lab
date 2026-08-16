@@ -8,22 +8,28 @@
 import * as React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
+import { useT } from "@/components/Providers";
 import { Alert, Card, CardBody, Chip, EmptyState, ErrorPanel, LedgerLabel, ProgressBar, Skeleton } from "@/components/ui";
 import type { DailyQuest, QuestsToday } from "@/lib/types";
 
 function QuestCard({ quest }: { quest: DailyQuest }) {
+  const t = useT();
   const completed = quest.completedAt !== null;
   return (
     <Card>
       <CardBody className="space-y-3">
         <div className="flex items-start justify-between gap-3">
           <h2 className="text-base font-semibold">{quest.title}</h2>
-          {completed ? <Chip tone="positive">Đã hoàn thành</Chip> : <Chip tone="neutral">Đang làm</Chip>}
+          {completed ? (
+            <Chip tone="positive">{t("quests.completed")}</Chip>
+          ) : (
+            <Chip tone="neutral">{t("quests.inProgress")}</Chip>
+          )}
         </div>
 
         <div className="space-y-1.5">
           <div className="flex items-baseline justify-between text-sm">
-            <span className="text-ink-soft">Tiến độ</span>
+            <span className="text-ink-soft">{t("quests.progress")}</span>
             <span className="figure text-ink-soft">
               {Math.min(quest.progressInt, quest.targetInt)} / {quest.targetInt}
             </span>
@@ -36,7 +42,7 @@ function QuestCard({ quest }: { quest: DailyQuest }) {
             +{quest.xpReward} XP
           </Chip>
           <Chip tone="caution" className="figure">
-            +{quest.coinReward} xu
+            {t("quests.coinReward", { count: quest.coinReward })}
           </Chip>
         </div>
       </CardBody>
@@ -45,6 +51,7 @@ function QuestCard({ quest }: { quest: DailyQuest }) {
 }
 
 export default function QuestsPage() {
+  const t = useT();
   const query = useQuery({
     queryKey: ["quests", "today"],
     queryFn: () => api.get<QuestsToday>("/me/quests/today"),
@@ -55,11 +62,9 @@ export default function QuestsPage() {
   return (
     <div className="space-y-5">
       <div>
-        <LedgerLabel>Mỗi ngày</LedgerLabel>
-        <h1 className="mt-1 text-2xl">Nhiệm vụ hôm nay</h1>
-        <p className="mt-1 text-sm text-ink-soft">
-          Hoàn thành nhiệm vụ để nhận thêm XP và xu. Nhiệm vụ làm mới vào 0 giờ theo giờ Việt Nam mỗi ngày.
-        </p>
+        <LedgerLabel>{t("nav.quests")}</LedgerLabel>
+        <h1 className="mt-1 text-2xl">{t("nav.quests")}</h1>
+        <p className="mt-1 text-sm text-ink-soft">{t("quests.emptyDescription")}</p>
       </div>
 
       {query.isLoading ? (
@@ -71,7 +76,7 @@ export default function QuestsPage() {
       ) : query.isError ? (
         <ErrorPanel error={query.error} onRetry={() => query.refetch()} />
       ) : quests.length === 0 ? (
-        <EmptyState title="Chưa có nhiệm vụ nào cho hôm nay" description="Quay lại sau, nhiệm vụ mới sẽ xuất hiện vào 0 giờ theo giờ Việt Nam." />
+        <EmptyState title={t("quests.emptyTitle")} description={t("quests.emptyDescription")} />
       ) : (
         <>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -80,8 +85,8 @@ export default function QuestsPage() {
             ))}
           </div>
           {quests.every((q) => q.completedAt !== null) && (
-            <Alert tone="positive" title="Đã xong hết nhiệm vụ hôm nay">
-              Quay lại vào ngày mai để nhận nhiệm vụ mới.
+            <Alert tone="positive" title={t("quests.allDoneTitle")}>
+              {t("quests.emptyDescription")}
             </Alert>
           )}
         </>

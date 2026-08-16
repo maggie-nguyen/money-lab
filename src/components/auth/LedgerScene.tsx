@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * The auth panel illustration: a topographic "money map" of the MoneyLab
  * journey, drawn in the Sổ Cái style (layered moss, cream contour hairlines,
@@ -8,6 +10,8 @@
  * light and the dark ledger. Everything is vector, so it costs no image
  * download and stays crisp on any display.
  */
+import { useT } from "@/components/Providers";
+
 export function LedgerScene({
   className,
   /** Crop window into the artwork. The banner variant frames the middle of the route. */
@@ -23,6 +27,7 @@ export function LedgerScene({
   viewBox?: string;
   uid?: string;
 }) {
+  const t = useT();
   const sky = `${uid}-sky`;
   const glow = `${uid}-glow`;
   const scrim = `${uid}-scrim`;
@@ -33,7 +38,7 @@ export function LedgerScene({
       preserveAspectRatio="xMidYMid slice"
       className={className}
       role="img"
-      aria-label="Bản đồ hành trình tài chính: từ ngân sách hằng ngày tới tự do tài chính"
+      aria-label={t("art.ledger.aria")}
     >
       <defs>
         <linearGradient id={sky} x1="0" y1="0" x2="0" y2="1">
@@ -131,18 +136,18 @@ export function LedgerScene({
       <g>
         <House x={272} y={920} />
         <Marker x={366} y={928} />
-        <Label x={82} y={898} text="Ngân sách" />
+        <Label x={82} y={898} text={t("art.ledger.budget")} />
 
         <Shop x={620} y={772} />
         <Marker x={536} y={760} />
-        <Label x={596} y={840} text="Kinh doanh" />
+        <Label x={596} y={840} text={t("art.ledger.business")} />
 
         <Bank x={388} y={604} />
         <Marker x={476} y={600} />
-        <Label x={288} y={668} text="Đầu tư" />
+        <Label x={288} y={668} text={t("art.ledger.invest")} />
 
         <Summit x={640} y={474} />
-        <Label x={698} y={434} text="Tự do tài chính" />
+        <Label x={698} y={434} text={t("art.ledger.freedom")} />
       </g>
 
       {/* Keeps the caption text legible over the artwork */}

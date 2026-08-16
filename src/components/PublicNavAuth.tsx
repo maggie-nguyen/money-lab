@@ -3,6 +3,7 @@
 import * as React from "react";
 import Link from "next/link";
 import { hasSessionHint, onSessionHintChange } from "@/lib/api";
+import { useT } from "@/components/Providers";
 import { Button } from "@/components/ui";
 
 /**
@@ -14,6 +15,7 @@ import { Button } from "@/components/ui";
  * case is a signed-in reader seeing the signed-out links for one frame.
  */
 export function PublicNavAuth() {
+  const t = useT();
   const [signedIn, setSignedIn] = React.useState(false);
 
   React.useEffect(() => {
@@ -24,7 +26,7 @@ export function PublicNavAuth() {
   if (signedIn) {
     return (
       <Link href="/learn">
-        <Button size="sm">Vào học</Button>
+        <Button size="sm">{t("nav.enterLearn")}</Button>
       </Link>
     );
   }
@@ -32,10 +34,10 @@ export function PublicNavAuth() {
   return (
     <>
       <Link href="/login" className="text-ink-soft hover:text-ink">
-        Đăng nhập
+        {t("nav.signIn")}
       </Link>
       <Link href="/signup">
-        <Button size="sm">Bắt đầu miễn phí</Button>
+        <Button size="sm">{t("nav.startFree")}</Button>
       </Link>
     </>
   );

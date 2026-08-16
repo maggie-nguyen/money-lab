@@ -16,7 +16,8 @@ import type { ArticleSummary, CourseSummary, LessonDetail, TrackSummary } from "
 import { formatMinutes } from "@/lib/format";
 import { coverStyle } from "@/lib/cover";
 import { CoverArt } from "@/components/art/CoverArt";
-import { useSession } from "@/components/Providers";
+import { useSession, useT } from "@/components/Providers";
+import type { TranslateFn } from "@/lib/i18n";
 import {
   Button,
   Card,
@@ -31,8 +32,10 @@ import {
   StatRows,
 } from "@/components/ui";
 
-function levelLabel(level: 1 | 2 | 3): string {
-  return level === 1 ? "Cơ bản" : level === 2 ? "Trung cấp" : "Nâng cao";
+function levelLabel(level: 1 | 2 | 3, t: TranslateFn): string {
+  if (level === 1) return t("course.level.basic");
+  if (level === 2) return t("course.level.intermediate");
+  return t("course.level.advanced");
 }
 
 /**
@@ -66,6 +69,7 @@ function Cover({
 
 function ContinueCard() {
   const { bootstrap } = useSession();
+  const t = useT();
   const cl = bootstrap?.continueLearning ?? null;
 
   const lessonQuery = useQuery({
@@ -87,20 +91,20 @@ function ContinueCard() {
         {/* Scrim, so the type stays readable whatever the cover turns out to be. */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/35 to-transparent" />
         <div className="relative w-full p-5 text-white sm:p-6">
-          <LedgerLabel className="text-white/70">Tiếp tục học</LedgerLabel>
+          <LedgerLabel className="text-white/70">{t("common.continue")}</LedgerLabel>
           {lessonQuery.isLoading ? (
             <div className="mt-2 h-7 w-64 max-w-full animate-pulse rounded bg-white/25" />
           ) : (
-            <p className="mt-1.5 font-display text-2xl font-semibold">{lesson?.title ?? "Bài học tiếp theo"}</p>
+            <p className="mt-1.5 font-display text-2xl font-semibold">{lesson?.title ?? t("learn.nextLesson")}</p>
           )}
           {lesson && (
             <p className="figure mt-1 text-sm text-white/80">
-              {lesson.courseTitle} · Bài {lesson.position}/{lesson.lessonCount} ·{" "}
+              {lesson.courseTitle} · {lesson.position}/{lesson.lessonCount} ·{" "}
               {formatMinutes(lesson.estimatedMinutes)}
             </p>
           )}
           <span className="mt-4 inline-flex rounded-[var(--radius-control)] bg-white px-4 py-2 text-sm font-medium text-ink">
-            Học tiếp
+            {t("course.continue")}
           </span>
         </div>
       </Cover>
@@ -109,6 +113,7 @@ function ContinueCard() {
 }
 
 function DailyQuestsCard() {
+  const t = useT();
   const { bootstrap } = useSession();
   const quests = bootstrap?.dailyQuests ?? [];
   if (quests.length === 0) return null;
@@ -116,7 +121,7 @@ function DailyQuestsCard() {
   return (
     <Card>
       <CardBody className="space-y-3">
-        <LedgerLabel>Nhiệm vụ hôm nay</LedgerLabel>
+        <LedgerLabel>{t("learn.questsToday")}</LedgerLabel>
         <div className="space-y-3">
           {quests.map((q) => (
             <div key={q.code} className="space-y-1">
@@ -136,6 +141,7 @@ function DailyQuestsCard() {
 }
 
 function CourseCard({ course }: { course: CourseSummary }) {
+  const t = useT();
   const completed = course.progress?.completedLessons ?? 0;
   return (
     <Link href={`/course/${course.slug}`} className="group block">
@@ -145,19 +151,27 @@ function CourseCard({ course }: { course: CourseSummary }) {
         <Cover slug={course.slug} url={course.coverImageUrl} className="h-32 w-full shrink-0" />
         <CardBody className="flex flex-1 flex-col gap-2.5">
           <div className="flex items-center justify-between gap-2">
-            <Chip tone="moss">{levelLabel(course.level)}</Chip>
-            {course.progress?.status === "COMPLETED" && <Chip tone="positive">Hoàn thành</Chip>}
-            {course.progress?.status === "IN_PROGRESS" && <Chip tone="neutral">Đang học</Chip>}
+            <Chip tone="moss">{levelLabel(course.level, t)}</Chip>
+            {course.progress?.status === "COMPLETED" && <Chip tone="positive">{t("course.completed")}</Chip>}
+            {course.progress?.status === "IN_PROGRESS" && <Chip tone="neutral">{t("course.inProgress")}</Chip>}
           </div>
           <div>
             <p className="font-display text-base font-semibold group-hover:underline">{course.title}</p>
             {course.subtitle && <p className="mt-1 line-clamp-2 text-sm text-ink-soft">{course.subtitle}</p>}
           </div>
           <p className="figure mt-auto text-xs text-ink-faint">
-            {formatMinutes(course.estimatedMinutes)} · {course.lessonCount} bài · {course.xpReward} XP
+            {t("course.lessonsMeta", {
+              minutes: formatMinutes(course.estimatedMinutes),
+              count: course.lessonCount,
+              xp: course.xpReward,
+            })}
           </p>
           {course.progress && (
-            <ProgressBar value={completed} max={course.lessonCount} label={`Tiến độ ${course.title}`} />
+            <ProgressBar
+              value={completed}
+              max={course.lessonCount}
+              label={t("learn.courseProgress", { title: course.title })}
+            />
           )}
         </CardBody>
       </Card>
@@ -166,6 +180,7 @@ function CourseCard({ course }: { course: CourseSummary }) {
 }
 
 function TrackSection({ track }: { track: TrackSummary }) {
+  const t = useT();
   const query = useQuery({
     queryKey: ["track", track.slug],
     queryFn: () => api.get<TrackSummary & { courses: CourseSummary[] }>(`/catalog/tracks/${track.slug}`),
@@ -184,7 +199,7 @@ function TrackSection({ track }: { track: TrackSummary }) {
       ) : query.isError ? (
         <ErrorPanel error={query.error} onRetry={() => query.refetch()} />
       ) : !query.data || query.data.courses.length === 0 ? (
-        <EmptyState title="Chưa có khóa học" description="Chủ đề này chưa có khóa học nào." />
+        <EmptyState title={t("learn.emptyTrackTitle")} description={t("learn.emptyTrackDescription")} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {query.data.courses.map((course) => (
@@ -198,6 +213,7 @@ function TrackSection({ track }: { track: TrackSummary }) {
 
 /** Three newest articles, so the library is discoverable from the main path. */
 function LibraryStrip() {
+  const t = useT();
   const query = useQuery({
     queryKey: ["library", "latest"],
     queryFn: () => api.get<ArticleSummary[]>("/library/articles", { limit: 3 }),
@@ -208,9 +224,9 @@ function LibraryStrip() {
   return (
     <section>
       <div className="flex items-baseline justify-between gap-3">
-        <SectionTitle>Bài viết mới</SectionTitle>
+        <SectionTitle>{t("learn.libraryNew")}</SectionTitle>
         <Link href="/library" className="text-sm text-moss-600 hover:underline">
-          Xem thư viện
+          {t("learn.viewLibrary")}
         </Link>
       </div>
       <div className="grid gap-4 sm:grid-cols-3">
@@ -219,7 +235,7 @@ function LibraryStrip() {
             <Card className="h-full overflow-hidden transition-shadow hover:shadow-md">
               <Cover slug={a.slug} url={a.coverImageUrl} className="h-24 w-full" />
               <CardBody className="space-y-1.5">
-                <p className="figure text-xs text-ink-faint">{a.readMinutes} phút đọc</p>
+                <p className="figure text-xs text-ink-faint">{t("common.readMinutes", { count: a.readMinutes })}</p>
                 <p className="font-medium leading-snug group-hover:underline">{a.title}</p>
               </CardBody>
             </Card>
@@ -232,6 +248,7 @@ function LibraryStrip() {
 
 export default function LearnPage() {
   const { bootstrap } = useSession();
+  const t = useT();
   const stats = bootstrap?.stats;
 
   const tracksQuery = useQuery({
@@ -243,10 +260,8 @@ export default function LearnPage() {
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-10">
       <div className="space-y-8">
         <div>
-          <h1 className="font-display text-2xl font-semibold">Khóa học</h1>
-          <p className="mt-1 text-sm text-ink-soft">
-            Mỗi bài học gồm một video ngắn, phần đọc, một hoạt động thực hành và câu hỏi kiểm tra.
-          </p>
+          <h1 className="font-display text-2xl font-semibold">{t("nav.courses")}</h1>
+          <p className="mt-1 text-sm text-ink-soft">{t("landing.topicsBody")}</p>
         </div>
 
         <ContinueCard />
@@ -263,7 +278,7 @@ export default function LearnPage() {
         ) : tracksQuery.isError ? (
           <ErrorPanel error={tracksQuery.error} onRetry={() => tracksQuery.refetch()} />
         ) : !tracksQuery.data || tracksQuery.data.length === 0 ? (
-          <EmptyState title="Chưa có khóa học nào" description="Nội dung sẽ sớm được cập nhật." />
+          <EmptyState title={t("learn.emptyAllTitle")} description={t("learn.emptyAllDescription")} />
         ) : (
           <div className="space-y-10">
             {tracksQuery.data.map((track) => (
@@ -281,28 +296,26 @@ export default function LearnPage() {
             columns={1}
             items={[
               { label: "XP", value: stats.xpTotal },
-              { label: "Chuỗi ngày học", value: stats.streakCurrent, hint: "ngày" },
-              { label: "Bài đã học", value: stats.lessonsCompleted },
-              { label: "Xu", value: stats.coins },
+              { label: t("learn.streakLabel"), value: stats.streakCurrent, hint: t("common.dayUnit") },
+              { label: t("learn.lessonsDone"), value: stats.lessonsCompleted },
+              { label: t("stats.coinsTitle"), value: stats.coins },
             ]}
           />
         )}
         <DailyQuestsCard />
         <Card tone="flat">
           <CardBody className="space-y-2">
-            <LedgerLabel>Luyện tập</LedgerLabel>
-            <p className="text-sm text-ink-soft">
-              Thử một tình huống mô phỏng hoặc tính nhanh một khoản vay.
-            </p>
+            <LedgerLabel>{t("nav.sims")}</LedgerLabel>
+            <p className="text-sm text-ink-soft">{t("landing.simNote")}</p>
             <div className="flex gap-2 pt-1">
               <Link href="/sims">
                 <Button size="sm" variant="secondary">
-                  Mô phỏng
+                  {t("nav.sims")}
                 </Button>
               </Link>
               <Link href="/tools">
                 <Button size="sm" variant="secondary">
-                  Công cụ
+                  {t("nav.tools")}
                 </Button>
               </Link>
             </div>

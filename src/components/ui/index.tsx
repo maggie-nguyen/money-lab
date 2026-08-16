@@ -11,6 +11,8 @@
 import * as React from "react";
 
 import { formatVnd, formatVndApprox } from "@/lib/format";
+import { getClientLocale } from "@/lib/locale";
+import { createT } from "@/lib/i18n";
 
 export function cx(...parts: Array<string | false | null | undefined>): string {
   return parts.filter(Boolean).join(" ");
@@ -409,14 +411,15 @@ export function Skeleton({ className }: { className?: string }) {
 }
 
 export function ErrorPanel({ error, onRetry }: { error: unknown; onRetry?: () => void }) {
+  const t = createT(getClientLocale());
   const message =
-    error instanceof Error && error.message ? error.message : "Không tải được dữ liệu.";
+    error instanceof Error && error.message ? error.message : t("common.loadFailed");
   return (
-    <Alert tone="critical" title="Có lỗi xảy ra">
+    <Alert tone="critical" title={t("common.errorTitle")}>
       <p>{message}</p>
       {onRetry && (
         <Button variant="secondary" size="sm" className="mt-3" onClick={onRetry}>
-          Thử lại
+          {t("common.retry")}
         </Button>
       )}
     </Alert>
@@ -440,6 +443,7 @@ export function Dialog({
   footer?: React.ReactNode;
   wide?: boolean;
 }) {
+  const t = createT(getClientLocale());
   React.useEffect(() => {
     if (!open || !onClose) return;
     const onKey = (e: KeyboardEvent) => {
@@ -464,7 +468,7 @@ export function Dialog({
         <div className="flex items-center justify-between border-b border-rule px-5 py-3">
           <h2 className="text-base">{title}</h2>
           {onClose && (
-            <button onClick={onClose} aria-label="Đóng" className="text-ink-faint hover:text-ink">
+            <button onClick={onClose} aria-label={t("common.close")} className="text-ink-faint hover:text-ink">
               ✕
             </button>
           )}

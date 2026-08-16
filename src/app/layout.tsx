@@ -3,6 +3,8 @@ import { Be_Vietnam_Pro, Source_Serif_4 } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/components/Providers";
 import { env } from "@/server/config";
+import { createT } from "@/lib/i18n";
+import { getRequestLocale } from "@/lib/requestLocale";
 
 const serifDisplay = Source_Serif_4({
   subsets: ["latin", "latin-ext", "vietnamese"],
@@ -18,19 +20,22 @@ const bodySans = Be_Vietnam_Pro({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  // Without this the canonical and Open Graph urls the article pages set stay
-  // relative, and a crawler resolves them against whatever host it came in on.
-  metadataBase: new URL(env().APP_ORIGIN),
-  title: {
-    default: "MoneyLab",
-    template: "%s · MoneyLab",
-  },
-  description:
-    "Học tài chính cá nhân bằng bài học ngắn và mô phỏng thực tế: chi tiêu, tiết kiệm, vay nợ, thuế, lừa đảo và đầu tư.",
-  applicationName: "MoneyLab",
-  robots: { index: true, follow: true },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const t = createT(locale);
+  return {
+    // Without this the canonical and Open Graph urls the article pages set stay
+    // relative, and a crawler resolves them against whatever host it came in on.
+    metadataBase: new URL(env().APP_ORIGIN),
+    title: {
+      default: "MoneyLab",
+      template: "%s · MoneyLab",
+    },
+    description: t("landing.metaDescription"),
+    applicationName: "MoneyLab",
+    robots: { index: true, follow: true },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: [
@@ -56,7 +61,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded focus:bg-moss-600 focus:px-3 focus:py-2 focus:text-paper"
         >
-          Tới nội dung chính
+          Skip to content
         </a>
         <Providers>{children}</Providers>
       </body>

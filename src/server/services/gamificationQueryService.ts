@@ -14,14 +14,14 @@ import {
 // Read-side gamification + shop - doc 03 §6.
 
 /** GET /quests/today - lazily generates today's quests. */
-export async function questsToday(userId: string, now: Clock) {
+export async function questsToday(userId: string, now: Clock, locale: Locale = "vi") {
   const at = now();
   await prisma.$transaction((tx) => ensureDailyQuests(tx, userId, at));
   const quests = await prisma.dailyQuest.findMany({
     where: { userId, questDate: vnDate(at) },
     orderBy: { code: "asc" },
   });
-  return { questDate: vnDate(at), quests: quests.map(serializeQuest) };
+  return { questDate: vnDate(at), quests: quests.map((q) => serializeQuest(q, locale)) };
 }
 
 /** GET /badges - earned + available (never the criteria internals beyond description). */
@@ -109,7 +109,7 @@ export async function weeklyLeaderboard(userId: string, now: Clock) {
       userId,
       isMe: true,
       xpEarned: myXp,
-      ...boardName(u ?? { displayName: "Học sinh", avatarKey: null }),
+      ...boardName(u ?? { displayName: "Learner", avatarKey: null }),
     };
   }
   return { weekStart, entries, me };

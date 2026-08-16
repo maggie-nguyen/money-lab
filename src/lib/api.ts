@@ -4,7 +4,12 @@
  * Auth rides on the httpOnly ml_access cookie installed by /api/session/*.
  * On a 401 the client refreshes once and replays the request; a second failure
  * surfaces as ApiError so the UI can send the user to the login screen.
+ *
+ * Content reads append ?locale= from LocaleProvider via getClientLocale().
  */
+
+import { getClientLocale } from "@/lib/locale";
+import { createT } from "@/lib/i18n";
 
 export interface ApiErrorDetail {
   path: string;
@@ -63,20 +68,44 @@ interface RequestOptions {
 
 const BASE = "/api/v1";
 
+/** Paths that accept ?locale=vi|en (doc 03). Others ignore the param harmlessly if sent; we only attach where useful. */
+const LOCALE_QUERY_PREFIXES = [
+  "/catalog/",
+  "/library/",
+  "/sims",
+  "/shop/",
+  "/me/badges",
+  "/me/enrollments",
+  "/me/certificates",
+  "/me/quests",
+  "/quizzes/",
+  "/tutor/",
+  "/tools/",
+];
+
+function wantsLocaleQuery(path: string): boolean {
+  return LOCALE_QUERY_PREFIXES.some((p) => path === p || path.startsWith(p));
+}
+
 function buildUrl(path: string, query?: RequestOptions["query"]): string {
   const url = `${BASE}${path}`;
-  if (!query) return url;
   const params = new URLSearchParams();
-  for (const [k, v] of Object.entries(query)) {
-    if (v !== undefined && v !== null && v !== "") params.set(k, String(v));
+  if (wantsLocaleQuery(path) && (query?.locale === undefined || query?.locale === null || query?.locale === "")) {
+    params.set("locale", getClientLocale());
+  }
+  if (query) {
+    for (const [k, v] of Object.entries(query)) {
+      if (v !== undefined && v !== null && v !== "") params.set(k, String(v));
+    }
   }
   const qs = params.toString();
   return qs ? `${url}?${qs}` : url;
 }
 
 async function toApiError(res: Response): Promise<ApiError> {
+  const t = createT(getClientLocale());
   let code = "INTERNAL";
-  let message = "Có lỗi xảy ra. Vui lòng thử lại.";
+  let message = t("error.generic");
   let details: ApiErrorDetail[] = [];
   let requestId: string | null = res.headers.get("x-request-id");
   try {
@@ -92,6 +121,20 @@ async function toApiError(res: Response): Promise<ApiError> {
   } catch {
     // Non-JSON error body (proxy timeout, 502 page). Keep the defaults.
   }
+
+  const codeKey = `error.code.${code}`;
+  const codeTranslated = t(codeKey);
+  if (codeTranslated !== codeKey) message = codeTranslated;
+
+  if (code === "RULE_VIOLATION") {
+    const machineCode = details[0]?.message;
+    if (machineCode && /^[A-Z][A-Z0-9_]*$/.test(machineCode)) {
+      const ruleKey = `error.rule.${machineCode}`;
+      const ruleTranslated = t(ruleKey);
+      if (ruleTranslated !== ruleKey) message = ruleTranslated;
+    }
+  }
+
   const retry = res.headers.get("retry-after");
   return new ApiError({
     code,
@@ -233,8 +276,11 @@ export const session = {
   }) {
     return sessionCall("/api/session/signup", input);
   },
-  async google(idToken: string) {
-    return sessionCall("/api/session/google", { idToken });
+  async google(idToken: string, localePref?: "vi" | "en") {
+    return sessionCall("/api/session/google", {
+      idToken,
+      ...(localePref ? { localePref } : {}),
+    });
   },
   async logout() {
     return sessionCall("/api/session/logout", {});

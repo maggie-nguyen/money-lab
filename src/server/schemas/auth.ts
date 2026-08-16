@@ -27,7 +27,10 @@ export const loginSchema = z.object({
   password: z.string().min(1).max(128),
 });
 
-export const googleSchema = z.object({ idToken: z.string().min(10).max(4096) });
+export const googleSchema = z.object({
+  idToken: z.string().min(10).max(4096),
+  localePref: z.enum(["vi", "en"]).optional(),
+});
 
 export const refreshSchema = z.object({ refreshToken: z.string().min(10).max(512) });
 

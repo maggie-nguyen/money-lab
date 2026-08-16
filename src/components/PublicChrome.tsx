@@ -1,12 +1,18 @@
 import Link from "next/link";
 import { PublicNavAuth } from "@/components/PublicNavAuth";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { createT } from "@/lib/i18n";
+import { getRequestLocale } from "@/lib/requestLocale";
 
 /**
  * Header and footer for the pages a signed-out visitor can reach: the landing
  * page and the article library. The app itself uses AppShell instead, which
  * needs a session.
  */
-export function PublicChrome({ children }: { children: React.ReactNode }) {
+export async function PublicChrome({ children }: { children: React.ReactNode }) {
+  const locale = await getRequestLocale();
+  const t = createT(locale);
+
   return (
     <div className="min-h-dvh bg-paper">
       <header className="border-b border-rule">
@@ -15,8 +21,9 @@ export function PublicChrome({ children }: { children: React.ReactNode }) {
             MoneyLab
           </Link>
           <nav className="flex items-center gap-4 text-sm">
+            <LanguageSwitcher />
             <Link href="/library" className="text-ink-soft hover:text-ink">
-              Thư viện
+              {t("nav.library")}
             </Link>
             <PublicNavAuth />
           </nav>
@@ -27,7 +34,7 @@ export function PublicChrome({ children }: { children: React.ReactNode }) {
 
       <footer className="border-t border-rule">
         <div className="mx-auto max-w-5xl px-4 py-8 text-xs text-ink-faint">
-          © {new Date().getFullYear()} MoneyLab. Số liệu trong mô phỏng là dữ liệu giả lập.
+          {t("footer.public", { year: new Date().getFullYear() })}
         </div>
       </footer>
     </div>

@@ -1,9 +1,18 @@
 "use client";
 
 import * as React from "react";
+import { useRouter } from "next/navigation";
 import { QueryClient, QueryClientProvider, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, api, hasSessionHint, onSessionHintChange } from "@/lib/api";
-import type { Bootstrap } from "@/lib/types";
+import type { Bootstrap, Locale } from "@/lib/types";
+import {
+  DEFAULT_LOCALE,
+  getClientLocale,
+  readLocaleCookie,
+  setClientLocale,
+  writeLocaleCookie,
+} from "@/lib/locale";
+import { createT, type TranslateFn } from "@/lib/i18n";
 
 function makeQueryClient() {
   return new QueryClient({
@@ -121,6 +130,75 @@ export function useFeatureFlag(key: string): boolean {
   return useSession().bootstrap?.featureFlags[key] ?? false;
 }
 
+/* ---------------------------------------------------------------- Locale */
+
+interface LocaleValue {
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
+  t: TranslateFn;
+}
+
+const LocaleContext = React.createContext<LocaleValue | null>(null);
+
+function applyDocumentLang(locale: Locale) {
+  if (typeof document === "undefined") return;
+  document.documentElement.lang = locale;
+}
+
+function LocaleProvider({ children }: { children: React.ReactNode }) {
+  const { bootstrap } = useSession();
+  const qc = useQueryClient();
+  const router = useRouter();
+  const [locale, setLocaleState] = React.useState<Locale>(() => {
+    const fromCookie = typeof window !== "undefined" ? readLocaleCookie() : null;
+    const initial = fromCookie ?? DEFAULT_LOCALE;
+    setClientLocale(initial);
+    return initial;
+  });
+
+  // Signed-in preference is source of truth when it differs from the guest cookie.
+  React.useEffect(() => {
+    const pref = bootstrap?.user.localePref;
+    if (!pref || pref === locale) return;
+    setClientLocale(pref);
+    writeLocaleCookie(pref);
+    setLocaleState(pref);
+    applyDocumentLang(pref);
+  }, [bootstrap?.user.localePref]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  React.useEffect(() => {
+    applyDocumentLang(locale);
+    if (getClientLocale() !== locale) setClientLocale(locale);
+  }, [locale]);
+
+  const setLocale = React.useCallback(
+    (next: Locale) => {
+      setClientLocale(next);
+      writeLocaleCookie(next);
+      setLocaleState(next);
+      applyDocumentLang(next);
+      void qc.invalidateQueries();
+      router.refresh();
+    },
+    [qc, router],
+  );
+
+  const t = React.useMemo(() => createT(locale), [locale]);
+  const value = React.useMemo(() => ({ locale, setLocale, t }), [locale, setLocale, t]);
+
+  return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
+}
+
+export function useLocale(): LocaleValue {
+  const ctx = React.useContext(LocaleContext);
+  if (!ctx) throw new Error("useLocale must be used inside Providers");
+  return ctx;
+}
+
+export function useT(): TranslateFn {
+  return useLocale().t;
+}
+
 /* ------------------------------------------------------------------ Toast */
 
 interface Toast {
@@ -174,7 +252,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryClientProvider client={client}>
       <ToastProvider>
-        <SessionProvider>{children}</SessionProvider>
+        <SessionProvider>
+          <LocaleProvider>{children}</LocaleProvider>
+        </SessionProvider>
       </ToastProvider>
     </QueryClientProvider>
   );

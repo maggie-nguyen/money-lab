@@ -3,6 +3,10 @@
  * đồng and is formatted with BigInt, never parseInt (doc 06 §5).
  */
 
+import type { Locale } from "@/lib/types";
+import { DEFAULT_LOCALE, intlLocale } from "@/lib/locale";
+import { createT } from "@/lib/i18n";
+
 const VN_GROUP = /\B(?=(\d{3})+(?!\d))/g;
 
 /** "12500000" → "12.500.000 ₫". Negative values keep the sign in front. */
@@ -20,8 +24,11 @@ export function formatVnd(vnd: string | bigint | null | undefined, opts?: { unit
   return `${neg ? "-" : ""}${digits}${unit}`;
 }
 
-/** Compact money for tight cells: 12.500.000 → "12,5 tr". */
-export function formatVndShort(vnd: string | bigint | null | undefined): string {
+/** Compact money for tight cells: 12.500.000 → "12,5 tr" / "12.5M". */
+export function formatVndShort(
+  vnd: string | bigint | null | undefined,
+  locale: Locale = DEFAULT_LOCALE,
+): string {
   if (vnd === null || vnd === undefined || vnd === "") return "-";
   let v: bigint;
   try {
@@ -32,21 +39,31 @@ export function formatVndShort(vnd: string | bigint | null | undefined): string 
   const neg = v < 0n;
   const abs = neg ? -v : v;
   const sign = neg ? "-" : "";
-  if (abs >= 1_000_000_000n) return `${sign}${oneDecimal(abs, 1_000_000_000n)} tỷ`;
-  if (abs >= 1_000_000n) return `${sign}${oneDecimal(abs, 1_000_000n)} tr`;
-  if (abs >= 1_000n) return `${sign}${oneDecimal(abs, 1_000n)} n`;
+  const t = createT(locale);
+  if (abs >= 1_000_000_000n) {
+    return `${sign}${oneDecimal(abs, 1_000_000_000n, locale)}${t("format.shortBillion")}`;
+  }
+  if (abs >= 1_000_000n) {
+    return `${sign}${oneDecimal(abs, 1_000_000n, locale)}${t("format.shortMillion")}`;
+  }
+  if (abs >= 1_000n) {
+    return `${sign}${oneDecimal(abs, 1_000n, locale)}${t("format.shortThousand")}`;
+  }
   return `${sign}${abs.toString()}`;
 }
 
 /**
- * A plain language gloss for a large figure: "khoảng 100,1 triệu".
+ * A plain language gloss for a large figure: "khoảng 100,1 triệu" / "about 100.1 million".
  *
  * Thirteen grouped digits are precise but slow to read, and a learner comparing
  * two results mostly wants the magnitude. Returns null below a million, where
  * the grouped digits are already easy enough to take in at a glance, and drops
- * "khoảng" when the short form happens to be exact.
+ * the "about" prefix when the short form happens to be exact.
  */
-export function formatVndApprox(vnd: string | bigint | null | undefined): string | null {
+export function formatVndApprox(
+  vnd: string | bigint | null | undefined,
+  locale: Locale = DEFAULT_LOCALE,
+): string | null {
   if (vnd === null || vnd === undefined || vnd === "") return null;
   let v: bigint;
   try {
@@ -58,26 +75,31 @@ export function formatVndApprox(vnd: string | bigint | null | undefined): string
   const abs = neg ? -v : v;
   if (abs < 1_000_000n) return null;
   const unit = abs >= 1_000_000_000n ? 1_000_000_000n : 1_000_000n;
-  const word = unit === 1_000_000_000n ? "tỷ" : "triệu";
+  const t = createT(locale);
+  const word = unit === 1_000_000_000n ? t("format.billion") : t("format.million");
   const tenths = (abs * 10n) / unit;
   const exact = (tenths * unit) / 10n === abs;
-  return `${exact ? "" : "khoảng "}${neg ? "-" : ""}${oneDecimal(abs, unit)} ${word}`;
+  const decimal = oneDecimal(abs, unit, locale);
+  return `${exact ? "" : t("format.about")}${neg ? "-" : ""}${decimal} ${word}`;
 }
 
-function oneDecimal(abs: bigint, unit: bigint): string {
+function oneDecimal(abs: bigint, unit: bigint, locale: Locale = DEFAULT_LOCALE): string {
   const whole = abs / unit;
   const tenth = ((abs % unit) * 10n) / unit;
-  return tenth === 0n ? whole.toString() : `${whole},${tenth}`;
+  const sep = locale === "en" ? "." : ",";
+  return tenth === 0n ? whole.toString() : `${whole}${sep}${tenth}`;
 }
 
-/** Integer bps → "12,5%". */
-export function formatBps(bps: number): string {
+/** Integer bps → "12,5%" / "12.5%". */
+export function formatBps(bps: number, locale: Locale = DEFAULT_LOCALE): string {
   const pct = bps / 100;
-  return `${pct.toFixed(pct % 1 === 0 ? 0 : 1).replace(".", ",")}%`;
+  const sep = locale === "en" ? "." : ",";
+  return `${pct.toFixed(pct % 1 === 0 ? 0 : 1).replace(".", sep)}%`;
 }
 
-export function formatPct(pct: number, digits = 0): string {
-  return `${pct.toFixed(digits).replace(".", ",")}%`;
+export function formatPct(pct: number, digits = 0, locale: Locale = DEFAULT_LOCALE): string {
+  const sep = locale === "en" ? "." : ",";
+  return `${pct.toFixed(digits).replace(".", sep)}%`;
 }
 
 export function formatInt(n: number): string {
@@ -90,32 +112,51 @@ const VN_MONTHS = [
 ];
 const VN_WEEKDAYS = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
 
-/** "2026-08-14T…" → "14 tháng 8, 2026" (Asia/Ho_Chi_Minh). */
-export function formatDate(iso: string | null | undefined, opts?: { weekday?: boolean }): string {
+/** "2026-08-14T…" → localized calendar date (Asia/Ho_Chi_Minh). */
+export function formatDate(
+  iso: string | null | undefined,
+  opts?: { weekday?: boolean; locale?: Locale },
+): string {
   if (!iso) return "-";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "-";
+  const locale = opts?.locale ?? DEFAULT_LOCALE;
+  if (locale === "en") {
+    return new Intl.DateTimeFormat(intlLocale(locale), {
+      timeZone: "Asia/Ho_Chi_Minh",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      ...(opts?.weekday ? { weekday: "long" as const } : {}),
+    }).format(d);
+  }
   const vn = new Date(d.getTime() + 7 * 3600 * 1000);
   const base = `${vn.getUTCDate()} ${VN_MONTHS[vn.getUTCMonth()]}, ${vn.getUTCFullYear()}`;
   return opts?.weekday ? `${VN_WEEKDAYS[vn.getUTCDay()]}, ${base}` : base;
 }
 
-/** Relative time in Vietnamese, for feeds and thread lists. */
-export function formatRelative(iso: string | null | undefined, now = new Date()): string {
+/** Relative time for feeds and thread lists. */
+export function formatRelative(
+  iso: string | null | undefined,
+  now = new Date(),
+  locale: Locale = DEFAULT_LOCALE,
+): string {
   if (!iso) return "-";
   const then = new Date(iso).getTime();
   if (Number.isNaN(then)) return "-";
+  const t = createT(locale);
   const sec = Math.round((now.getTime() - then) / 1000);
-  if (sec < 60) return "vừa xong";
-  if (sec < 3600) return `${Math.floor(sec / 60)} phút trước`;
-  if (sec < 86400) return `${Math.floor(sec / 3600)} giờ trước`;
-  if (sec < 7 * 86400) return `${Math.floor(sec / 86400)} ngày trước`;
-  return formatDate(iso);
+  if (sec < 60) return t("format.justNow");
+  if (sec < 3600) return t("format.minutesAgo", { count: Math.floor(sec / 60) });
+  if (sec < 86400) return t("format.hoursAgo", { count: Math.floor(sec / 3600) });
+  if (sec < 7 * 86400) return t("format.daysAgo", { count: Math.floor(sec / 86400) });
+  return formatDate(iso, { locale });
 }
 
-export function formatMinutes(min: number): string {
-  if (min < 60) return `${min} phút`;
+export function formatMinutes(min: number, locale: Locale = DEFAULT_LOCALE): string {
+  const t = createT(locale);
+  if (min < 60) return t("format.minutesOnly", { count: min });
   const h = Math.floor(min / 60);
   const m = min % 60;
-  return m === 0 ? `${h} giờ` : `${h} giờ ${m} phút`;
+  return m === 0 ? t("format.hoursOnly", { count: h }) : t("format.hoursMinutes", { h, m });
 }

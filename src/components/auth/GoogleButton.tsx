@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { session, ApiError } from "@/lib/api";
-import { BOOTSTRAP_KEY } from "@/components/Providers";
+import { BOOTSTRAP_KEY, useLocale, useT } from "@/components/Providers";
 import { readReturnTo, welcomeHref } from "@/lib/returnTo";
 import { Alert } from "@/components/ui";
 
@@ -71,6 +71,8 @@ function loadGsi(): Promise<void> {
 export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" | "signup_with" }) {
   const router = useRouter();
   const qc = useQueryClient();
+  const t = useT();
+  const { locale } = useLocale();
   const hostRef = React.useRef<HTMLDivElement | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -82,7 +84,7 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
     setError(null);
     void (async () => {
       try {
-        const data = (await session.google(res.credential as string)) as { isNewUser?: boolean };
+        const data = (await session.google(res.credential as string, locale)) as { isNewUser?: boolean };
         await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
         // A returning learner goes back to whatever sent them here. A new one
         // needs the welcome flow first, so their destination waits.
@@ -90,8 +92,8 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
       } catch (err) {
         setError(
           err instanceof ApiError && err.status === 401
-            ? "Không xác thực được tài khoản Google. Vui lòng thử lại."
-            : "Không đăng nhập bằng Google được. Bạn có thể dùng email và mật khẩu bên dưới.",
+            ? t("auth.google.authFailed")
+            : t("auth.google.failed"),
         );
       }
     })();
@@ -112,6 +114,7 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
           auto_select: false,
           cancel_on_tap_outside: true,
         });
+        hostRef.current.innerHTML = "";
         id.renderButton(hostRef.current, {
           type: "standard",
           theme: "outline",
@@ -119,17 +122,17 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
           shape: "rectangular",
           text: label,
           logo_alignment: "center",
-          locale: "vi",
+          locale,
           width: 320,
         });
       })
       .catch(() => {
-        if (!cancelled) setError("Không tải được nút Google. Hãy dùng email và mật khẩu bên dưới.");
+        if (!cancelled) setError(t("auth.google.loadFailed"));
       });
     return () => {
       cancelled = true;
     };
-  }, [label]);
+  }, [label, locale, t]);
 
   if (!CLIENT_ID) return null;
 
@@ -143,7 +146,7 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
       <div ref={hostRef} className="flex justify-center [&>div]:!w-full" />
       <div className="mt-6 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-ink-soft">
         <span className="h-px flex-1 bg-rule" />
-        hoặc
+        {t("auth.google.or")}
         <span className="h-px flex-1 bg-rule" />
       </div>
     </div>

@@ -19,11 +19,18 @@ import {
 import { sendEmail } from "@/server/lib/email";
 import type { Clock } from "@/server/lib/time";
 import type { User } from "@prisma/client";
+import { createT } from "@/lib/i18n";
+import { parseLocale, DEFAULT_LOCALE } from "@/lib/locale";
+import type { Locale } from "@/lib/types";
 
 // argon2id params - doc 01 stack table
 const ARGON_OPTS = { memoryCost: 19456, timeCost: 2, parallelism: 1 };
 
 const sha256 = (s: string): string => createHash("sha256").update(s).digest("hex");
+
+function userLocale(pref: string | null | undefined): Locale {
+  return parseLocale(pref) ?? DEFAULT_LOCALE;
+}
 
 export interface TokenPair {
   accessToken: string;
@@ -128,12 +135,13 @@ export async function login(
 const googleJwks = () => createRemoteJWKSet(new URL(env().GOOGLE_JWKS_URL));
 
 export async function googleLogin(
-  input: { idToken: string },
+  input: { idToken: string; localePref?: "vi" | "en" },
   now: Clock,
   meta: { userAgent?: string; ip?: string },
 ) {
   const clientId = env().GOOGLE_CLIENT_ID;
   if (!clientId) throw new AppError("NOT_IMPLEMENTED", "Google login is not configured");
+  const localePref = input.localePref === "en" ? "en" : "vi";
   let payload: { sub?: string; email?: string; email_verified?: boolean; name?: string };
   try {
     const res = await jwtVerify(input.idToken, googleJwks(), {
@@ -171,18 +179,22 @@ export async function googleLogin(
     });
     if (taken) {
       throw conflict(
-        "Email này đã có tài khoản. Hãy đăng nhập bằng mật khẩu, vì Google chưa xác minh email của bạn.",
+        localePref === "en"
+          ? "This email already has an account. Sign in with your password, because Google has not verified this email."
+          : "Email này đã có tài khoản. Hãy đăng nhập bằng mật khẩu, vì Google chưa xác minh email của bạn.",
       );
     }
   }
   if (!user) {
     isNewUser = true;
+    const fallbackName = localePref === "en" ? "Learner" : "Học sinh";
     user = await prisma.user.create({
       data: {
         id: uuidv7(),
         email: payload.email?.toLowerCase() ?? null,
         emailVerifiedAt: payload.email_verified ? now() : null,
-        displayName: (payload.name ?? "Học sinh").slice(0, 40),
+        displayName: (payload.name ?? fallbackName).slice(0, 40),
+        localePref,
       },
     });
     await ensureStats(user.id);
@@ -278,10 +290,12 @@ export async function sendVerificationEmail(userId: string, now: Date): Promise<
   const user = await prisma.user.findUnique({ where: { id: userId } });
   if (!user?.email || user.emailVerifiedAt) return;
   const token = await createEmailToken(userId, "verify", 7 * 24 * 3600 * 1000, now);
+  const t = createT(userLocale(user.localePref));
+  const url = `${env().APP_ORIGIN}/verify-email?token=${token}`;
   await sendEmail(
     user.email,
-    "Xác nhận email MoneyLab",
-    `Chào ${user.displayName},\n\nNhấn vào liên kết để xác nhận email:\n${env().APP_ORIGIN}/verify-email?token=${token}\n\nLiên kết hết hạn sau 7 ngày.`,
+    t("auth.email.verifySubject"),
+    t("auth.email.verifyBody", { name: user.displayName, url }),
   );
 }
 
@@ -302,11 +316,9 @@ export async function forgotPassword(input: { email: string }, now: Clock): Prom
   });
   if (!user?.email) return; // no enumeration - always 204
   const token = await createEmailToken(user.id, "reset", 3600 * 1000, now());
-  await sendEmail(
-    user.email,
-    "Đặt lại mật khẩu MoneyLab",
-    `Nhấn vào liên kết để đặt lại mật khẩu (hết hạn sau 1 giờ):\n${env().APP_ORIGIN}/reset-password?token=${token}`,
-  );
+  const t = createT(userLocale(user.localePref));
+  const url = `${env().APP_ORIGIN}/reset-password?token=${token}`;
+  await sendEmail(user.email, t("auth.email.resetSubject"), t("auth.email.resetBody", { url }));
 }
 
 export async function resetPassword(

@@ -27,6 +27,8 @@ import {
   StatRows,
 } from "@/components/ui";
 import { formatDate, formatVnd } from "@/lib/format";
+import { useT } from "@/components/Providers";
+import type { TranslateFn } from "@/lib/i18n";
 
 /* ------------------------------------------------------------- Response DTOs (doc 03 §8) */
 
@@ -91,6 +93,21 @@ interface ToolMeta {
   formula: string;
 }
 
+const TOOL_SLUGS = [
+  "compound-interest",
+  "loan-payment",
+  "loan-compare",
+  "savings-goal",
+  "inflation",
+  "budget-503020",
+] as const;
+
+type ToolSlug = (typeof TOOL_SLUGS)[number];
+
+function isToolSlug(value: string): value is ToolSlug {
+  return (TOOL_SLUGS as readonly string[]).includes(value);
+}
+
 /* -------------------------------------------------------------------- Shared bits */
 
 function toBps(percent: string): number {
@@ -110,8 +127,9 @@ function RateField({
   onChange: (v: string) => void;
   id: string;
 }) {
+  const t = useT();
   return (
-    <Field label={label} htmlFor={id} hint="Lãi suất theo năm, ví dụ 12 nghĩa là 12% một năm.">
+    <Field label={label} htmlFor={id} hint={t("tools.rateHint")}>
       <div className="relative">
         <Input
           id={id}
@@ -127,11 +145,12 @@ function RateField({
 }
 
 function FormulaNote({ meta }: { meta: ToolMeta | undefined }) {
+  const t = useT();
   if (!meta?.formula) return null;
   return (
     <Card tone="flat">
       <CardBody className="space-y-1">
-        <LedgerLabel>Công thức</LedgerLabel>
+        <LedgerLabel>{t("tools.formula")}</LedgerLabel>
         <p className="text-sm text-ink-soft">{meta.formula}</p>
       </CardBody>
     </Card>
@@ -151,23 +170,29 @@ function usePreset(name: string, fallback: string): string {
 }
 
 function ToolError({ error }: { error: unknown }) {
+  const t = useT();
   if (!error) return null;
   const message =
     error instanceof ApiError
       ? error.ruleCode === "UNREACHABLE"
-        ? "Với mức góp và lãi suất này, không bao giờ đạt được mục tiêu. Hãy tăng khoản góp hoặc lãi suất."
+        ? t("tools.errorUnreachable")
         : error.message
-      : "Không tính được kết quả. Vui lòng thử lại.";
+      : t("tools.errorGeneric");
   return (
-    <Alert tone="critical" title="Không tính được">
+    <Alert tone="critical" title={t("tools.errorTitle")}>
       {message}
     </Alert>
   );
 }
 
+function methodLabel(method: "ANNUITY" | "DECLINING_BALANCE", t: TranslateFn): string {
+  return method === "ANNUITY" ? t("tools.method.annuity") : t("tools.method.declining");
+}
+
 /* ----------------------------------------------------------- Compound interest (8.1) */
 
 function CompoundInterestTool() {
+  const t = useT();
   const [principalVnd, setPrincipalVnd] = React.useState(usePreset("principalVnd", "10000000"));
   const [contributionVnd, setContributionVnd] = React.useState(usePreset("contributionVnd", "500000"));
   const [ratePercent, setRatePercent] = React.useState(usePreset("ratePercent", "6"));
@@ -189,25 +214,29 @@ function CompoundInterestTool() {
     <div className="grid gap-6 lg:grid-cols-2">
       <Card>
         <CardBody className="space-y-4">
-          <Field label="Số tiền gốc ban đầu" htmlFor="principal">
+          <Field label={t("tools.field.principal")} htmlFor="principal">
             <MoneyInput id="principal" value={principalVnd} onChange={setPrincipalVnd} />
           </Field>
-          <Field label="Góp thêm mỗi tháng" htmlFor="contribution" hint="Để trống nếu không góp thêm.">
+          <Field
+            label={t("tools.field.monthlyContribution")}
+            htmlFor="contribution"
+            hint={t("tools.field.contributionHint")}
+          >
             <MoneyInput id="contribution" value={contributionVnd} onChange={setContributionVnd} />
           </Field>
-          <RateField id="rate" label="Lãi suất mỗi năm" value={ratePercent} onChange={setRatePercent} />
-          <Field label="Kỳ ghép lãi" htmlFor="compounding">
+          <RateField id="rate" label={t("tools.field.annualRate")} value={ratePercent} onChange={setRatePercent} />
+          <Field label={t("tools.field.compounding")} htmlFor="compounding">
             <Select id="compounding" value={compounding} onChange={(e) => setCompounding(e.target.value as typeof compounding)}>
-              <option value="MONTHLY">Hàng tháng</option>
-              <option value="QUARTERLY">Hàng quý</option>
-              <option value="ANNUALLY">Hàng năm</option>
+              <option value="MONTHLY">{t("tools.compounding.monthly")}</option>
+              <option value="QUARTERLY">{t("tools.compounding.quarterly")}</option>
+              <option value="ANNUALLY">{t("tools.compounding.annually")}</option>
             </Select>
           </Field>
-          <Field label="Số năm" htmlFor="years">
+          <Field label={t("tools.field.years")} htmlFor="years">
             <Input id="years" className="figure" type="number" min={1} max={50} value={years} onChange={(e) => setYears(e.target.value)} />
           </Field>
           <Button onClick={() => mutation.mutate()} loading={mutation.isPending} disabled={mutation.isPending}>
-            Tính lãi kép
+            {t("tools.action.compound")}
           </Button>
         </CardBody>
       </Card>
@@ -218,13 +247,13 @@ function CompoundInterestTool() {
           <>
             <MoneyReadout
               items={[
-                { label: "Số dư cuối kỳ", vnd: mutation.data.data.finalAmountVnd, primary: true },
-                { label: "Tổng đã góp", vnd: mutation.data.data.totalContributedVnd },
-                { label: "Tổng tiền lãi", vnd: mutation.data.data.totalInterestVnd },
+                { label: t("tools.result.finalBalance"), vnd: mutation.data.data.finalAmountVnd, primary: true },
+                { label: t("tools.result.totalContributed"), vnd: mutation.data.data.totalContributedVnd },
+                { label: t("tools.result.totalInterest"), vnd: mutation.data.data.totalInterestVnd },
               ]}
             />
             <LedgerTable
-              headers={["Năm", "Số dư"]}
+              headers={[t("tools.table.year"), t("tools.table.balance")]}
               align={["left", "right"]}
               rows={mutation.data.data.yearly.map((y) => [y.year, formatVnd(y.balanceVnd)])}
             />
@@ -232,7 +261,7 @@ function CompoundInterestTool() {
           </>
         )}
         {!mutation.data && !mutation.isPending && !mutation.error && (
-          <EmptyState title="Chưa có kết quả" description="Nhập thông tin và bấm tính để xem kết quả." />
+          <EmptyState title={t("tools.emptyTitle")} description={t("tools.emptyDescription")} />
         )}
       </div>
     </div>
@@ -241,12 +270,8 @@ function CompoundInterestTool() {
 
 /* --------------------------------------------------------------- Loan payment (8.2) */
 
-const METHOD_LABEL: Record<"ANNUITY" | "DECLINING_BALANCE", string> = {
-  ANNUITY: "Trả góp đều",
-  DECLINING_BALANCE: "Dư nợ giảm dần",
-};
-
 function LoanPaymentTool() {
+  const t = useT();
   const [principalVnd, setPrincipalVnd] = React.useState(usePreset("principalVnd", "100000000"));
   const [ratePercent, setRatePercent] = React.useState(usePreset("ratePercent", "12"));
   const [termMonths, setTermMonths] = React.useState(usePreset("termMonths", "12"));
@@ -266,21 +291,21 @@ function LoanPaymentTool() {
     <div className="grid gap-6 lg:grid-cols-2">
       <Card>
         <CardBody className="space-y-4">
-          <Field label="Số tiền vay" htmlFor="principal">
+          <Field label={t("tools.field.loanAmount")} htmlFor="principal">
             <MoneyInput id="principal" value={principalVnd} onChange={setPrincipalVnd} />
           </Field>
-          <RateField id="rate" label="Lãi suất mỗi năm" value={ratePercent} onChange={setRatePercent} />
-          <Field label="Kỳ hạn (tháng)" htmlFor="term">
+          <RateField id="rate" label={t("tools.field.annualRate")} value={ratePercent} onChange={setRatePercent} />
+          <Field label={t("tools.field.termMonths")} htmlFor="term">
             <Input id="term" className="figure" type="number" min={1} max={600} value={termMonths} onChange={(e) => setTermMonths(e.target.value)} />
           </Field>
-          <Field label="Cách trả nợ" htmlFor="method">
+          <Field label={t("tools.field.repayMethod")} htmlFor="method">
             <Select id="method" value={method} onChange={(e) => setMethod(e.target.value as typeof method)}>
-              <option value="ANNUITY">Trả góp đều mỗi tháng</option>
-              <option value="DECLINING_BALANCE">Dư nợ giảm dần</option>
+              <option value="ANNUITY">{t("tools.method.annuityFull")}</option>
+              <option value="DECLINING_BALANCE">{t("tools.method.declining")}</option>
             </Select>
           </Field>
           <Button onClick={() => mutation.mutate()} loading={mutation.isPending} disabled={mutation.isPending}>
-            Tính khoản vay
+            {t("tools.action.loan")}
           </Button>
         </CardBody>
       </Card>
@@ -291,19 +316,21 @@ function LoanPaymentTool() {
           <>
             <MoneyReadout
               items={[
-                { label: "Trả tháng đầu", vnd: mutation.data.data.monthlyPaymentVnd, primary: true },
-                { label: "Tổng đã trả", vnd: mutation.data.data.totalPaidVnd },
-                { label: "Tổng tiền lãi", vnd: mutation.data.data.totalInterestVnd },
+                { label: t("tools.result.firstPayment"), vnd: mutation.data.data.monthlyPaymentVnd, primary: true },
+                { label: t("tools.result.totalPaid"), vnd: mutation.data.data.totalPaidVnd },
+                { label: t("tools.result.totalInterest"), vnd: mutation.data.data.totalInterestVnd },
               ]}
             />
             <LedgerTable
-              headers={["Tháng", "Trả", "Gốc", "Lãi", "Còn lại"]}
+              headers={[
+                t("tools.table.month"),
+                t("tools.table.payment"),
+                t("tools.table.principal"),
+                t("tools.table.interest"),
+                t("tools.table.remaining"),
+              ]}
               align={["left", "right", "right", "right", "right"]}
-              caption={
-                mutation.data.data.scheduleTruncated
-                  ? "Bảng chỉ hiển thị 360 dòng đầu."
-                  : undefined
-              }
+              caption={mutation.data.data.scheduleTruncated ? t("tools.scheduleTruncated") : undefined}
               rows={mutation.data.data.schedule.map((r) => [
                 r.month,
                 formatVnd(r.paymentVnd),
@@ -316,7 +343,7 @@ function LoanPaymentTool() {
           </>
         )}
         {!mutation.data && !mutation.isPending && !mutation.error && (
-          <EmptyState title="Chưa có kết quả" description="Nhập thông tin và bấm tính để xem bảng trả nợ." />
+          <EmptyState title={t("tools.emptyTitle")} description={t("tools.emptySchedule")} />
         )}
       </div>
     </div>
@@ -333,18 +360,25 @@ interface LoanCompareInput {
   method: "ANNUITY" | "DECLINING_BALANCE";
 }
 
-function emptyLoan(n: number): LoanCompareInput {
-  return { name: `Khoản vay ${n}`, principalVnd: "100000000", ratePercent: "12", termMonths: "12", method: "ANNUITY" };
+function emptyLoan(n: number, t: TranslateFn): LoanCompareInput {
+  return {
+    name: t("tools.defaultLoanName", { n }),
+    principalVnd: "100000000",
+    ratePercent: "12",
+    termMonths: "12",
+    method: "ANNUITY",
+  };
 }
 
 function LoanCompareTool() {
-  const [loans, setLoans] = React.useState<LoanCompareInput[]>([emptyLoan(1), emptyLoan(2)]);
+  const t = useT();
+  const [loans, setLoans] = React.useState<LoanCompareInput[]>([emptyLoan(1, t), emptyLoan(2, t)]);
 
   const mutation = useMutation({
     mutationFn: () =>
       api.postWithMeta<LoanCompareData, ToolMeta>("/tools/loan-compare", {
         loans: loans.map((l) => ({
-          name: l.name || "Khoản vay",
+          name: l.name || t("tools.defaultLoan"),
           principalVnd: l.principalVnd || "0",
           annualRateBps: toBps(l.ratePercent),
           termMonths: Number(l.termMonths) || 1,
@@ -364,7 +398,7 @@ function LoanCompareTool() {
           <Card key={i}>
             <CardBody className="space-y-3">
               <div className="flex items-center justify-between gap-2">
-                <Field label="Tên khoản vay" htmlFor={`name-${i}`}>
+                <Field label={t("tools.field.loanName")} htmlFor={`name-${i}`}>
                   <Input id={`name-${i}`} value={loan.name} onChange={(e) => updateLoan(i, { name: e.target.value })} />
                 </Field>
                 {loans.length > 2 && (
@@ -374,20 +408,20 @@ function LoanCompareTool() {
                     className="mt-6"
                     onClick={() => setLoans((prev) => prev.filter((_, idx) => idx !== i))}
                   >
-                    Xóa
+                    {t("tools.action.remove")}
                   </Button>
                 )}
               </div>
-              <Field label="Số tiền vay" htmlFor={`principal-${i}`}>
+              <Field label={t("tools.field.loanAmount")} htmlFor={`principal-${i}`}>
                 <MoneyInput id={`principal-${i}`} value={loan.principalVnd} onChange={(v) => updateLoan(i, { principalVnd: v })} />
               </Field>
               <RateField
                 id={`rate-${i}`}
-                label="Lãi suất mỗi năm"
+                label={t("tools.field.annualRate")}
                 value={loan.ratePercent}
                 onChange={(v) => updateLoan(i, { ratePercent: v })}
               />
-              <Field label="Kỳ hạn (tháng)" htmlFor={`term-${i}`}>
+              <Field label={t("tools.field.termMonths")} htmlFor={`term-${i}`}>
                 <Input
                   id={`term-${i}`}
                   className="figure"
@@ -398,14 +432,14 @@ function LoanCompareTool() {
                   onChange={(e) => updateLoan(i, { termMonths: e.target.value })}
                 />
               </Field>
-              <Field label="Cách trả nợ" htmlFor={`method-${i}`}>
+              <Field label={t("tools.field.repayMethod")} htmlFor={`method-${i}`}>
                 <Select
                   id={`method-${i}`}
                   value={loan.method}
                   onChange={(e) => updateLoan(i, { method: e.target.value as LoanCompareInput["method"] })}
                 >
-                  <option value="ANNUITY">Trả góp đều mỗi tháng</option>
-                  <option value="DECLINING_BALANCE">Dư nợ giảm dần</option>
+                  <option value="ANNUITY">{t("tools.method.annuityFull")}</option>
+                  <option value="DECLINING_BALANCE">{t("tools.method.declining")}</option>
                 </Select>
               </Field>
             </CardBody>
@@ -415,12 +449,12 @@ function LoanCompareTool() {
 
       <div className="flex flex-wrap gap-3">
         {loans.length < 4 && (
-          <Button variant="secondary" onClick={() => setLoans((prev) => [...prev, emptyLoan(prev.length + 1)])}>
-            Thêm khoản vay
+          <Button variant="secondary" onClick={() => setLoans((prev) => [...prev, emptyLoan(prev.length + 1, t)])}>
+            {t("tools.action.addLoan")}
           </Button>
         )}
         <Button onClick={() => mutation.mutate()} loading={mutation.isPending} disabled={mutation.isPending}>
-          So sánh
+          {t("tools.action.compare")}
         </Button>
       </div>
 
@@ -429,11 +463,20 @@ function LoanCompareTool() {
       {mutation.data && (
         <div className="space-y-4">
           <LedgerTable
-            headers={["Khoản vay", "Cách trả", "Trả tháng đầu", "Tổng đã trả", "Tổng lãi", "Chênh lệch so với rẻ nhất"]}
+            headers={[
+              t("tools.table.loan"),
+              t("tools.table.method"),
+              t("tools.table.firstPayment"),
+              t("tools.table.totalPaid"),
+              t("tools.table.totalInterest"),
+              t("tools.table.deltaVsCheapest"),
+            ]}
             align={["left", "left", "right", "right", "right", "right"]}
             rows={mutation.data.data.loans.map((l) => [
-              l.name === mutation.data!.data.cheapestByTotal ? `${l.name} (rẻ nhất)` : l.name,
-              METHOD_LABEL[l.method],
+              l.name === mutation.data!.data.cheapestByTotal
+                ? t("tools.result.cheapest", { name: l.name })
+                : l.name,
+              methodLabel(l.method, t),
               formatVnd(l.monthlyPaymentVnd),
               formatVnd(l.totalPaidVnd),
               formatVnd(l.totalInterestVnd),
@@ -451,6 +494,7 @@ function LoanCompareTool() {
 /* -------------------------------------------------------------- Savings goal (8.4) */
 
 function SavingsGoalTool() {
+  const t = useT();
   const [goalVnd, setGoalVnd] = React.useState(usePreset("goalVnd", "50000000"));
   const [currentVnd, setCurrentVnd] = React.useState(usePreset("currentVnd", "5000000"));
   const [ratePercent, setRatePercent] = React.useState(usePreset("ratePercent", "5"));
@@ -470,18 +514,18 @@ function SavingsGoalTool() {
     <div className="grid gap-6 lg:grid-cols-2">
       <Card>
         <CardBody className="space-y-4">
-          <Field label="Mục tiêu tiết kiệm" htmlFor="goal">
+          <Field label={t("tools.field.goal")} htmlFor="goal">
             <MoneyInput id="goal" value={goalVnd} onChange={setGoalVnd} />
           </Field>
-          <Field label="Số tiền đã có" htmlFor="current">
+          <Field label={t("tools.field.currentSavings")} htmlFor="current">
             <MoneyInput id="current" value={currentVnd} onChange={setCurrentVnd} />
           </Field>
-          <RateField id="rate" label="Lãi suất mỗi năm" value={ratePercent} onChange={setRatePercent} />
-          <Field label="Góp thêm mỗi tháng" htmlFor="contribution">
+          <RateField id="rate" label={t("tools.field.annualRate")} value={ratePercent} onChange={setRatePercent} />
+          <Field label={t("tools.field.monthlyContribution")} htmlFor="contribution">
             <MoneyInput id="contribution" value={contributionVnd} onChange={setContributionVnd} />
           </Field>
           <Button onClick={() => mutation.mutate()} loading={mutation.isPending} disabled={mutation.isPending}>
-            Tính số tháng cần
+            {t("tools.action.savingsMonths")}
           </Button>
         </CardBody>
       </Card>
@@ -493,15 +537,15 @@ function SavingsGoalTool() {
             <StatRows
               columns={1}
               items={[
-                { label: "Số tháng cần", value: mutation.data.data.monthsNeeded, hint: "tháng" },
-                { label: "Ngày dự kiến đạt mục tiêu", value: formatDate(mutation.data.data.achievedDate) },
+                { label: t("tools.result.monthsNeeded"), value: mutation.data.data.monthsNeeded, hint: t("tools.result.monthsHint") },
+                { label: t("tools.result.achievedDate"), value: formatDate(mutation.data.data.achievedDate) },
               ]}
             />
             <FormulaNote meta={mutation.data.meta} />
           </>
         )}
         {!mutation.data && !mutation.isPending && !mutation.error && (
-          <EmptyState title="Chưa có kết quả" description="Nhập thông tin và bấm tính để xem cần bao nhiêu tháng." />
+          <EmptyState title={t("tools.emptyTitle")} description={t("tools.emptyMonths")} />
         )}
       </div>
     </div>
@@ -511,6 +555,7 @@ function SavingsGoalTool() {
 /* ----------------------------------------------------------------- Inflation (8.5) */
 
 function InflationTool() {
+  const t = useT();
   const [amountVnd, setAmountVnd] = React.useState(usePreset("amountVnd", "10000000"));
   const [ratePercent, setRatePercent] = React.useState(usePreset("ratePercent", "4"));
   const [years, setYears] = React.useState(usePreset("years", "10"));
@@ -528,15 +573,15 @@ function InflationTool() {
     <div className="grid gap-6 lg:grid-cols-2">
       <Card>
         <CardBody className="space-y-4">
-          <Field label="Số tiền hiện tại" htmlFor="amount">
+          <Field label={t("tools.field.currentAmount")} htmlFor="amount">
             <MoneyInput id="amount" value={amountVnd} onChange={setAmountVnd} />
           </Field>
-          <RateField id="rate" label="Lạm phát mỗi năm" value={ratePercent} onChange={setRatePercent} />
-          <Field label="Số năm" htmlFor="years">
+          <RateField id="rate" label={t("tools.field.inflationRate")} value={ratePercent} onChange={setRatePercent} />
+          <Field label={t("tools.field.years")} htmlFor="years">
             <Input id="years" className="figure" type="number" min={1} max={50} value={years} onChange={(e) => setYears(e.target.value)} />
           </Field>
           <Button onClick={() => mutation.mutate()} loading={mutation.isPending} disabled={mutation.isPending}>
-            Tính ảnh hưởng lạm phát
+            {t("tools.action.inflation")}
           </Button>
         </CardBody>
       </Card>
@@ -548,18 +593,18 @@ function InflationTool() {
             <MoneyReadout
               items={[
                 {
-                  label: "Sức mua tương đương hôm nay",
+                  label: t("tools.result.purchasingPower"),
                   vnd: mutation.data.data.equivalentPurchasingPowerVnd,
                   primary: true,
                 },
-                { label: "Số tiền mặt (giữ nguyên số)", vnd: mutation.data.data.futureValueOfCashVnd },
+                { label: t("tools.result.cashFaceValue"), vnd: mutation.data.data.futureValueOfCashVnd },
               ]}
             />
             <FormulaNote meta={mutation.data.meta} />
           </>
         )}
         {!mutation.data && !mutation.isPending && !mutation.error && (
-          <EmptyState title="Chưa có kết quả" description="Nhập thông tin và bấm tính để xem tác động của lạm phát." />
+          <EmptyState title={t("tools.emptyTitle")} description={t("tools.emptyInflation")} />
         )}
       </div>
     </div>
@@ -569,6 +614,7 @@ function InflationTool() {
 /* -------------------------------------------------------------- Budget 50/30/20 (8.6) */
 
 function BudgetSplitTool() {
+  const t = useT();
   const [incomeVnd, setIncomeVnd] = React.useState(usePreset("incomeVnd", "10000000"));
 
   const mutation = useMutation({
@@ -582,11 +628,11 @@ function BudgetSplitTool() {
     <div className="grid gap-6 lg:grid-cols-2">
       <Card>
         <CardBody className="space-y-4">
-          <Field label="Thu nhập hằng tháng" htmlFor="income">
+          <Field label={t("tools.field.monthlyIncome")} htmlFor="income">
             <MoneyInput id="income" value={incomeVnd} onChange={setIncomeVnd} />
           </Field>
           <Button onClick={() => mutation.mutate()} loading={mutation.isPending} disabled={mutation.isPending}>
-            Chia ngân sách
+            {t("tools.action.budget")}
           </Button>
         </CardBody>
       </Card>
@@ -597,16 +643,16 @@ function BudgetSplitTool() {
           <>
             <MoneyReadout
               items={[
-                { label: "Nhu cầu thiết yếu (50%)", vnd: mutation.data.data.needsVnd },
-                { label: "Mong muốn cá nhân (30%)", vnd: mutation.data.data.wantsVnd },
-                { label: "Tiết kiệm và trả nợ (20%)", vnd: mutation.data.data.savingsVnd },
+                { label: t("tools.result.needs"), vnd: mutation.data.data.needsVnd },
+                { label: t("tools.result.wants"), vnd: mutation.data.data.wantsVnd },
+                { label: t("tools.result.savings"), vnd: mutation.data.data.savingsVnd },
               ]}
             />
             <FormulaNote meta={mutation.data.meta} />
           </>
         )}
         {!mutation.data && !mutation.isPending && !mutation.error && (
-          <EmptyState title="Chưa có kết quả" description="Nhập thu nhập và bấm chia ngân sách." />
+          <EmptyState title={t("tools.emptyTitle")} description={t("tools.emptyBudget")} />
         )}
       </div>
     </div>
@@ -615,30 +661,20 @@ function BudgetSplitTool() {
 
 /* -------------------------------------------------------------------------- Page */
 
-const TOOL_TITLE: Record<string, string> = {
-  "compound-interest": "Lãi kép",
-  "loan-payment": "Tính khoản trả góp",
-  "loan-compare": "So sánh khoản vay",
-  "savings-goal": "Mục tiêu tiết kiệm",
-  inflation: "Lạm phát",
-  "budget-503020": "Ngân sách 50/30/20",
-};
-
 export default function ToolPage() {
+  const t = useT();
   const params = useParams<{ tool: string }>();
   const router = useRouter();
   const tool = params.tool;
 
-  const title = TOOL_TITLE[tool];
-
-  if (!title) {
+  if (!isToolSlug(tool)) {
     return (
       <EmptyState
-        title="Không tìm thấy công cụ này"
-        description="Công cụ có thể đã đổi tên hoặc chưa tồn tại."
+        title={t("tools.notFoundTitle")}
+        description={t("tools.notFoundDescription")}
         action={
           <Button variant="secondary" onClick={() => router.push("/tools")}>
-            Về danh sách công cụ
+            {t("tools.backToList")}
           </Button>
         }
       />
@@ -648,8 +684,8 @@ export default function ToolPage() {
   return (
     <div className="space-y-5">
       <div>
-        <LedgerLabel>Công cụ</LedgerLabel>
-        <h1 className="mt-1 text-2xl">{title}</h1>
+        <LedgerLabel>{t("tools.label")}</LedgerLabel>
+        <h1 className="mt-1 text-2xl">{t(`tools.${tool}.title`)}</h1>
       </div>
 
       {tool === "compound-interest" && <CompoundInterestTool />}

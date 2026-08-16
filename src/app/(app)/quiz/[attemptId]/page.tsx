@@ -16,7 +16,8 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError, idempotencyKey } from "@/lib/api";
 import type { AttemptState, Awards, QuestionPublic } from "@/lib/types";
-import { BOOTSTRAP_KEY, useToast } from "@/components/Providers";
+import { BOOTSTRAP_KEY, useT, useToast } from "@/components/Providers";
+import type { TranslateFn } from "@/lib/i18n";
 import {
   Alert,
   Button,
@@ -33,23 +34,8 @@ import { QuestionInput } from "@/components/quiz/QuestionInput";
 type AttemptWithQuestions = AttemptState & { questions: QuestionPublic[] };
 type SubmitResponse = AttemptState & { awards: Awards };
 
-function questionTypeLabel(t: QuestionPublic["type"]): string {
-  switch (t) {
-    case "SINGLE_CHOICE":
-      return "Chọn một đáp án";
-    case "MULTI_CHOICE":
-      return "Chọn nhiều đáp án";
-    case "TRUE_FALSE":
-      return "Đúng hay sai";
-    case "NUMERIC":
-      return "Nhập số";
-    case "ORDERING":
-      return "Sắp xếp thứ tự";
-    case "MATCHING":
-      return "Nối tương ứng";
-    case "SCENARIO_CHOICE":
-      return "Tình huống";
-  }
+function questionTypeLabel(type: QuestionPublic["type"], t: TranslateFn): string {
+  return t(`quiz.type.${type}`);
 }
 
 export default function QuizAttemptPage() {
@@ -64,6 +50,7 @@ export default function QuizAttemptPage() {
   const router = useRouter();
   const qc = useQueryClient();
   const toast = useToast();
+  const t = useT();
 
   const attemptQuery = useQuery({
     queryKey: ["attempt", attemptId, quizId],
@@ -85,7 +72,7 @@ export default function QuizAttemptPage() {
 
   const saveAnswer = useMutation({
     mutationFn: async ({ questionId, response }: { questionId: string; response: unknown }) => {
-      if (!quizId) throw new Error("Thiếu mã bài kiểm tra.");
+      if (!quizId) throw new Error(t("quiz.missingId"));
       return api.put<{ saved: true }>(`/quizzes/${quizId}/attempts/${attemptId}/answers/${questionId}`, {
         response,
       });
@@ -94,7 +81,7 @@ export default function QuizAttemptPage() {
 
   const submit = useMutation({
     mutationFn: async () => {
-      if (!quizId) throw new Error("Thiếu mã bài kiểm tra.");
+      if (!quizId) throw new Error(t("quiz.missingId"));
       return api.post<SubmitResponse>(
         `/quizzes/${quizId}/attempts/${attemptId}/submit`,
         undefined,
@@ -106,17 +93,17 @@ export default function QuizAttemptPage() {
         prev ? { ...prev, ...result } : prev,
       );
       await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
-      toast({ tone: "positive", message: "Đã nộp bài." });
+      toast({ tone: "positive", message: t("quiz.submittedToast") });
     },
     onError: (err) => {
-      const message = err instanceof ApiError ? err.message : "Không nộp được bài, thử lại.";
+      const message = err instanceof ApiError ? err.message : t("quiz.submitFailed");
       toast({ tone: "critical", message });
     },
   });
 
   const startNew = useMutation({
     mutationFn: async () => {
-      if (!quizId) throw new Error("Thiếu mã bài kiểm tra.");
+      if (!quizId) throw new Error(t("quiz.missingId"));
       return api.post<AttemptState>(`/quizzes/${quizId}/attempts`);
     },
     onSuccess: (attempt) => {
@@ -138,18 +125,21 @@ export default function QuizAttemptPage() {
           return;
         }
       }
-      toast({ tone: "critical", message: err instanceof ApiError ? err.message : "Không bắt đầu lại được." });
+      toast({
+        tone: "critical",
+        message: err instanceof ApiError ? err.message : t("quiz.restartFailed"),
+      });
     },
   });
 
   if (!quizId) {
     return (
       <EmptyState
-        title="Thiếu thông tin bài kiểm tra"
-        description="Hãy quay lại bài học hoặc khóa học và bắt đầu bài kiểm tra từ đó."
+        title={t("quiz.missingTitle")}
+        description={t("quiz.missingDescription")}
         action={
           <Link href="/learn">
-            <Button variant="secondary">Về trang học</Button>
+            <Button variant="secondary">{t("quiz.backToLearn")}</Button>
           </Link>
         }
       />
@@ -172,17 +162,17 @@ export default function QuizAttemptPage() {
 
   const attempt = attemptQuery.data;
   if (!attempt) {
-    return <EmptyState title="Không tìm thấy bài kiểm tra" />;
+    return <EmptyState title={t("quiz.notFound")} />;
   }
 
   if (attempt.status === "EXPIRED") {
     return (
       <div className="mx-auto max-w-xl space-y-4">
-        <Alert tone="warning" title="Bài kiểm tra đã hết thời gian">
-          Phiên làm bài đã hết hạn. Bạn có thể bắt đầu một lượt làm bài mới.
+        <Alert tone="warning" title={t("quiz.expiredTitle")}>
+          {t("quiz.expiredBody")}
         </Alert>
         <Button onClick={() => startNew.mutate()} loading={startNew.isPending}>
-          Làm lại bài kiểm tra
+          {t("quiz.tryAgain")}
         </Button>
       </div>
     );
@@ -198,26 +188,26 @@ export default function QuizAttemptPage() {
       <div className="mx-auto max-w-2xl space-y-6">
         <Card tone={passed ? "ink" : "flat"}>
           <CardBody className="space-y-2 text-center">
-            <LedgerLabel className={passed ? "text-paper/70" : undefined}>Kết quả</LedgerLabel>
+            <LedgerLabel className={passed ? "text-paper/70" : undefined}>{t("quiz.result")}</LedgerLabel>
             <p className="font-display text-3xl font-semibold">
               <span className="figure">{result.scorePct}</span>%
             </p>
             <p className="figure text-sm opacity-90">
-              {result.scorePoints}/{result.maxPoints} điểm
-              {passThresholdPct !== null && ` · Ngưỡng đạt ${passThresholdPct}%`}
+              {t("quiz.scorePoints", { score: result.scorePoints, max: result.maxPoints })}
+              {passThresholdPct !== null && ` · ${t("quiz.passThreshold", { pct: passThresholdPct })}`}
             </p>
-            <p className="text-base font-medium">{passed ? "Đạt" : "Chưa đạt"}</p>
+            <p className="text-base font-medium">{passed ? t("quiz.passed") : t("quiz.failed")}</p>
           </CardBody>
         </Card>
 
         {!passed && (
           <Button onClick={() => startNew.mutate()} loading={startNew.isPending} variant="secondary">
-            Làm lại bài kiểm tra
+            {t("quiz.tryAgain")}
           </Button>
         )}
 
         <div className="space-y-4">
-          <h2 className="text-lg">Xem lại từng câu</h2>
+          <h2 className="text-lg">{t("quiz.reviewTitle")}</h2>
           {questionOrder.map((qid, i) => {
             const q = questionsById.get(qid);
             const pq = result.perQuestion.find((p) => p.questionId === qid);
@@ -228,12 +218,12 @@ export default function QuizAttemptPage() {
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <LedgerLabel>
-                        Câu {i + 1} · {questionTypeLabel(q.type)}
+                        {t("quiz.reviewMeta", { n: i + 1, type: questionTypeLabel(q.type, t) })}
                       </LedgerLabel>
                       <p className="mt-1 font-medium">{q.prompt}</p>
                     </div>
                     <span className={`figure shrink-0 text-sm font-semibold ${pq.isCorrect ? "text-positive" : "text-critical"}`}>
-                      {pq.isCorrect ? "Chính xác" : "Chưa chính xác"} · {pq.pointsAwarded}/{q.points}
+                      {pq.isCorrect ? t("quiz.correct") : t("quiz.incorrect")} · {pq.pointsAwarded}/{q.points}
                     </span>
                   </div>
                   <QuestionInput
@@ -244,7 +234,7 @@ export default function QuizAttemptPage() {
                     correctResponse={pq.correctResponse}
                   />
                   {pq.explanation && (
-                    <Alert tone="info" title="Giải thích">
+                    <Alert tone="info" title={t("quiz.explanation")}>
                       {pq.explanation}
                     </Alert>
                   )}
@@ -256,7 +246,7 @@ export default function QuizAttemptPage() {
 
         <div className="flex justify-end">
           <Link href={backHref ?? "/learn"}>
-            <Button variant="secondary">Tiếp tục</Button>
+            <Button variant="secondary">{t("common.continue")}</Button>
           </Link>
         </div>
       </div>
@@ -271,7 +261,7 @@ export default function QuizAttemptPage() {
   const answeredCount = questionOrder.filter((id) => answers[id] !== undefined).length;
 
   if (!current || !currentId) {
-    return <EmptyState title="Không tải được câu hỏi" />;
+    return <EmptyState title={t("quiz.questionsLoadFailed")} />;
   }
 
   function updateAnswer(response: unknown) {
@@ -285,16 +275,18 @@ export default function QuizAttemptPage() {
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm text-ink-soft">
           <span className="figure">
-            Câu {index + 1}/{total}
+            {t("quiz.questionOf", { current: index + 1, total })}
           </span>
-          <span className="figure">Đã trả lời {answeredCount}/{total}</span>
+          <span className="figure">
+            {t("quiz.answeredCount", { answered: answeredCount, total })}
+          </span>
         </div>
-        <ProgressBar value={index + 1} max={total} label="Tiến độ bài kiểm tra" />
+        <ProgressBar value={index + 1} max={total} label={t("quiz.progressLabel")} />
       </div>
 
       <Card>
         <CardBody className="space-y-4">
-          <LedgerLabel>{questionTypeLabel(current.type)}</LedgerLabel>
+          <LedgerLabel>{questionTypeLabel(current.type, t)}</LedgerLabel>
           <p className="text-base font-medium">{current.prompt}</p>
           <QuestionInput
             question={current}
@@ -309,14 +301,14 @@ export default function QuizAttemptPage() {
 
       <div className="flex items-center justify-between gap-3">
         <Button variant="secondary" onClick={() => setIndex((i) => Math.max(0, i - 1))} disabled={index === 0}>
-          Câu trước
+          {t("quiz.prev")}
         </Button>
         {isLast ? (
           <Button onClick={() => submit.mutate()} loading={submit.isPending}>
-            Nộp bài
+            {t("quiz.submit")}
           </Button>
         ) : (
-          <Button onClick={() => setIndex((i) => Math.min(total - 1, i + 1))}>Câu tiếp theo</Button>
+          <Button onClick={() => setIndex((i) => Math.min(total - 1, i + 1))}>{t("quiz.next")}</Button>
         )}
       </div>
     </div>

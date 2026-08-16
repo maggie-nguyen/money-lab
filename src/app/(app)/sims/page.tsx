@@ -9,7 +9,7 @@ import * as React from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ApiError, api, idempotencyKey } from "@/lib/api";
-import { BOOTSTRAP_KEY } from "@/components/Providers";
+import { BOOTSTRAP_KEY, useT } from "@/components/Providers";
 import { Button, Card, CardBody, Chip, EmptyState, ErrorPanel, Skeleton } from "@/components/ui";
 import { formatMinutes } from "@/lib/format";
 import { TopicGlyph, type TopicKind } from "@/components/art/TopicGlyph";
@@ -32,21 +32,19 @@ const SIM_GLYPH: Record<SimType, TopicKind> = {
   INVEST: "invest",
 };
 
-const LOCK_REASON_VI: Record<string, string> = {
-  LOGIN_REQUIRED: "Đăng nhập để mở khóa",
-  COMPLETE_LESSON_FIRST: "Hãy hoàn thành bài học liên quan trước",
-  COMPLETE_COURSE_FIRST: "Hãy hoàn thành khóa học liên quan trước",
-};
-
-function lockReasonLabel(reason: string | null): string {
-  if (!reason) return "Chưa mở khóa";
-  return LOCK_REASON_VI[reason] ?? reason;
-}
-
 function SimCard({ sim, autoStart }: { sim: SimDefinitionSummary; autoStart: boolean }) {
   const router = useRouter();
   const qc = useQueryClient();
+  const t = useT();
   const segment = ROUTE_SEGMENT[sim.type];
+
+  function lockReasonLabel(reason: string | null): string {
+    if (!reason) return t("sims.lock.generic");
+    if (reason === "LOGIN_REQUIRED") return t("sims.lock.login");
+    if (reason === "COMPLETE_LESSON_FIRST") return t("sims.lock.lesson");
+    if (reason === "COMPLETE_COURSE_FIRST") return t("sims.lock.course");
+    return reason;
+  }
 
   const start = useMutation({
     mutationFn: () =>
@@ -107,13 +105,13 @@ function SimCard({ sim, autoStart }: { sim: SimDefinitionSummary; autoStart: boo
         <div className="flex flex-wrap gap-2 text-xs text-ink-faint">
           <span>{formatMinutes(sim.estimatedMinutes)}</span>
           <span aria-hidden>·</span>
-          <span className="figure">+{sim.xpRewardComplete} XP khi hoàn thành</span>
+          <span className="figure">{t("sims.xpComplete", { xp: sim.xpRewardComplete })}</span>
         </div>
 
         {startError && (
           <p className="text-xs text-critical">
             {startError.code === "CONFLICT"
-              ? "Đã có phiên đang chạy cho mô phỏng này, đang mở lại phiên đó."
+              ? t("sims.conflict")
               : startError.message}
           </p>
         )}
@@ -121,13 +119,13 @@ function SimCard({ sim, autoStart }: { sim: SimDefinitionSummary; autoStart: boo
         <div>
           {sim.locked ? (
             <Button variant="secondary" disabled>
-              Bị khóa
+              {t("sims.locked")}
             </Button>
           ) : sim.activeSessionId ? (
-            <Button onClick={() => router.push(`/sims/${segment}/${sim.activeSessionId}`)}>Tiếp tục</Button>
+            <Button onClick={() => router.push(`/sims/${segment}/${sim.activeSessionId}`)}>{t("common.continue")}</Button>
           ) : (
             <Button onClick={() => start.mutate()} loading={start.isPending} disabled={start.isPending}>
-              Bắt đầu
+              {t("sims.start")}
             </Button>
           )}
         </div>
@@ -137,6 +135,7 @@ function SimCard({ sim, autoStart }: { sim: SimDefinitionSummary; autoStart: boo
 }
 
 export default function SimsHubPage() {
+  const t = useT();
   const startSlug = useSearchParams().get("start");
   const query = useQuery({
     queryKey: ["sims"],
@@ -146,10 +145,8 @@ export default function SimsHubPage() {
   return (
     <div className="space-y-5">
       <div>
-        <h1 className="text-2xl">Mô phỏng</h1>
-        <p className="mt-1 text-sm text-ink-soft">
-          Thực hành các tình huống tài chính trong môi trường giả lập, an toàn để mắc lỗi.
-        </p>
+        <h1 className="text-2xl">{t("nav.sims")}</h1>
+        <p className="mt-1 text-sm text-ink-soft">{t("sims.subtitle")}</p>
       </div>
 
       {query.isLoading ? (
@@ -162,7 +159,7 @@ export default function SimsHubPage() {
       ) : query.isError ? (
         <ErrorPanel error={query.error} onRetry={() => query.refetch()} />
       ) : !query.data || query.data.length === 0 ? (
-        <EmptyState title="Chưa có mô phỏng nào" description="Quay lại sau khi có nội dung mới." />
+        <EmptyState title={t("sims.emptyTitle")} description={t("sims.emptyDescription")} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2">
           {query.data.map((sim) => (

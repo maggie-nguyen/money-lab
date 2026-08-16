@@ -9,7 +9,7 @@ import { env } from "@/server/config";
 import { chat, UpstreamError } from "@/server/lib/anthropic";
 import { getEngine } from "@/server/engines";
 import type { EngineJson, TextBundle } from "@/server/engines/types";
-import { TUTOR_DISCLAIMER, TUTOR_SYSTEM_PROMPT, contextBlock } from "@/server/services/tutorPrompt";
+import { tutorDisclaimer, tutorSystemPrompt, contextBlock } from "@/server/services/tutorPrompt";
 
 // AI Tutor - doc 03 §9. Synchronous (no streaming), hard daily cap per VN day,
 // thread capped at 40 messages, context is lesson/sim only (never profile data).
@@ -332,13 +332,13 @@ export async function sendMessage(
     .reverse()
     .map((m) => ({ role: m.role === "USER" ? ("user" as const) : ("assistant" as const), content: m.content }));
   // Context rides on the newest user turn so it stays fresh as the sim state changes.
-  messages.push({ role: "user", content: `${contextBlock(ctx)}${content}` });
+  messages.push({ role: "user", content: `${contextBlock(ctx, locale)}${content}` });
 
   // 4. call Claude
   let completion;
   try {
     completion = await chat({
-      system: TUTOR_SYSTEM_PROMPT,
+      system: tutorSystemPrompt(locale),
       messages,
       maxTokens: 1024,
       temperature: 0.3,
@@ -359,9 +359,10 @@ export async function sendMessage(
   }
 
   // 5. append disclaimer + persist both messages atomically
-  const answer = completion.text.includes(TUTOR_DISCLAIMER)
+  const disclaimer = tutorDisclaimer(locale);
+  const answer = completion.text.includes(disclaimer)
     ? completion.text
-    : `${completion.text}\n\n${TUTOR_DISCLAIMER}`;
+    : `${completion.text}\n\n${disclaimer}`;
 
   const assistantAt = new Date(now.getTime() + 1); // keeps createdAt ordering stable
   const [userMessage, assistantMessage] = await prisma.$transaction(async (tx) => {

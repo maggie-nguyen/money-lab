@@ -15,7 +15,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api, ApiError, idempotencyKey } from "@/lib/api";
 import type { AttemptState, Awards, Block, LessonDetail } from "@/lib/types";
 import { formatMinutes } from "@/lib/format";
-import { BOOTSTRAP_KEY, useToast } from "@/components/Providers";
+import { BOOTSTRAP_KEY, useT, useToast } from "@/components/Providers";
 import {
   Alert,
   Button,
@@ -47,6 +47,7 @@ export default function LessonPlayerPage() {
   const router = useRouter();
   const qc = useQueryClient();
   const toast = useToast();
+  const t = useT();
 
   const lessonQuery = useQuery({
     queryKey: ["lesson", slug],
@@ -128,11 +129,11 @@ export default function LessonPlayerPage() {
 
   React.useEffect(() => {
     if (!lesson || seen <= saved.current) return;
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       saved.current = seen;
       saveProgress.mutate({ lessonId: lesson.id, lastBlockIndex: seen });
     }, SAVE_DEBOUNCE_MS);
-    return () => clearTimeout(t);
+    return () => clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [seen, lesson]);
 
@@ -144,15 +145,15 @@ export default function LessonPlayerPage() {
     onSuccess: async (res) => {
       setCompleteResult(res);
       await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
-      toast({ tone: "positive", message: "Đã hoàn thành bài học." });
+      toast({ tone: "positive", message: t("lesson.completeToast") });
     },
     onError: (err) => {
       const message =
         err instanceof ApiError && err.ruleCode === "CHECK_QUIZ_NOT_PASSED"
-          ? "Bạn cần vượt qua bài kiểm tra nhanh trước khi hoàn thành bài học."
+          ? t("lesson.needCheckQuiz")
           : err instanceof ApiError
             ? err.message
-            : "Không thể hoàn thành bài học. Vui lòng thử lại.";
+            : t("lesson.completeFailed");
       toast({ tone: "critical", message });
     },
   });
@@ -176,7 +177,10 @@ export default function LessonPlayerPage() {
           return;
         }
       }
-      toast({ tone: "critical", message: err instanceof ApiError ? err.message : "Không bắt đầu được bài kiểm tra." });
+      toast({
+        tone: "critical",
+        message: err instanceof ApiError ? err.message : t("lesson.quizStartFailed"),
+      });
     },
   });
 
@@ -195,11 +199,11 @@ export default function LessonPlayerPage() {
   }
 
   if (!lesson) {
-    return <EmptyState title="Không tìm thấy bài học" />;
+    return <EmptyState title={t("lesson.notFound")} />;
   }
 
   if (lesson.blocks.length === 0) {
-    return <EmptyState title="Bài học chưa có nội dung" description="Vui lòng quay lại sau." />;
+    return <EmptyState title={t("lesson.emptyTitle")} description={t("lesson.emptyDescription")} />;
   }
 
   // The outline is built from the headings, which is the only structure an
@@ -225,8 +229,12 @@ export default function LessonPlayerPage() {
           </LedgerLabel>
           <h1 className="mt-2 font-display text-3xl font-semibold">{lesson.title}</h1>
           <p className="figure mt-2 text-sm text-ink-faint">
-            Bài {lesson.position}/{lesson.lessonCount} · {formatMinutes(lesson.estimatedMinutes)} ·{" "}
-            {lesson.xpReward} XP
+            {t("lesson.meta", {
+              position: lesson.position,
+              total: lesson.lessonCount,
+              minutes: formatMinutes(lesson.estimatedMinutes),
+              xp: lesson.xpReward,
+            })}
           </p>
           {lesson.summary && <p className="mt-4 text-lg leading-relaxed text-ink-soft">{lesson.summary}</p>}
 
@@ -251,15 +259,20 @@ export default function LessonPlayerPage() {
               {!completeResult ? (
                 <>
                   <div>
-                    <p className="font-display text-lg font-semibold">Hoàn thành bài học</p>
-                    <p className="figure mt-1 text-sm text-ink-faint">{lesson.xpReward} XP khi hoàn thành</p>
+                    <p className="font-display text-lg font-semibold">{t("lesson.completeTitle")}</p>
+                    <p className="figure mt-1 text-sm text-ink-faint">
+                      {t("lesson.xpOnComplete", { xp: lesson.xpReward })}
+                    </p>
                   </div>
                   {lesson.checkQuiz && (
                     <div className="flex flex-wrap items-center justify-between gap-3 rounded-[var(--radius-control)] border border-rule px-4 py-3">
                       <div>
-                        <p className="text-sm font-medium">Bài kiểm tra nhanh</p>
+                        <p className="text-sm font-medium">{t("lesson.checkQuizTitle")}</p>
                         <p className="figure text-xs text-ink-faint">
-                          {lesson.checkQuiz.questionCount} câu · cần đạt {lesson.checkQuiz.passThresholdPct}%
+                          {t("lesson.checkQuizMeta", {
+                            count: lesson.checkQuiz.questionCount,
+                            pct: lesson.checkQuiz.passThresholdPct,
+                          })}
                         </p>
                       </div>
                       <Button
@@ -268,22 +281,24 @@ export default function LessonPlayerPage() {
                         loading={startCheckQuiz.isPending}
                         onClick={() => startCheckQuiz.mutate(lesson.checkQuiz!.id)}
                       >
-                        Làm bài kiểm tra
+                        {t("lesson.takeCheckQuiz")}
                       </Button>
                     </div>
                   )}
                   {complete.isError && <ErrorPanel error={complete.error} />}
                   <Button onClick={() => complete.mutate(lesson.id)} loading={complete.isPending} className="w-full">
-                    Hoàn thành bài học
+                    {t("lesson.completeTitle")}
                   </Button>
                 </>
               ) : (
                 <>
-                  <p className="font-display text-lg font-semibold">Chúc mừng, bạn đã hoàn thành bài học</p>
+                  <p className="font-display text-lg font-semibold">{t("lesson.congrats")}</p>
                   <div className="figure flex flex-wrap gap-4 text-sm">
                     <span>+{completeResult.awards.xp} XP</span>
-                    <span>+{completeResult.awards.coins} xu</span>
-                    {completeResult.awards.levelUp && <span>Lên cấp {completeResult.awards.levelUp.to}</span>}
+                    <span>{t("lesson.awardedCoins", { count: completeResult.awards.coins })}</span>
+                    {completeResult.awards.levelUp && (
+                      <span>{t("lesson.levelUp", { level: completeResult.awards.levelUp.to })}</span>
+                    )}
                   </div>
                   {completeResult.awards.badges.length > 0 && (
                     <div className="flex flex-wrap gap-2">
@@ -295,14 +310,16 @@ export default function LessonPlayerPage() {
                     </div>
                   )}
                   {completeResult.courseCompleted && (
-                    <Alert tone="positive" title="Đã hoàn thành khóa học">
-                      Bạn đã hoàn thành toàn bộ khóa học này.
-                      {completeResult.certificate && " Chứng chỉ đã được cấp, xem trong hồ sơ của bạn."}
+                    <Alert tone="positive" title={t("lesson.courseDoneTitle")}>
+                      {t("lesson.courseDoneBody")}
+                      {completeResult.certificate && t("lesson.certificateNote")}
                     </Alert>
                   )}
                   <Link href={lesson.next ? `/lesson/${lesson.next.slug}` : `/course/${lesson.courseSlug}`}>
                     <Button variant="secondary" className="w-full border-paper/40 text-paper hover:bg-paper/10">
-                      {lesson.next ? `Bài tiếp theo: ${lesson.next.title}` : "Quay lại khóa học"}
+                      {lesson.next
+                        ? t("lesson.next", { title: lesson.next.title })
+                        : t("lesson.backToCourse")}
                     </Button>
                   </Link>
                 </>
@@ -314,17 +331,21 @@ export default function LessonPlayerPage() {
         <aside className="hidden lg:sticky lg:top-20 lg:block lg:self-start">
           <div className="space-y-4">
             <div>
-              <LedgerLabel>Tiến độ</LedgerLabel>
+              <LedgerLabel>{t("lesson.sidebarProgress")}</LedgerLabel>
               <div className="mt-2">
-                <ProgressBar value={Math.min(seen + 1, total)} max={total} label="Tiến độ bài học" />
+                <ProgressBar
+                  value={Math.min(seen + 1, total)}
+                  max={total}
+                  label={t("lesson.progressLabel")}
+                />
               </div>
               <p className="figure mt-1 text-xs text-ink-faint">
-                {Math.min(seen + 1, total)}/{total} phần
+                {t("lesson.partsProgress", { done: Math.min(seen + 1, total), total })}
               </p>
             </div>
             {outline.length > 0 && (
-              <nav aria-label="Mục lục bài học">
-                <LedgerLabel>Nội dung</LedgerLabel>
+              <nav aria-label={t("lesson.outline")}>
+                <LedgerLabel>{t("lesson.sidebarContents")}</LedgerLabel>
                 <ul className="mt-2 space-y-1.5 border-l border-rule">
                   {outline.map((h) => (
                     <li key={h.index}>
@@ -354,29 +375,29 @@ export default function LessonPlayerPage() {
           {lesson.prev ? (
             <Link href={`/lesson/${lesson.prev.slug}`} className="shrink-0">
               <Button variant="secondary" size="sm">
-                Bài trước
+                {t("lesson.prev")}
               </Button>
             </Link>
           ) : (
             <Link href={`/course/${lesson.courseSlug}`} className="shrink-0">
               <Button variant="secondary" size="sm">
-                Khóa học
+                {t("lesson.courseShort")}
               </Button>
             </Link>
           )}
           <span className="figure hidden flex-1 text-center text-xs text-ink-faint sm:block">
-            Bài {lesson.position}/{lesson.lessonCount}
+            {t("lesson.positionShort", { position: lesson.position, total: lesson.lessonCount })}
           </span>
           <div className="ml-auto flex shrink-0 items-center gap-2">
             {!completeResult && (
               <Button size="sm" onClick={() => complete.mutate(lesson.id)} loading={complete.isPending}>
-                Hoàn thành
+                {t("lesson.completeShort")}
               </Button>
             )}
             {lesson.next && (
               <Link href={`/lesson/${lesson.next.slug}`}>
                 <Button size="sm" variant={completeResult ? "primary" : "secondary"}>
-                  Bài sau
+                  {t("lesson.nextBar")}
                 </Button>
               </Link>
             )}

@@ -9,6 +9,7 @@ import * as React from "react";
 import { useParams } from "next/navigation";
 import { SimFrame, KeyValueGrid } from "@/components/sim/SimFrame";
 import { useSimSession } from "@/components/sim/useSimSession";
+import { useT } from "@/components/Providers";
 import {
   Alert,
   Button,
@@ -25,6 +26,7 @@ import {
   Skeleton,
 } from "@/components/ui";
 import { formatVnd } from "@/lib/format";
+import type { TranslateFn } from "@/lib/i18n";
 
 interface UpgradeView {
   key: string;
@@ -49,16 +51,8 @@ function hasAction(actions: Array<{ type: string }>, type: string): boolean {
   return actions.some((a) => a.type === type);
 }
 
-const RULE_MESSAGE: Record<string, string> = {
-  INSUFFICIENT_CASH: "Không đủ tiền mặt cho kế hoạch này.",
-  PRICE_OUT_OF_RANGE: "Giá phải trong khoảng 1.000 ₫ đến 100.000 ₫.",
-  STOCK_NEGATIVE: "Số lượng hàng nhập phải là số nguyên không âm.",
-  BAD_CHOICE: "Lựa chọn không hợp lệ.",
-  WRONG_PHASE: "Không thể lên kế hoạch lúc này.",
-};
-
 /** Hand-rolled SVG bar chart of profit per week. No chart library. */
-function ProfitChart({ history }: { history: Array<Record<string, unknown>> }) {
+function ProfitChart({ history, t }: { history: Array<Record<string, unknown>>; t: TranslateFn }) {
   const values = history.map((h) => Number(h.profitVnd ?? 0));
   if (values.length === 0) return null;
   const maxAbs = Math.max(1, ...values.map((v) => Math.abs(v)));
@@ -73,7 +67,7 @@ function ProfitChart({ history }: { history: Array<Record<string, unknown>> }) {
       <svg
         viewBox={`0 0 ${width} ${height}`}
         role="img"
-        aria-label="Biểu đồ lợi nhuận theo tuần"
+        aria-label={t("sims.business.chartAria")}
         className="h-40 w-full min-w-[320px]"
       >
         <line x1={0} y1={midY} x2={width} y2={midY} style={{ stroke: "var(--color-rule-strong)" }} strokeWidth={1} />
@@ -91,7 +85,7 @@ function ProfitChart({ history }: { history: Array<Record<string, unknown>> }) {
               rx={2}
               style={{ fill: v >= 0 ? "var(--color-moss-400)" : "var(--color-critical)" }}
             >
-              <title>{`Tuần ${i + 1}: ${formatVnd(String(v))}`}</title>
+              <title>{t("sims.business.weekBar", { week: i + 1, amount: formatVnd(String(v)) })}</title>
             </rect>
           );
         })}
@@ -101,6 +95,7 @@ function ProfitChart({ history }: { history: Array<Record<string, unknown>> }) {
 }
 
 export default function BusinessSimPage() {
+  const t = useT();
   const { sessionId } = useParams<{ sessionId: string }>();
   const { session, isLoading, isError, error, refetch, act, isActing, staleNotice, dismissStaleNotice, ruleCode } =
     useSimSession(sessionId);
@@ -127,44 +122,52 @@ export default function BusinessSimPage() {
     );
   }
   if (isError) return <ErrorPanel error={error} onRetry={() => refetch()} />;
-  if (!session || !view) return <EmptyState title="Không tìm thấy phiên mô phỏng" />;
+  if (!session || !view) return <EmptyState title={t("sims.sessionNotFound")} />;
 
   const availableActions = session.availableActions;
 
+  const ruleMessage: Record<string, string> = {
+    INSUFFICIENT_CASH: t("sims.business.rules.INSUFFICIENT_CASH"),
+    PRICE_OUT_OF_RANGE: t("sims.business.rules.PRICE_OUT_OF_RANGE"),
+    STOCK_NEGATIVE: t("sims.business.rules.STOCK_NEGATIVE"),
+    BAD_CHOICE: t("sims.rules.BAD_CHOICE"),
+    WRONG_PHASE: t("sims.business.rules.WRONG_PHASE"),
+  };
+
   return (
     <SimFrame
-      title="Quán nước của tôi"
-      subtitle="Đặt giá, nhập hàng và đầu tư nâng cấp để tối ưu lợi nhuận mỗi tuần."
-      turnLabel={`Tuần ${view.week}/${view.weeks}`}
+      title={t("sims.business.title")}
+      subtitle={t("sims.business.subtitle")}
+      turnLabel={t("sims.business.turnLabel", { week: view.week, weeks: view.weeks })}
       session={session}
       staleNotice={staleNotice}
       onDismissStaleNotice={dismissStaleNotice}
       turnReport={session.turnReport ? <KeyValueGrid data={session.turnReport} /> : undefined}
     >
       {ruleCode && (
-        <Alert tone="critical" title="Không thực hiện được">
-          {RULE_MESSAGE[ruleCode] ?? ruleCode}
+        <Alert tone="critical" title={t("sims.actionFailed")}>
+          {ruleMessage[ruleCode] ?? ruleCode}
         </Alert>
       )}
 
       <Card>
         <CardBody className="space-y-3">
-          <SectionTitle>Tổng quan</SectionTitle>
+          <SectionTitle>{t("sims.overview")}</SectionTitle>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>
-              <LedgerLabel>Tiền mặt</LedgerLabel>
+              <LedgerLabel>{t("sims.cash")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.cashVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>Lợi nhuận lũy kế</LedgerLabel>
+              <LedgerLabel>{t("sims.business.totalProfit")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.totalProfitVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>Giá vốn mỗi ly</LedgerLabel>
+              <LedgerLabel>{t("sims.business.unitCost")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.product.unitCostVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>Chi phí cố định/tuần</LedgerLabel>
+              <LedgerLabel>{t("sims.business.fixedCost")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.fixedCostPerWeekVnd)}</div>
             </div>
           </div>
@@ -174,8 +177,8 @@ export default function BusinessSimPage() {
       {view.history.length > 0 && (
         <Card>
           <CardBody>
-            <SectionTitle>Lợi nhuận theo tuần</SectionTitle>
-            <ProfitChart history={view.history} />
+            <SectionTitle>{t("sims.business.profitByWeek")}</SectionTitle>
+            <ProfitChart history={view.history} t={t} />
           </CardBody>
         </Card>
       )}
@@ -183,16 +186,16 @@ export default function BusinessSimPage() {
       {hasAction(availableActions, "PLAN_WEEK") && (
         <Card>
           <CardBody className="space-y-4">
-            <SectionTitle>Kế hoạch tuần {view.week}</SectionTitle>
+            <SectionTitle>{t("sims.business.planWeek", { week: view.week })}</SectionTitle>
             <div className="grid gap-4 sm:grid-cols-2">
               <Field
-                label="Giá bán mỗi ly"
+                label={t("sims.business.priceLabel")}
                 htmlFor="price-vnd"
-                hint={`Tham khảo giá gốc: ${formatVnd(view.referencePriceVnd)}. Giá hợp lệ từ 1.000 ₫ đến 100.000 ₫.`}
+                hint={t("sims.business.priceHint", { price: formatVnd(view.referencePriceVnd) })}
               >
                 <MoneyInput id="price-vnd" value={priceVnd} onChange={setPriceVnd} disabled={isActing} />
               </Field>
-              <Field label="Số lượng nhập hàng" htmlFor="units" hint="Số ly muốn chuẩn bị cho tuần này.">
+              <Field label={t("sims.business.unitsLabel")} htmlFor="units" hint={t("sims.business.unitsHint")}>
                 <Input
                   id="units"
                   type="number"
@@ -205,7 +208,7 @@ export default function BusinessSimPage() {
             </div>
             {view.upgrades.length > 0 && (
               <div>
-                <LedgerLabel>Nâng cấp</LedgerLabel>
+                <LedgerLabel>{t("sims.business.upgrades")}</LedgerLabel>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {view.upgrades.map((u) => (
                     <label
@@ -223,7 +226,12 @@ export default function BusinessSimPage() {
                         }
                       />
                       <span>
-                        {u.label} {u.owned ? <Chip tone="positive">Đã có</Chip> : <span className="figure">{formatVnd(u.costVnd)}</span>}
+                        {u.label}{" "}
+                        {u.owned ? (
+                          <Chip tone="positive">{t("sims.business.owned")}</Chip>
+                        ) : (
+                          <span className="figure">{formatVnd(u.costVnd)}</span>
+                        )}
                       </span>
                     </label>
                   ))}
@@ -242,7 +250,7 @@ export default function BusinessSimPage() {
                 })
               }
             >
-              Chạy tuần này
+              {t("sims.business.runWeek")}
             </Button>
           </CardBody>
         </Card>

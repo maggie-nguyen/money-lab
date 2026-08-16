@@ -9,6 +9,7 @@ import * as React from "react";
 import { useParams } from "next/navigation";
 import { SimFrame, KeyValueGrid } from "@/components/sim/SimFrame";
 import { useSimSession } from "@/components/sim/useSimSession";
+import { useT } from "@/components/Providers";
 import {
   Alert,
   Button,
@@ -67,15 +68,8 @@ function hasAction(actions: Array<{ type: string }>, type: string): boolean {
   return actions.some((a) => a.type === type);
 }
 
-const RULE_MESSAGE: Record<string, string> = {
-  INSUFFICIENT_CASH: "Không đủ tiền mặt cho thao tác này.",
-  EXTRA_TOO_SMALL: "Số tiền trả thêm phải từ 100.000 ₫ trở lên.",
-  RESTRUCTURE_EXHAUSTED: "Bạn đã tái cơ cấu khoản vay một lần rồi.",
-  BAD_CHOICE: "Lựa chọn không hợp lệ.",
-  WRONG_PHASE: "Không thể thực hiện ở giai đoạn hiện tại.",
-};
-
 export default function LoansSimPage() {
+  const t = useT();
   const { sessionId } = useParams<{ sessionId: string }>();
   const { session, isLoading, isError, error, refetch, act, isActing, staleNotice, dismissStaleNotice, ruleCode } =
     useSimSession(sessionId);
@@ -94,51 +88,62 @@ export default function LoansSimPage() {
     );
   }
   if (isError) return <ErrorPanel error={error} onRetry={() => refetch()} />;
-  if (!session || !view) return <EmptyState title="Không tìm thấy phiên mô phỏng" />;
+  if (!session || !view) return <EmptyState title={t("sims.sessionNotFound")} />;
 
   const availableActions = session.availableActions;
-  const progressPaid =
-    view.loan && view.months > 0 ? Math.min(view.months, view.month) : 0;
+  const progressPaid = view.loan && view.months > 0 ? Math.min(view.months, view.month) : 0;
+
+  const ruleMessage: Record<string, string> = {
+    INSUFFICIENT_CASH: t("sims.rules.INSUFFICIENT_CASH"),
+    EXTRA_TOO_SMALL: t("sims.loans.rules.EXTRA_TOO_SMALL"),
+    RESTRUCTURE_EXHAUSTED: t("sims.loans.rules.RESTRUCTURE_EXHAUSTED"),
+    BAD_CHOICE: t("sims.rules.BAD_CHOICE"),
+    WRONG_PHASE: t("sims.rules.WRONG_PHASE"),
+  };
 
   return (
     <SimFrame
-      title="Vay khôn ngoan"
-      subtitle="So sánh các khoản vay, chọn phương án và trả nợ đúng hạn."
-      turnLabel={view.phase === "REPAY" ? `Tháng trả nợ ${view.month}/${view.months}` : "Chọn phương án"}
+      title={t("sims.loans.title")}
+      subtitle={t("sims.loans.subtitle")}
+      turnLabel={
+        view.phase === "REPAY"
+          ? t("sims.loans.turnRepay", { month: view.month, months: view.months })
+          : t("sims.loans.turnChoose")
+      }
       session={session}
       staleNotice={staleNotice}
       onDismissStaleNotice={dismissStaleNotice}
       turnReport={session.turnReport ? <KeyValueGrid data={session.turnReport} /> : undefined}
     >
       {ruleCode && (
-        <Alert tone="critical" title="Không thực hiện được">
-          {RULE_MESSAGE[ruleCode] ?? ruleCode}
+        <Alert tone="critical" title={t("sims.actionFailed")}>
+          {ruleMessage[ruleCode] ?? ruleCode}
         </Alert>
       )}
 
       <Card>
         <CardBody className="space-y-3">
-          <SectionTitle>Mục tiêu</SectionTitle>
+          <SectionTitle>{t("sims.loans.goal")}</SectionTitle>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div>
-              <LedgerLabel>Món cần mua</LedgerLabel>
+              <LedgerLabel>{t("sims.loans.item")}</LedgerLabel>
               <div className="mt-1 text-sm">{view.goal.label}</div>
             </div>
             <div>
-              <LedgerLabel>Giá</LedgerLabel>
+              <LedgerLabel>{t("sims.loans.price")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.goal.priceVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>Tiền mặt hiện có</LedgerLabel>
+              <LedgerLabel>{t("sims.loans.cashOnHand")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.cashVnd)}</div>
             </div>
             <div>
-              <LedgerLabel>Ngân sách trả nợ mỗi tháng</LedgerLabel>
+              <LedgerLabel>{t("sims.loans.monthlyBudget")}</LedgerLabel>
               <div className="figure mt-1 text-lg">{formatVnd(view.monthlyBudgetVnd)}</div>
             </div>
           </div>
           {view.lastEvent && (
-            <p className="text-xs text-ink-faint">Sự kiện gần nhất: {view.lastEvent.label}</p>
+            <p className="text-xs text-ink-faint">{t("sims.loans.lastEvent", { label: view.lastEvent.label })}</p>
           )}
         </CardBody>
       </Card>
@@ -146,27 +151,27 @@ export default function LoansSimPage() {
       {view.loan && (
         <Card>
           <CardBody className="space-y-3">
-            <SectionTitle>Khoản vay hiện tại</SectionTitle>
+            <SectionTitle>{t("sims.loans.currentLoan")}</SectionTitle>
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
               <div>
-                <LedgerLabel>Còn lại</LedgerLabel>
+                <LedgerLabel>{t("sims.loans.remaining")}</LedgerLabel>
                 <div className="figure mt-1 text-lg">{formatVnd(view.loan.remainingVnd)}</div>
               </div>
               <div>
-                <LedgerLabel>Trả hằng tháng</LedgerLabel>
+                <LedgerLabel>{t("sims.loans.monthlyPayment")}</LedgerLabel>
                 <div className="figure mt-1 text-lg">{formatVnd(view.loan.monthlyPaymentVnd)}</div>
               </div>
               <div>
-                <LedgerLabel>Lãi suất năm</LedgerLabel>
+                <LedgerLabel>{t("sims.loans.annualRate")}</LedgerLabel>
                 <div className="figure mt-1 text-lg">{formatBps(view.loan.annualRateBps)}</div>
               </div>
               <div>
-                <LedgerLabel>Số tháng còn lại</LedgerLabel>
+                <LedgerLabel>{t("sims.loans.monthsLeft")}</LedgerLabel>
                 <div className="figure mt-1 text-lg">{view.loan.termMonthsLeft}</div>
               </div>
             </div>
             <div>
-              <LedgerLabel>Tiến độ</LedgerLabel>
+              <LedgerLabel>{t("sims.loans.progress")}</LedgerLabel>
               <ProgressBar value={progressPaid} max={view.months} className="mt-1" />
             </div>
           </CardBody>
@@ -176,9 +181,18 @@ export default function LoansSimPage() {
       {view.phase === "CHOOSE" && (
         <Card>
           <CardBody className="space-y-4">
-            <SectionTitle>So sánh các khoản vay</SectionTitle>
+            <SectionTitle>{t("sims.loans.compareTitle")}</SectionTitle>
             <LedgerTable
-              headers={["", "Gói vay", "Gốc", "Lãi suất năm", "Kỳ hạn", "Phí ban đầu", "Trả mỗi tháng", "Tổng chi phí"]}
+              headers={[
+                "",
+                t("sims.loans.col.offer"),
+                t("sims.loans.col.principal"),
+                t("sims.loans.col.rate"),
+                t("sims.loans.col.term"),
+                t("sims.loans.col.fee"),
+                t("sims.loans.col.monthly"),
+                t("sims.loans.col.total"),
+              ]}
               align={["left", "left", "right", "right", "right", "right", "right", "right"]}
               rows={view.offers.map((o) => [
                 hasAction(availableActions, "COMPARE") ? (
@@ -189,7 +203,7 @@ export default function LoansSimPage() {
                     onChange={(e) =>
                       setSelected((prev) => (e.target.checked ? [...prev, o.key] : prev.filter((k) => k !== o.key)))
                     }
-                    aria-label={`Chọn ${o.label} để so sánh`}
+                    aria-label={t("sims.loans.selectAria", { label: o.label })}
                   />
                 ) : null,
                 <div key={`${o.key}-label`}>
@@ -207,10 +221,10 @@ export default function LoansSimPage() {
                 </div>,
                 formatVnd(o.principalVnd),
                 formatBps(o.annualRateBps),
-                `${o.termMonths} tháng`,
+                t("sims.loans.termMonths", { count: o.termMonths }),
                 formatVnd(o.upfrontFeeVnd),
-                o.monthlyPaymentVnd ? formatVnd(o.monthlyPaymentVnd) : "Bấm so sánh để xem",
-                o.totalCostVnd ? formatVnd(o.totalCostVnd) : "Bấm so sánh để xem",
+                o.monthlyPaymentVnd ? formatVnd(o.monthlyPaymentVnd) : t("sims.loans.compareToSee"),
+                o.totalCostVnd ? formatVnd(o.totalCostVnd) : t("sims.loans.compareToSee"),
               ])}
             />
             <div className="flex flex-wrap gap-2">
@@ -221,13 +235,13 @@ export default function LoansSimPage() {
                   loading={isActing}
                   onClick={() => act({ type: "COMPARE", offerKeys: selected })}
                 >
-                  So sánh mục đã chọn
+                  {t("sims.loans.compareSelected")}
                 </Button>
               )}
             </div>
             {hasAction(availableActions, "TAKE_LOAN") && (
               <div>
-                <LedgerLabel>Chọn khoản vay</LedgerLabel>
+                <LedgerLabel>{t("sims.loans.pickLoan")}</LedgerLabel>
                 <div className="mt-2 flex flex-wrap gap-2">
                   {view.offers.map((o) => (
                     <Button
@@ -237,7 +251,7 @@ export default function LoansSimPage() {
                       disabled={isActing}
                       onClick={() => act({ type: "TAKE_LOAN", offerKey: o.key })}
                     >
-                      Vay {o.label}
+                      {t("sims.loans.takeLoan", { label: o.label })}
                     </Button>
                   ))}
                 </div>
@@ -245,9 +259,9 @@ export default function LoansSimPage() {
             )}
             {hasAction(availableActions, "PAY_CASH_WAIT") && (
               <div className="space-y-2 border-t border-rule pt-4">
-                <LedgerLabel>Hoặc để dành tiền mặt rồi mua thẳng</LedgerLabel>
+                <LedgerLabel>{t("sims.loans.saveCash")}</LedgerLabel>
                 <div className="flex flex-wrap items-end gap-3">
-                  <Field label="Số tháng chờ" htmlFor="wait-months">
+                  <Field label={t("sims.loans.waitMonths")} htmlFor="wait-months">
                     <Input
                       id="wait-months"
                       type="number"
@@ -264,7 +278,7 @@ export default function LoansSimPage() {
                     disabled={isActing}
                     onClick={() => act({ type: "PAY_CASH_WAIT", months: Number(waitMonths) })}
                   >
-                    Để dành và chờ
+                    {t("sims.loans.waitAndSave")}
                   </Button>
                 </div>
               </div>
@@ -276,26 +290,22 @@ export default function LoansSimPage() {
       {view.phase === "REPAY" && (
         <Card>
           <CardBody className="space-y-4">
-            <SectionTitle>Trả nợ tháng này</SectionTitle>
+            <SectionTitle>{t("sims.loans.repayTitle")}</SectionTitle>
             <div className="flex flex-wrap gap-2">
               {hasAction(availableActions, "PAY_SCHEDULED") && (
                 <Button disabled={isActing} loading={isActing} onClick={() => act({ type: "PAY_SCHEDULED" })}>
-                  Trả đúng lịch
+                  {t("sims.loans.payScheduled")}
                 </Button>
               )}
               {hasAction(availableActions, "RESTRUCTURE") && (
-                <Button
-                  variant="secondary"
-                  disabled={isActing}
-                  onClick={() => act({ type: "RESTRUCTURE" })}
-                >
-                  Tái cơ cấu khoản vay
+                <Button variant="secondary" disabled={isActing} onClick={() => act({ type: "RESTRUCTURE" })}>
+                  {t("sims.loans.restructure")}
                 </Button>
               )}
             </div>
             {hasAction(availableActions, "PAY_EXTRA") && (
               <div className="flex flex-wrap items-end gap-3 border-t border-rule pt-4">
-                <Field label="Trả thêm để giảm nợ gốc" htmlFor="extra-vnd">
+                <Field label={t("sims.loans.payExtraLabel")} htmlFor="extra-vnd">
                   <div className="w-48">
                     <MoneyInput id="extra-vnd" value={extraVnd} onChange={setExtraVnd} disabled={isActing} />
                   </div>
@@ -305,7 +315,7 @@ export default function LoansSimPage() {
                   disabled={isActing || !extraVnd}
                   onClick={() => act({ type: "PAY_EXTRA", extraVnd })}
                 >
-                  Trả thêm
+                  {t("sims.loans.payExtra")}
                 </Button>
               </div>
             )}
@@ -316,13 +326,23 @@ export default function LoansSimPage() {
       {view.history.length > 0 && (
         <Card>
           <CardBody>
-            <SectionTitle>Lịch sử trả nợ</SectionTitle>
+            <SectionTitle>{t("sims.loans.history")}</SectionTitle>
             <LedgerTable
-              headers={["Tháng", "Hành động", "Trả", "Gốc còn lại"]}
+              headers={[
+                t("sims.loans.col.month"),
+                t("sims.loans.col.action"),
+                t("sims.loans.col.paid"),
+                t("sims.loans.col.principalLeft"),
+              ]}
               align={["left", "left", "right", "right"]}
               rows={view.history.map((h) => {
                 const r = h as { month: number; action: string; paymentVnd?: string; remainingVnd?: string };
-                return [r.month, r.action, r.paymentVnd ? formatVnd(r.paymentVnd) : "-", r.remainingVnd ? formatVnd(r.remainingVnd) : "-"];
+                return [
+                  r.month,
+                  r.action,
+                  r.paymentVnd ? formatVnd(r.paymentVnd) : "-",
+                  r.remainingVnd ? formatVnd(r.remainingVnd) : "-",
+                ];
               })}
             />
           </CardBody>

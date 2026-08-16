@@ -20,6 +20,7 @@
 import * as React from "react";
 import { cx, Input, Select } from "@/components/ui";
 import type { QuestionPublic } from "@/lib/types";
+import { useT } from "@/components/Providers";
 
 export interface QuestionInputProps {
   question: QuestionPublic;
@@ -55,6 +56,7 @@ function optionRow({
 }
 
 export function QuestionInput({ question, value, onChange, disabled, mode = "answer", correctResponse }: QuestionInputProps) {
+  const t = useT();
   const payload = question.payload as Json;
   const readOnly = mode === "review" || disabled;
 
@@ -147,8 +149,8 @@ export function QuestionInput({ question, value, onChange, disabled, mode = "ans
       const chosen = asRecord(value).value as boolean | undefined;
       const correctVal = asRecord(correctResponse).value as boolean | undefined;
       const choices: Array<{ v: boolean; label: string }> = [
-        { v: true, label: "Đúng" },
-        { v: false, label: "Sai" },
+        { v: true, label: t("quiz.true") },
+        { v: false, label: t("quiz.false") },
       ];
       return (
         <div className="flex gap-3">
@@ -202,7 +204,7 @@ export function QuestionInput({ question, value, onChange, disabled, mode = "ans
             )}
           </div>
           {mode === "review" && correctVal !== undefined && (
-            <p className="figure text-xs text-ink-faint">Đáp án đúng: {correctVal}</p>
+            <p className="figure text-xs text-ink-faint">{t("quiz.correctAnswer", { answer: correctVal })}</p>
           )}
         </div>
       );
@@ -249,7 +251,7 @@ export function QuestionInput({ question, value, onChange, disabled, mode = "ans
                   <span className="flex gap-1">
                     <button
                       type="button"
-                      aria-label="Di chuyển lên"
+                      aria-label={t("quiz.moveUp")}
                       onClick={() => move(i, -1)}
                       disabled={i === 0}
                       className="rounded-[var(--radius-control)] border border-rule-strong px-2 py-1 text-xs disabled:opacity-40"
@@ -258,7 +260,7 @@ export function QuestionInput({ question, value, onChange, disabled, mode = "ans
                     </button>
                     <button
                       type="button"
-                      aria-label="Di chuyển xuống"
+                      aria-label={t("quiz.moveDown")}
                       onClick={() => move(i, 1)}
                       disabled={i === order.length - 1}
                       className="rounded-[var(--radius-control)] border border-rule-strong px-2 py-1 text-xs disabled:opacity-40"
@@ -308,7 +310,7 @@ export function QuestionInput({ question, value, onChange, disabled, mode = "ans
                   className="max-w-[60%]"
                 >
                   <option value="" disabled>
-                    Chọn một mục
+                    {t("quiz.pickOne")}
                   </option>
                   {right.map((rk) => (
                     <option key={rk} value={rk}>
@@ -318,7 +320,7 @@ export function QuestionInput({ question, value, onChange, disabled, mode = "ans
                 </Select>
                 {mode === "review" && correctPairs[lk] && correctPairs[lk] !== chosenRight && (
                   <span className="w-full text-xs text-ink-faint">
-                    Đáp án đúng: {rightText[correctPairs[lk]] ?? correctPairs[lk]}
+                    {t("quiz.correctAnswer", { answer: rightText[correctPairs[lk]!] ?? correctPairs[lk]! })}
                   </span>
                 )}
               </div>

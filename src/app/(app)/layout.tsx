@@ -3,7 +3,7 @@
 import * as React from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { AppShell } from "@/components/AppShell";
-import { useSession } from "@/components/Providers";
+import { useSession, useT } from "@/components/Providers";
 import { loginHref } from "@/lib/returnTo";
 import { isSigningOut } from "@/lib/signOut";
 import { ErrorPanel, Skeleton } from "@/components/ui";
@@ -14,6 +14,7 @@ import { ErrorPanel, Skeleton } from "@/components/ui";
  * the server render stays identical for all users and therefore cacheable.
  */
 export default function AppLayout({ children }: { children: React.ReactNode }) {
+  const t = useT();
   const { isLoading, isSignedOut, error, refresh } = useSession();
   const router = useRouter();
   const pathname = usePathname();
@@ -37,7 +38,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           <Skeleton className="h-32 w-full" />
         </div>
       ) : isSignedOut ? (
-        <p className="text-sm text-ink-soft">Đang chuyển tới trang đăng nhập...</p>
+        <p className="text-sm text-ink-soft">{t("auth.redirectingToLogin")}</p>
       ) : error ? (
         // The session is probably fine, the server just did not answer. Sending
         // the learner to the login page would be a lie, and rendering the screen

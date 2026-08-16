@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { Button, Textarea } from "@/components/ui";
+import { useT } from "@/components/Providers";
 
 export function Composer({
   disabled,
@@ -14,6 +15,7 @@ export function Composer({
   pending: boolean;
   onSend: (content: string) => void;
 }) {
+  const t = useT();
   const [value, setValue] = React.useState("");
 
   function submit() {
@@ -36,14 +38,14 @@ export function Composer({
               submit();
             }
           }}
-          placeholder="Nhập câu hỏi..."
+          placeholder={t("tutor.composer.placeholder")}
           disabled={disabled || pending}
           maxLength={1000}
           className="min-h-[52px]"
-          aria-label="Nội dung tin nhắn"
+          aria-label={t("tutor.composer.aria")}
         />
         <Button onClick={submit} disabled={disabled || pending || value.trim().length === 0} loading={pending}>
-          Gửi
+          {t("tutor.composer.send")}
         </Button>
       </div>
     </div>
