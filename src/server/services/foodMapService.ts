@@ -1,7 +1,9 @@
 import type { Locale } from "@prisma/client";
 import { z } from "zod";
+import { distanceMeters, walkMinutes } from "@/lib/map";
 import { prisma } from "@/server/db";
 import { uuidv7 } from "@/server/lib/ids";
+import { AppError, notFound, ruleViolation } from "@/server/lib/errors";
 import { parseVnd, vndToString } from "@/server/lib/money";
 
 const moneyVnd = z
@@ -57,6 +59,18 @@ export interface FoodSpotPin {
   address: string;
   reviewCount: number;
   avgRating: number | null;
+  source?: string;
+  verified?: boolean;
+}
+
+export interface SchoolPin {
+  id: string;
+  name: string;
+  kind: string;
+  lat: number;
+  lng: number;
+  address: string;
+  nearbySpotCount: number;
 }
 
 export interface FoodSpotDetail extends FoodSpotView {
@@ -180,6 +194,8 @@ function spotToPin(s: {
   lng: number | null;
   avgPriceVnd: bigint | null;
   tags: unknown;
+  source?: string;
+  verified?: boolean;
   reviews: { rating: number }[];
 }): FoodSpotPin | null {
   if (s.lat == null || s.lng == null) return null;
@@ -196,28 +212,75 @@ function spotToPin(s: {
     address: s.address,
     reviewCount: s.reviews.length,
     avgRating,
+    source: s.source,
+    verified: s.verified,
   };
 }
 
-/** Spots with coordinates inside a map viewport. Caps at 200 pins per request. */
+/** Spots eligible for map pins: must have a known student price. */
+export const mapVisibleSpotWhere = {
+  avgPriceVnd: { not: null },
+};
+
+/** Spots with coordinates inside a map viewport. Caps at 500 pins per request. */
 export async function listFoodSpotsInBounds(bounds: MapBounds): Promise<FoodSpotPin[]> {
   const { swLat, swLng, neLat, neLng } = bounds;
   const spots = await prisma.foodSpot.findMany({
     where: {
+      ...mapVisibleSpotWhere,
       lat: { not: null, gte: Math.min(swLat, neLat), lte: Math.max(swLat, neLat) },
       lng: { not: null, gte: Math.min(swLng, neLng), lte: Math.max(swLng, neLng) },
     },
     include: { reviews: { select: { rating: true } } },
-    take: 200,
-    orderBy: { order: "asc" },
+    take: 500,
+    orderBy: [{ avgPriceVnd: "asc" }, { order: "asc" }],
   });
   return spots.map(spotToPin).filter((p): p is FoodSpotPin => p != null);
 }
 
+/** Schools with at least one priced food spot linked — anchors the “cheapest meal near campus” map. */
+export async function listSchoolsInBounds(bounds: MapBounds): Promise<SchoolPin[]> {
+  const { swLat, swLng, neLat, neLng } = bounds;
+  const schools = await prisma.school.findMany({
+    where: {
+      lat: { not: null, gte: Math.min(swLat, neLat), lte: Math.max(swLat, neLat) },
+      lng: { not: null, gte: Math.min(swLng, neLng), lte: Math.max(swLng, neLng) },
+      spotLinks: {
+        some: { spot: mapVisibleSpotWhere },
+      },
+    },
+    include: {
+      translations: true,
+      spotLinks: {
+        where: { spot: mapVisibleSpotWhere },
+        select: { spotId: true },
+      },
+    },
+    take: 300,
+    orderBy: { order: "asc" },
+  });
+  return schools
+    .filter((s) => s.lat != null && s.lng != null)
+    .map((s) => {
+      const tr = pickTranslation(s.translations, "vi");
+      return {
+        id: s.id,
+        name: tr?.name ?? s.slug,
+        kind: s.kind,
+        lat: s.lat!,
+        lng: s.lng!,
+        address: s.address,
+        nearbySpotCount: s.spotLinks.length,
+      };
+    });
+}
+
 export const foodReviewBodySchema = z.object({
   rating: z.number().int().min(1).max(5),
-  body: z.string().trim().min(10).max(800),
-  priceVnd: moneyVnd.optional(),
+  body: z.string().trim().min(5).max(800),
+  priceVnd: moneyVnd
+    .refine((v) => parseVnd(v) >= 1n, "Price must be at least 1 VND.")
+    .optional(),
 });
 
 export async function createFoodReview(
@@ -238,6 +301,20 @@ export async function createFoodReview(
     },
     include: { user: { select: { displayName: true } } },
   });
+  if (input.priceVnd) {
+    const priced = await prisma.foodReview.findMany({
+      where: { spotId, priceVnd: { not: null } },
+      select: { priceVnd: true },
+    });
+    const minPrice = priced.reduce(
+      (min, row) => (row.priceVnd != null && row.priceVnd < min ? row.priceVnd : min),
+      parseVnd(input.priceVnd!),
+    );
+    await prisma.foodSpot.update({
+      where: { id: spotId },
+      data: { avgPriceVnd: minPrice },
+    });
+  }
   return {
     id: review.id,
     rating: review.rating,
@@ -246,4 +323,70 @@ export async function createFoodReview(
     authorName: review.user.displayName,
     createdAt: review.createdAt.toISOString(),
   };
+}
+
+export const communityFoodSpotBodySchema = z.object({
+  name: z.string().trim().min(2).max(120),
+  address: z.string().trim().min(5).max(200),
+  lat: z.number().min(-90).max(90),
+  lng: z.number().min(-180).max(180),
+  priceVnd: moneyVnd.refine((v) => parseVnd(v) <= 2_000_000n, "Giá phải từ 1 đến 2.000.000 đồng."),
+  clusterSlug: z.enum(["hanoi", "saigon"]),
+  note: z.string().trim().max(400).optional(),
+});
+
+export async function createCommunityFoodSpot(
+  userId: string,
+  input: z.infer<typeof communityFoodSpotBodySchema>,
+): Promise<FoodSpotPin> {
+  const cluster = await prisma.foodCluster.findUnique({ where: { slug: input.clusterSlug } });
+  if (!cluster) throw notFound("Resource");
+
+  const cityBounds = input.clusterSlug === "hanoi"
+    ? { south: 20.7, north: 21.4, west: 105.4, east: 106.1 }
+    : { south: 10.3, north: 11.2, west: 106.3, east: 107.1 };
+  if (
+    input.lat < cityBounds.south || input.lat > cityBounds.north ||
+    input.lng < cityBounds.west || input.lng > cityBounds.east
+  ) {
+    throw ruleViolation("SPOT_OUTSIDE_CITY", "Vị trí phải nằm trong thành phố đã chọn.");
+  }
+
+  return prisma.$transaction(async (tx) => {
+    const spot = await tx.foodSpot.create({
+      data: {
+        id: uuidv7(), clusterId: cluster.id, name: input.name, address: input.address,
+        lat: input.lat, lng: input.lng, avgPriceVnd: parseVnd(input.priceVnd),
+        tags: ["under-35k"], note: input.note?.trim() || "Giá do cộng đồng gửi",
+        source: "manual", verified: false, order: 9000,
+      },
+      include: { reviews: { select: { rating: true } } },
+    });
+    const schools = await tx.school.findMany({
+      where: { clusterId: cluster.id, lat: { not: null }, lng: { not: null } },
+      select: { id: true, lat: true, lng: true },
+    });
+    const nearby = schools
+      .map((s) => ({ schoolId: s.id, d: distanceMeters(input.lat, input.lng, s.lat!, s.lng!) }))
+      .filter((x) => x.d <= 500)
+      .sort((a, b) => a.d - b.d);
+    if (nearby[0]) {
+      await tx.foodSpotSchool.create({
+        data: {
+          spotId: spot.id, schoolId: nearby[0].schoolId, isPrimary: true,
+          distanceMeters: Math.round(nearby[0].d), walkMinutes: walkMinutes(nearby[0].d),
+          note: "Gần trường — do cộng đồng gửi",
+        },
+      });
+    }
+    await tx.foodReview.create({
+      data: {
+        id: uuidv7(), spotId: spot.id, userId, rating: 4,
+        body: input.note?.trim() || "Quán mới trên bản đồ.", priceVnd: parseVnd(input.priceVnd),
+      },
+    });
+    const pin = spotToPin(spot);
+    if (!pin) throw new AppError("INTERNAL", "Invalid coordinates");
+    return pin;
+  });
 }

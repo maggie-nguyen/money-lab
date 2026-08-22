@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
-import { useSession, useT } from "@/components/Providers";
+import { useSession, useT, useToast } from "@/components/Providers";
 import { SpotDetailHero } from "@/components/map/SpotDetailHero";
 import {
   Button,
@@ -49,6 +49,7 @@ interface FoodSpotDetail {
 
 export default function BanDoSpotPage() {
   const t = useT();
+  const toast = useToast();
   const { bootstrap } = useSession();
   const params = useParams<{ spotId: string }>();
   const qc = useQueryClient();
@@ -66,14 +67,19 @@ export default function BanDoSpotPage() {
       api.post<FoodReviewView>(`/food/spots/${params.spotId}`, {
         rating,
         body,
-        ...(priceVnd ? { priceVnd } : {}),
+        priceVnd,
       }),
     onSuccess: () => {
       setBody("");
       setPriceVnd("");
+      toast({ tone: "positive", message: t("map.reviewSuccess") });
       void qc.invalidateQueries({ queryKey: ["food", "spot", params.spotId] });
+      void qc.invalidateQueries({ queryKey: ["food", "map"] });
     },
   });
+
+  const parsedPrice = Number(priceVnd);
+  const canSubmitReview = body.trim().length >= 5 && Number.isFinite(parsedPrice) && parsedPrice >= 1;
 
   const spot = query.data;
 
@@ -171,13 +177,13 @@ export default function BanDoSpotPage() {
                   placeholder={t("wallet.eat.reviewPlaceholder")}
                 />
               </Field>
-              <Field label={t("wallet.eat.pricePaid")} htmlFor="price-paid" hint={t("wallet.eat.pricePaidHint")}>
+              <Field label={t("map.pricePaidLabel")} htmlFor="price-paid" hint={t("map.pricePaidHint")}>
                 <MoneyInput id="price-paid" value={priceVnd} onChange={setPriceVnd} />
               </Field>
               <Button
                 onClick={() => reviewMutation.mutate()}
                 loading={reviewMutation.isPending}
-                disabled={body.trim().length < 10}
+                disabled={!canSubmitReview}
               >
                 {t("wallet.eat.submitReview")}
               </Button>

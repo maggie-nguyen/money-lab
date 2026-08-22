@@ -1,10 +1,6 @@
 import { z } from "zod";
-import { withApi, parseQuery, parseBody } from "@/server/http";
-import {
-  communityFoodSpotBodySchema,
-  createCommunityFoodSpot,
-  listFoodSpotsInBounds,
-} from "@/server/services/foodMapService";
+import { withApi, parseQuery } from "@/server/http";
+import { listSchoolsInBounds } from "@/server/services/foodMapService";
 
 const q = z
   .object({
@@ -21,12 +17,6 @@ const q = z
 
 export const GET = withApi({ auth: "optional", rateLimit: "read" }, async (ctx) => {
   const bounds = parseQuery(ctx, q);
-  const data = await listFoodSpotsInBounds(bounds);
-  return { data };
-});
-
-export const POST = withApi({ auth: "required", rateLimit: "write" }, async (ctx) => {
-  const input = await parseBody(ctx, communityFoodSpotBodySchema);
-  const data = await createCommunityFoodSpot(ctx.user!.id, input);
+  const data = await listSchoolsInBounds(bounds);
   return { data };
 });

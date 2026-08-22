@@ -990,6 +990,21 @@ model SpendingJarPlan {
 
 // ── Cheap food map ───────────────────────────────────────────────────────────
 
+enum SchoolKind {
+  HIGH_SCHOOL
+  UNIVERSITY
+  VOCATIONAL
+  OTHER
+}
+
+enum FoodSpotSource {
+  manual
+  openstreetmap
+  hcmc_opendata
+  moet
+  wikidata
+}
+
 model FoodCluster {
   id           String                   @id
   slug         String                   @unique
@@ -1001,6 +1016,7 @@ model FoodCluster {
   updatedAt    DateTime                 @updatedAt
   translations FoodClusterTranslation[]
   spots        FoodSpot[]
+  schools      School[]
 
   @@map("food_cluster")
 }
@@ -1017,24 +1033,84 @@ model FoodClusterTranslation {
 }
 
 model FoodSpot {
-  id            String       @id
+  id            String             @id
   clusterId     String
   name          String
-  address       String       @default("")
+  address       String             @default("")
   lat           Float?
   lng           Float?
   avgPriceVnd   BigInt?
-  tags          Json         @default("[]")
-  note          String       @default("")
-  order         Int          @default(0)
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
-  cluster       FoodCluster  @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  tags          Json               @default("[]")
+  note          String             @default("")
+  order         Int                @default(0)
+  source        FoodSpotSource     @default(manual)
+  osmType       String?
+  osmId         String?
+  sourceRef     String             @default("")
+  verified      Boolean            @default(false)
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+  cluster       FoodCluster        @relation(fields: [clusterId], references: [id], onDelete: Cascade)
   reviews       FoodReview[]
+  schoolLinks   FoodSpotSchool[]
 
+  @@unique([osmType, osmId])
   @@index([clusterId, order])
   @@index([lat, lng])
+  @@index([source])
   @@map("food_spot")
+}
+
+model School {
+  id           String              @id
+  slug         String              @unique
+  clusterId    String
+  kind         SchoolKind
+  lat          Float?
+  lng          Float?
+  address      String              @default("")
+  district     String              @default("")
+  source       FoodSpotSource      @default(manual)
+  osmType      String?
+  osmId        String?
+  externalRef  String              @default("")
+  order        Int                 @default(0)
+  createdAt    DateTime            @default(now())
+  updatedAt    DateTime            @updatedAt
+  cluster      FoodCluster         @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  translations SchoolTranslation[]
+  spotLinks    FoodSpotSchool[]
+
+  @@unique([osmType, osmId])
+  @@index([clusterId, order])
+  @@index([lat, lng])
+  @@map("school")
+}
+
+model SchoolTranslation {
+  schoolId  String
+  locale    Locale
+  name      String
+  shortName String @default("")
+  school    School @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@id([schoolId, locale])
+  @@map("school_translation")
+}
+
+model FoodSpotSchool {
+  spotId         String
+  schoolId       String
+  isPrimary      Boolean  @default(false)
+  walkMinutes    Int?
+  distanceMeters Int?
+  note           String   @default("")
+  spot           FoodSpot @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  school         School   @relation(fields: [schoolId], references: [id], onDelete: Cascade)
+
+  @@id([spotId, schoolId])
+  @@index([schoolId])
+  @@map("food_spot_school")
 }
 
 model FoodReview {

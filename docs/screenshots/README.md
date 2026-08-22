@@ -15,6 +15,8 @@ with `CHROME_PATH` if needed.
 | File | Route |
 | --- | --- |
 | `ban-do.png` | `/ban-do` (signed out; map waits 6s for tiles + pins) |
+| `ban-do-selected.png` | `/ban-do` with first spot selected (on-map preview overlay) |
+| `ban-do-spot.png` | `/ban-do/spot/[id]` opened from map overlay |
 | `ban-do-signed-in.png` | `/ban-do` (learner session) |
 | `vi-cua-toi.png` | `/vi-cua-toi` |
 | `vi-cua-toi-hieu-minh.png` | `/vi-cua-toi/hieu-minh` |
@@ -22,6 +24,7 @@ with `CHROME_PATH` if needed.
 | `vi-cua-toi-cuoc-song.png` | `/vi-cua-toi/cuoc-song` |
 | `vi-cua-toi-thu-thach.png` | `/vi-cua-toi/thu-thach` |
 | `mobile-ban-do.png` | `/ban-do` at 420px width |
+| `mobile-ban-do-selected.png` | `/ban-do` at 420px with spot selected (on-map overlay) |
 
 ## Learner, light theme
 

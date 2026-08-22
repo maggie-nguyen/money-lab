@@ -11,6 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "smoke": "tsx --tsconfig tsconfig.json scripts/smoke-ui.ts",
+    "smoke:map-shots": "tsx --tsconfig tsconfig.json scripts/capture-map-screenshots.ts",
     "smoke:auth": "tsx --tsconfig tsconfig.json scripts/check-auth-flows.ts",
     "content:verify": "tsx scripts/verify-videos.ts",
     "content:links": "tsx --tsconfig tsconfig.json scripts/check-lesson-links.ts",
@@ -20,7 +21,18 @@
     "db:seed": "tsx prisma/seed.ts",
     "db:seed:legacy": "SEED_LEGACY=true tsx prisma/seed.ts",
     "db:local": "tsx scripts/local-postgres.ts",
-    "content:lang": "tsx --tsconfig tsconfig.json scripts/check-vi-language.ts"
+    "content:lang": "tsx --tsconfig tsconfig.json scripts/check-vi-language.ts",
+    "map:import": "tsx --tsconfig tsconfig.json scripts/map-import/run-import.ts",
+    "map:import:dry": "tsx --tsconfig tsconfig.json scripts/map-import/run-import.ts --dry-run",
+    "map:import:hcmc-schools": "tsx --tsconfig tsconfig.json scripts/map-import/import-hcmc-schools.ts",
+    "map:import:wikidata": "tsx --tsconfig tsconfig.json scripts/map-import/import-wikidata-schools.ts",
+    "map:import:link": "tsx --tsconfig tsconfig.json scripts/map-import/link-schools.ts",
+    "map:import:dedup": "tsx --tsconfig tsconfig.json scripts/map-import/dedup-schools.ts",
+    "map:import:prune": "tsx --tsconfig tsconfig.json scripts/map-import/prune-unpriced-spots.ts",
+    "map:import:moet": "python3 scripts/map-import/extract-moet.py && tsx --tsconfig tsconfig.json scripts/map-import/import-moet-schools.ts",
+    "map:import:hust": "tsx --tsconfig tsconfig.json scripts/map-import/import-hust-listings.ts",
+    "map:import:saigon-listings": "tsx --tsconfig tsconfig.json scripts/map-import/import-saigon-listings.ts",
+    "map:import:saigon": "tsx --tsconfig tsconfig.json scripts/map-import/import-saigon-listings.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.0.2",

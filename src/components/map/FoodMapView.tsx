@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 import { APIProvider, Map, useMap } from "@vis.gl/react-google-maps";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
@@ -16,23 +17,25 @@ import {
 } from "@/components/ui";
 import { MapAreaLinks, MapSpotList } from "@/components/map/MapChrome";
 import { PricePinMarkers } from "@/components/map/PricePinMarkers";
-import { SpotPreviewCard } from "@/components/map/SpotPreviewCard";
+import { SchoolPinMarkers } from "@/components/map/SchoolPinMarkers";
+import { SpotMapOverlay } from "@/components/map/SpotPreviewCard";
 import {
   MAP_DEFAULTS,
   MAP_FILTER_TAGS,
   FoodTag,
+  boundsCenter,
+  boundsFromCenter,
   isInVietnam,
   type FoodTagId,
   type FoodSpotPin,
   type MapBounds,
   type MapCenter,
   type PriceFilter,
+  type SchoolPin,
   matchesPriceFilter,
 } from "@/lib/map";
 
 const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
-/** Required for AdvancedMarker (custom price tags). Use DEMO_MAP_ID until you create a Map ID in Cloud Console. */
-const MAP_ID = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID ?? "DEMO_MAP_ID";
 
 function BoundsWatcher({ onBounds }: { onBounds: (b: MapBounds) => void }) {
   const map = useMap();
@@ -100,7 +103,10 @@ function MapFilterButton({
 
 export function FoodMapView() {
   const t = useT();
-  const [bounds, setBounds] = React.useState<MapBounds | null>(null);
+  const didAutoRecenter = React.useRef(false);
+  const [bounds, setBounds] = React.useState<MapBounds | null>(() =>
+    boundsFromCenter(MAP_DEFAULTS.fallback),
+  );
   const [selected, setSelected] = React.useState<FoodSpotPin | null>(null);
   const [priceFilter, setPriceFilter] = React.useState<PriceFilter>("all");
   const [tagFilter, setTagFilter] = React.useState<FoodTagId | null>(null);
@@ -127,6 +133,21 @@ export function FoodMapView() {
     staleTime: 60_000,
   });
 
+  const schoolsQuery = useQuery({
+    queryKey: ["food", "schools", boundsKey],
+    queryFn: () => {
+      const b = bounds!;
+      return api.get<SchoolPin[]>("/food/schools", {
+        swLat: b.swLat,
+        swLng: b.swLng,
+        neLat: b.neLat,
+        neLng: b.neLng,
+      });
+    },
+    enabled: bounds != null,
+    staleTime: 120_000,
+  });
+
   const filters: FilterChip[] = [
     { kind: "price", id: "all", label: t("map.filter.all") },
     { kind: "price", id: "under25", label: t("map.filter.under25") },
@@ -139,6 +160,7 @@ export function FoodMapView() {
   ];
 
   const allPins = spotsQuery.data ?? [];
+  const schoolPins = schoolsQuery.data ?? [];
   const pins = allPins.filter((p) => {
     if (!matchesPriceFilter(p, priceFilter)) return false;
     if (tagFilter && !p.tags.includes(tagFilter)) return false;
@@ -159,13 +181,30 @@ export function FoodMapView() {
           setJumpTarget({ lat: latitude, lng: longitude, zoom: 16 });
         } else {
           setLocationNotice(t("map.nearMeOutsideVn"));
-          setJumpTarget(MAP_DEFAULTS.hcm);
+          setJumpTarget(MAP_DEFAULTS.hanoi);
         }
       },
       () => setLocationNotice(t("map.geolocationDenied")),
       { enableHighAccuracy: false, timeout: 8000, maximumAge: 300_000 },
     );
   }
+
+  function handleSelectPin(pin: FoodSpotPin | null) {
+    setSelected(pin);
+    if (pin) setJumpTarget({ lat: pin.lat, lng: pin.lng, zoom: 16 });
+  }
+
+  /** If the viewport is outside Vietnam (common when abroad), jump to seeded data in Hanoi. */
+  React.useEffect(() => {
+    if (didAutoRecenter.current || !bounds || spotsQuery.isLoading) return;
+    if (allPins.length > 0) return;
+    const center = boundsCenter(bounds);
+    if (!isInVietnam(center.lat, center.lng)) {
+      didAutoRecenter.current = true;
+      setLocationNotice(t("map.abroadHint"));
+      setJumpTarget(MAP_DEFAULTS.hanoi);
+    }
+  }, [allPins.length, bounds, spotsQuery.isLoading, t]);
 
   if (!MAPS_KEY) {
     return (
@@ -185,6 +224,7 @@ export function FoodMapView() {
         <LedgerLabel>{t("nav.map")}</LedgerLabel>
         <h1 className="text-2xl sm:text-3xl">{t("map.metaTitle")}</h1>
         <p className="text-sm leading-relaxed text-ink-soft">{t("map.metaDescription")}</p>
+        <p className="text-xs text-ink-faint">{t("map.dataCoverageHint")}</p>
       </header>
 
       <div className="grid gap-6 lg:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] xl:grid-cols-[minmax(0,18rem)_minmax(0,1fr)]">
@@ -244,24 +284,41 @@ export function FoodMapView() {
                 <p className="text-xs leading-relaxed text-caution">{locationNotice}</p>
               )}
 
-              {!spotsQuery.isLoading && pins.length === 0 && (
+              {!spotsQuery.isLoading && pins.length === 0 && bounds && (
                 <div className="rounded-[var(--radius-control)] border border-rule bg-paper-sunken px-3 py-2 text-xs leading-relaxed text-ink-soft">
-                  <p>{t("map.outsideCoverage")}</p>
-                  <p className="mt-1">{t("map.outsideCoverageHint")}</p>
+                  {allPins.length > 0 ? (
+                    <p>{t("map.spotListEmpty")}</p>
+                  ) : isInVietnam(boundsCenter(bounds).lat, boundsCenter(bounds).lng) ? (
+                    <>
+                      <p>{t("map.noPricedSpotsInView")}</p>
+                      <p className="mt-1">{t("map.noPricedSpotsHint")}</p>
+                      <p className="mt-1 font-medium text-moss-700">{t("map.noPricedSpotsCta")}</p>
+                      <Link
+                        href="/ban-do/them-quan"
+                        className="mt-2 inline-block text-xs font-semibold text-moss-700 underline"
+                      >
+                        {t("map.addSpotCta")}
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      <p>{t("map.outsideCoverage")}</p>
+                      <p className="mt-1">{t("map.outsideCoverageHint")}</p>
+                    </>
+                  )}
                 </div>
               )}
 
               <p className="text-xs text-ink-faint">
                 {spotsQuery.isLoading ? t("map.loading") : t("map.spotCount", { count: pins.length })}
               </p>
+              <p className="text-xs text-ink-faint">
+                {schoolsQuery.isLoading
+                  ? t("map.loadingSchools")
+                  : t("map.schoolCount", { count: schoolPins.length })}
+              </p>
             </CardBody>
           </Card>
-
-          {selected && (
-            <div className="hidden lg:block">
-              <SpotPreviewCard pin={selected} onClose={() => setSelected(null)} />
-            </div>
-          )}
 
           <Card className="lg:hidden">
             <CardBody>
@@ -269,7 +326,7 @@ export function FoodMapView() {
               <MapSpotList
                 pins={pins}
                 selectedId={selected?.id ?? null}
-                onSelect={setSelected}
+                onSelect={handleSelectPin}
                 onFocus={setJumpTarget}
               />
             </CardBody>
@@ -281,7 +338,7 @@ export function FoodMapView() {
               <MapSpotList
                 pins={pins}
                 selectedId={selected?.id ?? null}
-                onSelect={setSelected}
+                onSelect={handleSelectPin}
                 onFocus={setJumpTarget}
               />
             </CardBody>
@@ -293,7 +350,6 @@ export function FoodMapView() {
             <div className="relative h-[min(52vh,24rem)] lg:h-[min(68vh,40rem)]">
               <APIProvider apiKey={MAPS_KEY} language="vi" region="VN">
                 <Map
-                  mapId={MAP_ID}
                   defaultCenter={{ lat: MAP_DEFAULTS.fallback.lat, lng: MAP_DEFAULTS.fallback.lng }}
                   defaultZoom={MAP_DEFAULTS.fallback.zoom}
                   gestureHandling="greedy"
@@ -310,8 +366,9 @@ export function FoodMapView() {
                   <PricePinMarkers
                     pins={pins}
                     selectedId={selected?.id ?? null}
-                    onSelect={setSelected}
+                    onSelect={handleSelectPin}
                   />
+                  <SchoolPinMarkers schools={schoolPins} />
                 </Map>
               </APIProvider>
 
@@ -322,14 +379,15 @@ export function FoodMapView() {
                   </span>
                 </div>
               )}
-            </div>
-          </Card>
 
-          {selected && (
-            <div className="mt-4 lg:hidden">
-              <SpotPreviewCard pin={selected} onClose={() => setSelected(null)} />
+              {selected && (
+                <SpotMapOverlay pin={selected} onClose={() => setSelected(null)} />
+              )}
             </div>
-          )}
+            <p className="border-t border-rule px-3 py-2 text-[10px] leading-relaxed text-ink-faint">
+              {t("map.osmAttribution")}
+            </p>
+          </Card>
         </div>
       </div>
     </div>

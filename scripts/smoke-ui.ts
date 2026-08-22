@@ -136,6 +136,50 @@ async function visitMap(page: Page, name: string, path: string): Promise<void> {
   console.log(`  ${name.padEnd(22)} ${path}`);
 }
 
+async function selectFirstMapSpot(page: Page): Promise<void> {
+  await page.waitForSelector('[data-testid="map-spot-list"] button', { timeout: 20_000 });
+  const clicked = await page.evaluate(() => {
+    const lists = document.querySelectorAll('[data-testid="map-spot-list"]');
+    for (const list of lists) {
+      const btn = list.querySelector("button");
+      if (btn instanceof HTMLButtonElement && btn.offsetParent !== null) {
+        btn.click();
+        return true;
+      }
+    }
+    return false;
+  });
+  if (!clicked) throw new Error("no visible map spot list item to click");
+  await page.waitForSelector('[data-testid="map-spot-overlay"]', { timeout: 5_000 });
+}
+
+/** Map with first spot selected — shows the on-map preview overlay. */
+async function visitMapSelected(page: Page, name: string, path: string): Promise<void> {
+  current = name;
+  await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+  await new Promise((r) => setTimeout(r, 6_000));
+  await selectFirstMapSpot(page);
+  await new Promise((r) => setTimeout(r, 400));
+  await page.screenshot({ path: `${OUT}/${name}.png` as `${string}.png`, fullPage: true });
+  console.log(`  ${name.padEnd(22)} ${path} (spot selected)`);
+}
+
+/** Open spot detail from the map overlay link. */
+async function visitMapSpotDetail(page: Page, name: string, mapPath: string): Promise<void> {
+  current = name;
+  await page.goto(`${BASE}${mapPath}`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+  await new Promise((r) => setTimeout(r, 6_000));
+  await selectFirstMapSpot(page);
+  const detailHref = await page.$eval('[data-testid="map-spot-detail-link"]', (el) =>
+    el.getAttribute("href"),
+  );
+  if (!detailHref) throw new Error("map spot detail link missing");
+  await page.goto(`${BASE}${detailHref}`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+  await new Promise((r) => setTimeout(r, 800));
+  await page.screenshot({ path: `${OUT}/${name}.png` as `${string}.png`, fullPage: true });
+  console.log(`  ${name.padEnd(22)} ${detailHref}`);
+}
+
 async function main(): Promise<void> {
   mkdirSync(OUT, { recursive: true });
   const browser: Browser = await puppeteer.launch({
@@ -149,6 +193,8 @@ async function main(): Promise<void> {
 
   await visit(page, "landing", "/");
   await visitMap(page, "ban-do", "/ban-do");
+  await visitMapSelected(page, "ban-do-selected", "/ban-do");
+  await visitMapSpotDetail(page, "ban-do-spot", "/ban-do");
 
   await visit(page, "login", "/login");
   await visit(page, "signup", "/signup");
@@ -301,6 +347,7 @@ async function main(): Promise<void> {
   await page.setViewport({ width: 420, height: 860 });
   await visit(page, "mobile-landing", "/");
   await visitMap(page, "mobile-ban-do", "/ban-do");
+  await visitMapSelected(page, "mobile-ban-do-selected", "/ban-do");
   await visit(page, "mobile-login", "/login");
   await visit(page, "mobile-learn", "/learn");
   await visit(page, "mobile-library", "/library");

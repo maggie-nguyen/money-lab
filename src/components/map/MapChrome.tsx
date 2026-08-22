@@ -15,8 +15,8 @@ interface FoodClusterSummary {
 }
 
 const FALLBACK_AREAS: { slug: string; center: MapCenter }[] = [
-  { slug: "saigon", center: MAP_DEFAULTS.hcm },
   { slug: "hanoi", center: MAP_DEFAULTS.hanoi },
+  { slug: "saigon", center: MAP_DEFAULTS.hcm },
 ];
 
 export function MapAreaLinks({ onJump }: { onJump: (center: MapCenter) => void }) {
@@ -77,7 +77,10 @@ export function MapSpotList({
   const sorted = [...pins].sort((a, b) => a.name.localeCompare(b.name, "vi"));
 
   return (
-    <ul className="max-h-64 divide-y divide-rule overflow-y-auto border border-rule rounded-[var(--radius-control)]">
+    <ul
+      data-testid="map-spot-list"
+      className="max-h-64 divide-y divide-rule overflow-y-auto border border-rule rounded-[var(--radius-control)]"
+    >
       {sorted.map((pin) => {
         const active = pin.id === selectedId;
         return (
