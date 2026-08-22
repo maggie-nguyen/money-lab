@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { PublicNavAuth } from "@/components/PublicNavAuth";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { createT } from "@/lib/i18n";
 import { getRequestLocale } from "@/lib/requestLocale";
 
@@ -21,7 +20,6 @@ export async function PublicChrome({ children }: { children: React.ReactNode }) 
             MoneyLab
           </Link>
           <nav className="flex items-center gap-4 text-sm">
-            <LanguageSwitcher />
             <Link href="/library" className="text-ink-soft hover:text-ink">
               {t("nav.library")}
             </Link>

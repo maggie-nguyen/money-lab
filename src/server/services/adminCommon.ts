@@ -58,7 +58,7 @@ export async function writeAudit(
 /** Common list query - doc 03 §14: `?status=&locale=&cursor=&limit=&q=`. */
 export const adminListQuery = z.object({
   status: z.enum(["DRAFT", "PUBLISHED", "ARCHIVED"]).optional(),
-  locale: z.enum(["vi", "en"]).optional(),
+  locale: z.literal("vi").optional(),
   cursor: z.string().max(64).optional(),
   limit: z.coerce.number().int().min(1).max(100).default(20),
   q: z.string().trim().max(100).optional(),

@@ -9,11 +9,6 @@
         "title": "Nền tảng tiền bạc",
         "subtitle": "Kiếm tiền, chi tiêu, ngân sách và tiết kiệm",
         "description": "Điểm khởi đầu cho mọi kỹ năng tài chính: hiểu tiền đến từ đâu, đi về đâu, và làm sao giữ lại một phần cho tương lai."
-      },
-      "en": {
-        "title": "Money Foundations",
-        "subtitle": "Earning, spending, budgeting, and saving",
-        "description": "The starting point for every money skill: understand where money comes from, where it goes, and how to keep some for the future."
       }
     }
   },
@@ -35,18 +30,6 @@
           "Nhận diện sáu dấu hiệu thường gặp trong các vụ lừa đảo",
           "Biết cần làm gì trong giờ đầu sau khi chuyển tiền nhầm"
         ]
-      },
-      "en": {
-        "title": "Debt and Financial Traps",
-        "subtitle": "Understand interest before you sign; spot scams before you transfer",
-        "description": "Five lessons on the other side of money: what a loan really costs, when credit cards become a debt trap, and which scams target young people.",
-        "learningObjectives": [
-          "Read and understand interest rates and the total cost of a loan",
-          "Use a credit card without falling into the interest cycle",
-          "Convert daily interest on quick-loan apps into an annual rate for comparison",
-          "Recognize six common red flags in scams",
-          "Know what to do in the first hour after sending money by mistake"
-        ]
       }
     },
     "modules": [
@@ -56,9 +39,6 @@
         "i18n": {
           "vi": {
             "title": "Vay và trả nợ"
-          },
-          "en": {
-            "title": "Borrowing and Repaying"
           }
         }
       },
@@ -68,9 +48,6 @@
         "i18n": {
           "vi": {
             "title": "Cảnh giác tài chính"
-          },
-          "en": {
-            "title": "Financial Vigilance"
           }
         }
       }
@@ -185,109 +162,6 @@
                 "text": "Bài sau nói về hình thức vay mà hầu hết người trẻ tiếp xúc đầu tiên nhưng không nhận ra đó là vay: thẻ tín dụng."
               }
             ]
-          },
-          "en": {
-            "title": "What a Loan Really Costs",
-            "summary": "The number that matters is not the monthly payment — it is the total you pay through the last installment.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=MKszcOwT7cM",
-                "caption": "The consumer loan app trap (VTV24)"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "Sellers always talk about the monthly payment, because that number is small and sounds pleasant. But what actually decides how much money you lose is the total amount paid over the whole term, and that depends on three factors: the amount borrowed, the interest rate, and the loan term."
-              },
-              {
-                "type": "KEY_TERM",
-                "term": "Annual interest rate",
-                "definition": "The percentage you pay on top of the borrowed amount over one year. Stretching out the term makes the monthly payment smaller, but the total interest goes up."
-              },
-              {
-                "type": "TABLE",
-                "headers": [
-                  "Term",
-                  "Monthly payment",
-                  "Total repaid"
-                ],
-                "rows": [
-                  [
-                    "6 months",
-                    "1,777,000 ₫",
-                    "10,662,000 ₫"
-                  ],
-                  [
-                    "12 months",
-                    "945,000 ₫",
-                    "11,340,000 ₫"
-                  ],
-                  [
-                    "24 months",
-                    "529,000 ₫",
-                    "12,696,000 ₫"
-                  ]
-                ],
-                "caption": "A 10,000,000 VND loan at 24% a year, paid in equal installments. A term four times longer makes the interest nearly four times bigger too."
-              },
-              {
-                "type": "CALLOUT",
-                "variant": "WARNING",
-                "title": "The question to ask before you sign",
-                "text": "Before signing any installment contract, ask exactly one question: how much will I pay in total? If the seller can't answer right away, that silence is already the answer."
-              },
-              {
-                "type": "CALCULATOR",
-                "tool": "loan-payment",
-                "presets": {
-                  "principalVnd": 10000000,
-                  "ratePercent": 24,
-                  "termMonths": 12
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "vay-tong-chi-phi",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "With the same loan amount and the same interest rate, stretching the term from 12 months to 24 months does what?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "Lowers the monthly payment and lowers the total repaid"
-                    },
-                    {
-                      "key": "b",
-                      "text": "Lowers the monthly payment but raises the total repaid"
-                    },
-                    {
-                      "key": "c",
-                      "text": "Changes nothing — it's just split into smaller pieces"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "Borrowing for longer means you hold the bank's money longer, so you pay more interest. The lighter monthly payment is exactly the price you pay for a higher total cost."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "vay-cau-hoi-quan-trong",
-                  "type": "TRUE_FALSE",
-                  "prompt": "A low monthly payment is a reliable sign that a loan is cheap.",
-                  "answerKey": {
-                    "correct": false
-                  },
-                  "explanation": "A low monthly payment usually just means a long term. To know if a loan is cheap or expensive, compare the total amount repaid, not the monthly number."
-                }
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "The next lesson covers a form of borrowing most young people encounter first without realizing it's a loan at all: the credit card."
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -317,15 +191,6 @@
                     "c": "Số tiền vay, lãi suất và kỳ hạn"
                   },
                   "explanation": "Tiền lãi sinh ra từ số tiền bạn đang nợ, mức lãi suất áp lên nó, và thời gian bạn còn nợ."
-                },
-                "en": {
-                  "prompt": "What three factors determine the total interest on a loan?",
-                  "optionsText": {
-                    "a": "The bank, the seller, and where you live",
-                    "b": "Loan amount, your age, and your job",
-                    "c": "Loan amount, interest rate, and term"
-                  },
-                  "explanation": "Interest comes from how much you owe, the rate applied to it, and how long you still owe."
                 }
               }
             },
@@ -342,10 +207,6 @@
                 "vi": {
                   "prompt": "Vay 10.000.000 đồng, trả góp 12 tháng, tổng cộng trả 11.340.000 đồng. Bạn đã trả bao nhiêu tiền lãi?",
                   "explanation": "Tiền lãi là phần vượt trên số tiền gốc: 11.340.000 đồng trừ 10.000.000 đồng bằng 1.340.000 đồng."
-                },
-                "en": {
-                  "prompt": "You borrow 10,000,000 VND over 12 months and repay 11,340,000 VND in total. How much interest did you pay?",
-                  "explanation": "Interest is the amount above principal: 11,340,000 minus 10,000,000 equals 1,340,000 VND."
                 }
               }
             }
@@ -436,84 +297,6 @@
                 }
               }
             ]
-          },
-          "en": {
-            "title": "Credit Cards and the Minimum-Payment Spiral",
-            "summary": "A credit card is nearly free if you pay in full on time — and very expensive if you only pay the minimum.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=-emd9ksFLVg",
-                "caption": "Seven rules for using a credit card without drowning in debt"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "A credit card is money the bank lends you, not money you already have. Every purchase is a short-term loan. The roughly 45-day interest-free period only applies when you meet the conditions and pay the full balance on time."
-              },
-              {
-                "type": "KEY_TERM",
-                "term": "Minimum payment",
-                "definition": "The smallest amount, usually 5% of the balance, that you must pay so you're not considered late. Paying exactly this amount means the entire remaining balance starts accruing interest."
-              },
-              {
-                "type": "EXAMPLE",
-                "title": "Nam, age 19",
-                "text": "Nam spends 6,000,000 VND on his card and, at the due date, pays only the 300,000 VND minimum. The rest accrues interest at around 30% a year. If Nam pays only the minimum every month and spends nothing more, it will take him over three years to pay it off, costing about 3,000,000 VND extra in interest for a single purchase."
-              },
-              {
-                "type": "LIST",
-                "ordered": true,
-                "items": [
-                  "Pay the full balance before the due date, not just the minimum",
-                  "Set a low credit limit equal to what you actually need",
-                  "Don't use a credit card for cash withdrawals — those start accruing interest from the day you withdraw",
-                  "Turn on transaction alerts to catch anything unfamiliar early"
-                ]
-              },
-              {
-                "type": "SIM_LINK",
-                "simSlug": "vay-khon-ngoan",
-                "label": "Practice making loan decisions in the \"Smart Borrowing\" simulation"
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "the-tra-toi-thieu",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "What does paying exactly the minimum every month mean?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "You're not considered late, but the remaining balance still accrues interest"
-                    },
-                    {
-                      "key": "b",
-                      "text": "You've fully paid off that month's debt, with nothing left"
-                    },
-                    {
-                      "key": "c",
-                      "text": "The bank waives interest for you because you paid on time"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "a"
-                  },
-                  "explanation": "The minimum payment only keeps your credit record clean. The entire unpaid balance still accrues interest at one of the highest rates among consumer loans."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "the-mien-lai",
-                  "type": "TRUE_FALSE",
-                  "prompt": "If you pay off the entire balance before the due date every month, a credit card costs you almost nothing in interest.",
-                  "answerKey": {
-                    "correct": true
-                  },
-                  "explanation": "Paying in full during the interest-free period means you're only borrowing the bank's money for a few weeks without losing a single unit of interest. The only remaining cost is the annual fee, if the card charges one."
-                }
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -548,16 +331,6 @@
                     "d": "Chỉ trả khoản tối thiểu để giữ tiền mặt"
                   },
                   "explanation": "Trả đủ đúng hạn và giữ hạn mức thấp là hai việc kiểm soát được rủi ro. Rút tiền mặt bị tính lãi ngay, còn trả tối thiểu là cách nợ lớn dần."
-                },
-                "en": {
-                  "prompt": "Which habits keep a credit card from becoming expensive debt? Select all that apply.",
-                  "optionsText": {
-                    "a": "Pay the full balance before the due date",
-                    "b": "Withdraw cash from the card when urgent",
-                    "c": "Set a low credit limit that matches real need",
-                    "d": "Pay only the minimum to keep cash on hand"
-                  },
-                  "explanation": "Paying in full on time and keeping a low limit are two controllable risk guards. Cash advances start accruing interest immediately; minimum payments are how balances grow."
                 }
               }
             },
@@ -571,10 +344,6 @@
                 "vi": {
                   "prompt": "Hạn mức thẻ tín dụng là số tiền bạn đang có.",
                   "explanation": "Hạn mức là số tiền ngân hàng đồng ý cho bạn mượn. Tiêu tới hạn mức nghĩa là bạn đang nợ đúng số đó."
-                },
-                "en": {
-                  "prompt": "A credit card's limit is money you already have.",
-                  "explanation": "The limit is how much the bank agrees to lend you. Spending up to the limit means you owe that amount."
                 }
               }
             }
@@ -690,109 +459,6 @@
                 "text": "Bài sau chuyển sang mặt còn lại của rủi ro: không phải chuyện bạn ký nhầm, mà chuyện có người cố tình lấy tiền của bạn."
               }
             ]
-          },
-          "en": {
-            "title": "Daily Interest: How Quick-Loan Apps Hide the Cost",
-            "summary": "A rate that sounds tiny by the day can, when annualized, dwarf ordinary bank loans.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=UGIFY-rYCrE",
-                "caption": "How interest piling on interest turns a small loan into a huge bad debt"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "Quick-loan ads usually don't state an annual interest rate. They might quote three thousand VND per million per day, or a ten percent service fee for a seven-day term. To compare fairly, convert every number to the same unit: percent per year."
-              },
-              {
-                "type": "KEY_TERM",
-                "term": "Converting daily interest to an annual rate",
-                "definition": "Take the daily interest per million, multiply by 365, then divide by one million. For example, 3,000 VND a day on 1,000,000 VND equals about 109.5% a year."
-              },
-              {
-                "type": "TABLE",
-                "headers": [
-                  "Loan source",
-                  "How it's advertised",
-                  "Converted annual rate"
-                ],
-                "rows": [
-                  [
-                    "Bank",
-                    "12%/year",
-                    "12%"
-                  ],
-                  [
-                    "Finance company",
-                    "2.5%/month",
-                    "30%"
-                  ],
-                  [
-                    "Quick-loan app",
-                    "3,000 ₫/million/day",
-                    "about 110%"
-                  ],
-                  [
-                    "Loan shark (black credit)",
-                    "10% for 10 days",
-                    "about 365%"
-                  ]
-                ],
-                "caption": "For the same 10,000,000 VND loan, the interest gap between the first row and the last row can reach tens of millions of VND per year."
-              },
-              {
-                "type": "CALLOUT",
-                "variant": "WARNING",
-                "title": "Signs of a loan shark",
-                "text": "No paperwork required, funds disbursed within fifteen minutes, contact only through Zalo or a personal phone number, and a demand for access to your phone contacts. That contact list later becomes their tool for pressuring your family and friends."
-              },
-              {
-                "type": "CALCULATOR",
-                "tool": "loan-compare"
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "app-quy-doi-lai",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "A loan app advertises 2,000 VND interest per 1,000,000 VND per day. That is closest to what percent per year?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "About 7%"
-                    },
-                    {
-                      "key": "b",
-                      "text": "About 24%"
-                    },
-                    {
-                      "key": "c",
-                      "text": "About 73%"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "c"
-                  },
-                  "explanation": "2,000 VND a day times 365 days is 730,000 VND of interest on a 1,000,000 VND loan, or about 73% a year. It sounds small by the day but becomes very large once annualized."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "app-danh-ba",
-                  "type": "TRUE_FALSE",
-                  "prompt": "A loan app asking for permission to read your entire phone contact list is a normal part of reviewing an application.",
-                  "answerKey": {
-                    "correct": false
-                  },
-                  "explanation": "Your contact list says nothing about your ability to repay. In illegal lending apps, contacts can be used to call your relatives and pressure them over your debt. This is a serious red flag."
-                }
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "The next lesson turns to the other side of risk: not a mistake you make signing something, but someone deliberately trying to take your money."
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -815,10 +481,6 @@
                 "vi": {
                   "prompt": "Một khoản vay tính lãi 3% một tháng thì tương đương bao nhiêu phần trăm một năm?",
                   "explanation": "3% mỗi tháng nhân 12 tháng là 36% một năm, cao gấp ba lần lãi vay ngân hàng thông thường."
-                },
-                "en": {
-                  "prompt": "A loan charging 3% interest per month equals roughly what percent per year?",
-                  "explanation": "3% per month times 12 months is 36% a year — about three times a typical bank loan rate."
                 }
               }
             },
@@ -842,15 +504,6 @@
                     "c": "Chọn khoản giải ngân nhanh hơn"
                   },
                   "explanation": "Chỉ khi cùng đơn vị thì hai con số mới so được với nhau. Lãi suất năm và tổng tiền trả là hai thước đo trung thực nhất."
-                },
-                "en": {
-                  "prompt": "What is the right way to compare two loans advertised in different units?",
-                  "optionsText": {
-                    "a": "Pick the one with the smaller monthly payment",
-                    "b": "Convert both to an annual rate, then compare total repayment",
-                    "c": "Pick the one that disburses faster"
-                  },
-                  "explanation": "Numbers only compare when they share a unit. Annual interest rate and total repayment are the most honest measures."
                 }
               }
             }
@@ -966,109 +619,6 @@
                 }
               }
             ]
-          },
-          "en": {
-            "title": "Six Common Red Flags in Scams",
-            "summary": "Scam scripts keep changing, but the warning signs below almost never do.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=NkcT-2VFWrw",
-                "caption": "Scam messages, from VTV's Vigilance 247 program"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "You don't need to memorize every scam script, because new tricks can appear at any time. What you need to remember are the common warning signs, no matter how the outer story changes."
-              },
-              {
-                "type": "LIST",
-                "ordered": true,
-                "items": [
-                  "Urgency: you're given only a few hours, or minutes, to decide",
-                  "Secrecy: you're told not to tell family or friends",
-                  "A suspicious link: a domain that looks like your bank's but isn't the official site",
-                  "Asking for your OTP or card number: no legitimate organization ever asks for these",
-                  "A small fee first, a big reward later: pay first, then supposedly receive",
-                  "Guaranteed, unusually high returns promised with certainty"
-                ]
-              },
-              {
-                "type": "KEY_TERM",
-                "term": "OTP code",
-                "definition": "A one-time code that confirms you are the one making a transaction. Reading it out to someone else is like handing them the key to your account, and the bank will treat that transaction as if you made it yourself."
-              },
-              {
-                "type": "CALLOUT",
-                "variant": "TIP",
-                "title": "The ten-minute rule",
-                "text": "When a message makes you panic or feel unusually excited, put your phone down for ten minutes and call a family member or the official hotline printed on your card. Many scams rely on you deciding while you're not thinking clearly."
-              },
-              {
-                "type": "SIM_LINK",
-                "simSlug": "san-lua-dao",
-                "label": "Go to the \"Spot the Scam\" simulation and try sorting ten messages"
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "lua-dao-otp",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "Someone claiming to be a bank employee calls, saying there's an error with your account and asks you to read out the OTP you just received to fix it. What should you do?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "Read the code, since they're calling from the bank's hotline"
-                    },
-                    {
-                      "key": "b",
-                      "text": "Hang up and call back the hotline number printed on the back of your card"
-                    },
-                    {
-                      "key": "c",
-                      "text": "Text the code via Zalo instead, since that's safer than a phone call"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "Banks never ask you to provide an OTP over the phone, by text, or through any other channel. Caller ID can be spoofed, so hang up and call the official number yourself."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "lua-dao-loi-nhuan",
-                  "type": "MULTI_CHOICE",
-                  "prompt": "Which messages below show signs of a scam? Select all that apply.",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "Guarantees 30% interest a month and invites you to recruit friends for VIP status"
-                    },
-                    {
-                      "key": "b",
-                      "text": "A balance-change alert that tells you to call the hotline printed on your card if anything looks unusual"
-                    },
-                    {
-                      "key": "c",
-                      "text": "Your package is being held; pay a 20,000 VND storage fee through this link"
-                    },
-                    {
-                      "key": "d",
-                      "text": "You won a motorbike; pay a 1,500,000 VND processing fee to claim it"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": [
-                      "a",
-                      "c",
-                      "d"
-                    ]
-                  },
-                  "explanation": "The other three messages each hit a red flag: promising an unusual guaranteed return, demanding a small fee before a big promised reward, and charging a fee to receive a prize. A genuine message simply informs you and never asks you to act through a link."
-                }
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -1098,15 +648,6 @@
                     "c": "Người gửi dùng số điện thoại nước ngoài"
                   },
                   "explanation": "Sai chính tả và số điện thoại lạ chỉ xuất hiện trong một số vụ. Áp lực thời gian thường được dùng để khiến bạn không kịp kiểm tra lại thông tin."
-                },
-                "en": {
-                  "prompt": "Which red flag shows up in almost every scam, regardless of the story?",
-                  "optionsText": {
-                    "a": "Pressure to decide very quickly",
-                    "b": "Messages with spelling mistakes",
-                    "c": "The sender uses a foreign phone number"
-                  },
-                  "explanation": "Typos and foreign numbers appear in only some cases. Time pressure is used to stop you from double-checking."
                 }
               }
             },
@@ -1120,10 +661,6 @@
                 "vi": {
                   "prompt": "Nếu số điện thoại gọi đến hiện đúng tên ngân hàng thì cuộc gọi chắc chắn là thật.",
                   "explanation": "Tên và số hiển thị đều có thể bị giả mạo. Hãy cúp máy và tự gọi lại số tổng đài chính thức."
-                },
-                "en": {
-                  "prompt": "If the caller ID shows your bank's name, the call is definitely real.",
-                  "explanation": "Displayed names and numbers can be spoofed. Hang up and call the official hotline yourself."
                 }
               }
             }
@@ -1216,86 +753,6 @@
                 }
               }
             ]
-          },
-          "en": {
-            "title": "The First Hour After a Mistaken Transfer",
-            "summary": "What to do in order — and why staying silent out of embarrassment is the costliest reaction.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=eKge8Vro9_w",
-                "caption": "What to do when you've been scammed into transferring money online"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "Anyone can be scammed, even careful people, because scripts often target the moments you're tired or in a hurry. Once you notice what happened, react as fast as possible to limit the damage."
-              },
-              {
-                "type": "LIST",
-                "ordered": true,
-                "items": [
-                  "Call the bank hotline immediately, report the fraudulent transaction, and request an investigation or a freeze",
-                  "Screenshot all messages, the receiving account number, and the transfer receipt",
-                  "Change your bank and email passwords, and turn on two-factor authentication if it isn't already on",
-                  "Report it to your local police, bringing your screenshots as evidence",
-                  "Tell a trusted adult at home, as soon as possible"
-                ]
-              },
-              {
-                "type": "CALLOUT",
-                "variant": "WARNING",
-                "title": "The second trap",
-                "text": "After you've been scammed, an account may message you promising to recover your money if you pay a fee upfront. This could be the same scammers or a different group targeting victims. Only work with your bank and the police — never pay a fee to a service claiming it can recover your money."
-              },
-              {
-                "type": "EXAMPLE",
-                "title": "Why you must act fast",
-                "text": "Transferred money can be withdrawn or split across many accounts in a short time. If the bank receives a request to investigate while the money is still in the receiving account, the chances of recovering it are much better. So contact your bank the moment you spot a suspicious transaction."
-              },
-              {
-                "type": "SIM_LINK",
-                "simSlug": "san-lua-dao",
-                "label": "Practice your reflexes in the \"Spot the Scam\" simulation"
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "bi-lua-viec-dau-tien",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "You just realized you transferred money to a scam account by mistake. What should you do first?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "Message the scammer and demand your money back"
-                    },
-                    {
-                      "key": "b",
-                      "text": "Call the bank hotline immediately to report it and request an investigation"
-                    },
-                    {
-                      "key": "c",
-                      "text": "Wait a few days to see if the money comes back on its own"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "Only the bank can intervene in where the money goes, and that window is very short. Messaging the scammer just tips them off to move the money right away."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "bi-lua-dich-vu-lay-lai",
-                  "type": "TRUE_FALSE",
-                  "prompt": "A service that offers to recover your scammed money for an upfront fee is worth considering.",
-                  "answerKey": {
-                    "correct": false
-                  },
-                  "explanation": "This is a second scam layer, aimed directly at victims. Recovering stolen money only happens through the bank and the police, and no one charges an upfront fee to do it."
-                }
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -1332,16 +789,6 @@
                     "police": "Trình báo công an phường"
                   },
                   "explanation": "Ngân hàng đứng đầu vì chỉ họ mới chặn được dòng tiền trong vài chục phút đầu. Bằng chứng phải giữ lại trước khi tin nhắn bị xóa, sau đó mới đến việc khóa tài khoản và trình báo."
-                },
-                "en": {
-                  "prompt": "Order what to do after discovering a scam transfer, by priority.",
-                  "itemsText": {
-                    "bank": "Call the bank hotline and request a recall/investigation",
-                    "evidence": "Screenshot messages and receipts",
-                    "password": "Change bank and email passwords",
-                    "police": "Report to local police"
-                  },
-                  "explanation": "The bank comes first because only they can freeze the money in the first minutes. Preserve evidence before messages disappear, then lock accounts and file a report."
                 }
               }
             },
@@ -1355,10 +802,6 @@
                 "vi": {
                   "prompt": "Kể sớm cho người lớn trong nhà giúp giảm thiệt hại khi bị lừa.",
                   "explanation": "Giữ im lặng vì xấu hổ làm mất đúng khoảng thời gian quý nhất, trong khi người lớn thường xử lý các bước với ngân hàng nhanh hơn."
-                },
-                "en": {
-                  "prompt": "Telling a trusted adult early helps reduce damage after a scam.",
-                  "explanation": "Staying silent out of shame wastes the most valuable time window, while adults often handle bank steps faster."
                 }
               }
             }
@@ -1395,16 +838,6 @@
                 "d": "Tổng số tiền phải trả trong cả kỳ hạn"
               },
               "explanation": "Khoản hằng tháng phụ thuộc vào kỳ hạn nên không so sánh được. Tổng tiền trả là thước đo duy nhất phản ánh đúng chi phí."
-            },
-            "en": {
-              "prompt": "Which number tells you whether a loan is expensive or cheap?",
-              "optionsText": {
-                "a": "The monthly payment",
-                "b": "The amount disbursed",
-                "c": "How fast the application is approved",
-                "d": "Total amount repaid over the full term"
-              },
-              "explanation": "Monthly payments depend on term length, so they are not comparable. Total repayment is the only measure that reflects true cost."
             }
           }
         },
@@ -1421,10 +854,6 @@
             "vi": {
               "prompt": "App vay quảng cáo lãi 3.000 đồng cho mỗi 1.000.000 đồng mỗi ngày. Quy ra khoảng bao nhiêu phần trăm một năm?",
               "explanation": "3.000 đồng nhân với 365 ngày là 1.095.000 đồng tiền lãi trên 1.000.000 đồng vay, tức khoảng 110% một năm."
-            },
-            "en": {
-              "prompt": "A loan app advertises 3,000 VND interest per 1,000,000 VND per day. Roughly what percent is that per year?",
-              "explanation": "3,000 VND × 365 days = 1,095,000 VND interest on 1,000,000 VND borrowed — about 110% a year."
             }
           }
         },
@@ -1454,16 +883,6 @@
                 "d": "Chỉ liên hệ qua Zalo và số cá nhân"
               },
               "explanation": "Cho vay hợp pháp luôn có hợp đồng, có pháp nhân và ghi rõ lãi suất năm. Ba dấu hiệu còn lại đều nhằm né trách nhiệm pháp lý và tạo công cụ đòi nợ."
-            },
-            "en": {
-              "prompt": "Which signs suggest a loan offer is predatory / black credit? Select all that apply.",
-              "optionsText": {
-                "a": "No paperwork required at all",
-                "b": "Demands access to your phone contacts",
-                "c": "Has a contract stating the annual interest rate",
-                "d": "Only contacts you via Zalo and a personal number"
-              },
-              "explanation": "Legitimate lending always has a contract, a legal entity, and a stated annual rate. The other three avoid legal accountability and enable debt collection pressure."
             }
           }
         },
@@ -1477,10 +896,6 @@
             "vi": {
               "prompt": "Nhân viên ngân hàng có thể hỏi mã OTP của bạn khi cần xử lý sự cố.",
               "explanation": "Bạn không cần đọc mã OTP cho người khác để xử lý sự cố. Nếu ai yêu cầu mã, hãy dừng cuộc trò chuyện và liên hệ ngân hàng qua kênh chính thức."
-            },
-            "en": {
-              "prompt": "A bank staff member may ask for your OTP when fixing an issue.",
-              "explanation": "You never need to read an OTP aloud to someone else to resolve a problem. If anyone asks for a code, stop and contact the bank through official channels."
             }
           }
         },
@@ -1513,21 +928,6 @@
                 "c": "Chấp nhận được nếu bạn thật sự cần máy ngay, vì lãi ngân hàng minh bạch và thấp hơn nhiều lần so với app."
               },
               "explanation": "Thứ tự ưu tiên khi cần một khoản tiền lớn: dùng tiền có sẵn, rồi đến nguồn vay chính thức lãi thấp, và không bao giờ dùng vay nhanh lãi ngày."
-            },
-            "en": {
-              "prompt": "You need 8,000,000 VND for a laptop for school. Which option do you choose?",
-              "scenarioMd": "You have three choices: a quick-loan app that funds in 15 minutes at 3,000 VND per million per day; a 12-month bank installment at 18% a year; or wait three months, save more, and buy with cash.",
-              "optionsText": {
-                "a": "Use the app for speed — starting school earlier is worth it",
-                "b": "Wait three months, save, then buy with cash",
-                "c": "Take the 12-month bank installment"
-              },
-              "feedback": {
-                "a": "The app's rate is over 100% a year — after one year, interest alone can exceed the laptop's price.",
-                "b": "Best choice: zero interest, and three months of waiting to save millions in interest is worth it.",
-                "c": "Acceptable if you truly need the laptop now — bank interest is transparent and far lower than the app."
-              },
-              "explanation": "Priority when you need a large sum: use money you have, then low-rate formal credit — never daily-interest quick loans."
             }
           }
         },
@@ -1570,22 +970,6 @@
                 "r_guaranteed": "Để đánh vào mong muốn giàu nhanh và che đi rủi ro"
               },
               "explanation": "Mỗi dấu hiệu phục vụ một mục đích cụ thể trong kịch bản. Nhận ra mục đích thì nhận ra trò lừa, dù câu chuyện bên ngoài có đổi thế nào."
-            },
-            "en": {
-              "prompt": "Match each scam red flag with why it appears in the script.",
-              "leftText": {
-                "urgent": "Pressure to decide in minutes",
-                "otp": "Asking for an OTP",
-                "fee_first": "Demanding a small fee first",
-                "guaranteed": "Promising guaranteed returns"
-              },
-              "rightText": {
-                "r_urgent": "So you cannot double-check with someone else",
-                "r_otp": "To take control of transactions on your account",
-                "r_fee": "To extract real money before you realize the prize is fake",
-                "r_guaranteed": "To exploit the desire to get rich fast and hide risk"
-              },
-              "explanation": "Each red flag serves a specific purpose in the script. Spot the purpose and you spot the scam — even when the outer story changes."
             }
           }
         }

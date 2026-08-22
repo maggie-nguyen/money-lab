@@ -2,1035 +2,217 @@
   "$schema": "moneylab-articles-v1",
   "articles": [
     {
-      "slug": "lap-ngan-sach-dau-tien-voi-tien-tieu-vat",
-      "category": "GUIDE",
-      "readMinutes": 6,
-      "authorName": "Ban biên tập MoneyLab",
-      "relatedCourseSlug": "ngan-sach-va-tiet-kiem",
+      "slug": "tam-li-chi-tieu-gioi-tre",
+      "category": "EXPLAINER",
+      "readMinutes": 4,
+      "authorName": "MoneyLab",
       "publishedDaysAgo": 2,
       "i18n": {
         "vi": {
-          "title": "Lập ngân sách đầu tiên khi bạn chỉ có tiền tiêu vặt",
-          "summary": "Bạn không cần lương tháng mới cần ngân sách. Đây là cách chia 500.000 đồng một tháng sao cho vẫn còn tiền vào ngày 28.",
-          "seoTitle": "Cách lập ngân sách với tiền tiêu vặt cho học sinh",
-          "seoDescription": "Hướng dẫn từng bước lập ngân sách cá nhân đầu tiên cho học sinh trung học, với ví dụ bằng tiền Việt và một bảng mẫu để chép lại.",
+          "title": "Tâm lý chi tiêu tuổi trẻ: vì sao tiền cứ hết?",
+          "summary": "Cùng một khoản tiền tiêu vặt, có bạn giữ được còn bạn thì hết giữa tháng ,  thường không phải vì số tiền ít hơn.",
+          "seoTitle": "Tâm lý chi tiêu học sinh THPT",
+          "seoDescription": "Hiểu vì sao tiền tiêu vặt hết nhanh ,  không phải lúc nào cũng do bạn tiêu nhiều.",
           "blocks": [
             {
-              "type": "PARAGRAPH",
-              "text": "Phần lớn lời khuyên về ngân sách được viết cho người đi làm. Nếu thu nhập của bạn là tiền tiêu vặt và vài khoản lì xì, những lời khuyên đó có thể không sát với thực tế. Nhưng nguyên tắc vẫn vậy: bạn quyết định trước tiền sẽ được dùng vào đâu, thay vì đến cuối tháng mới cố nhớ mình đã chi những gì."
-            },
-            {
               "type": "HEADING",
-              "text": "Bắt đầu bằng con số thật",
+              "text": "Tiền không chỉ đi vào những thứ lớn",
               "level": 2
             },
             {
               "type": "PARAGRAPH",
-              "text": "Ghi lại mọi khoản tiền vào trong bốn tuần: tiền bố mẹ cho hằng tuần, tiền thưởng, tiền bán đồ cũ. Đừng làm tròn cho đẹp. Một ngân sách dựa trên con số phỏng đoán thì sai ngay từ dòng đầu tiên."
-            },
-            {
-              "type": "TABLE",
-              "caption": "Ví dụ một tháng của bạn Linh, lớp 11",
-              "headers": [
-                "Khoản",
-                "Số tiền",
-                "Ghi chú"
-              ],
-              "rows": [
-                [
-                  "Tiền tiêu vặt hằng tuần",
-                  "400.000 ₫",
-                  "100.000 ₫ x 4 tuần"
-                ],
-                [
-                  "Tiền thưởng học kỳ",
-                  "200.000 ₫",
-                  "Không đều, không tính vào kế hoạch cố định"
-                ],
-                [
-                  "Tổng thu nhập tháng",
-                  "600.000 ₫",
-                  ""
-                ]
-              ]
-            },
-            {
-              "type": "HEADING",
-              "text": "Chia theo ba nhóm, không phải mười nhóm",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Ngân sách càng nhiều dòng thì càng dễ bỏ dở. Ba nhóm là đủ: chi bắt buộc, chi cho bản thân và phần để dành. Với thu nhập nhỏ, tỷ lệ 50/30/20 vẫn dùng được; chỉ khác là các con số sẽ nhỏ hơn."
-            },
-            {
-              "type": "TABLE",
-              "caption": "600.000 ₫ chia theo tỷ lệ 50/30/20",
-              "headers": [
-                "Nhóm",
-                "Tỉ lệ",
-                "Số tiền"
-              ],
-              "rows": [
-                [
-                  "Chi bắt buộc (ăn trưa, xe buýt, dụng cụ học)",
-                  "50%",
-                  "300.000 ₫"
-                ],
-                [
-                  "Chi cho bản thân (cà phê, game, quà tặng)",
-                  "30%",
-                  "180.000 ₫"
-                ],
-                [
-                  "Để dành",
-                  "20%",
-                  "120.000 ₫"
-                ]
-              ]
-            },
-            {
-              "type": "KEY_TERM",
-              "term": "Chi bắt buộc",
-              "definition": "Khoản mà nếu cắt đi thì việc học và sinh hoạt hằng ngày bị ảnh hưởng ngay: bữa trưa ở trường, tiền xe, vở bút. Không phải khoản bạn thấy khó bỏ, mà là khoản bạn thật sự không bỏ được."
-            },
-            {
-              "type": "HEADING",
-              "text": "Kiểm tra vào ngày 15",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Giữa tháng, cộng lại xem đã tiêu bao nhiêu ở nhóm thứ hai. Nếu đã tiêu quá nửa, bạn còn hai tuần để điều chỉnh, thay vì phát hiện ra khi ví đã trống. Một lần kiểm tra năm phút là đủ."
+              "text": "Hầu hết tiền tiêu vặt của học sinh THPT biến mất qua những khoản nhỏ: trà sữa, snack, quẹt thẻ game, mua thêm đồ online vì sale. Mỗi khoản có vẻ vô hại, nhưng cộng dồn trong tháng thì thành con số đáng sợ."
             },
             {
               "type": "CALLOUT",
               "variant": "TIP",
-              "title": "Mẹo nhỏ",
-              "text": "Chuyển phần để dành ra khỏi ví ngay ngày nhận tiền. Tiền không nằm trong tầm tay thì khó tiêu hơn nhiều."
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Ngân sách đầu tiên của bạn có thể chưa sát thực tế. Điều đó hoàn toàn bình thường. Hãy điều chỉnh các con số sau tháng đầu, rồi tiếp tục áp dụng; sau vài tháng, việc lập ngân sách sẽ trở nên dễ dàng hơn."
-            }
-          ]
-        },
-        "en": {
-          "title": "Build Your First Budget When You Only Have Pocket Money",
-          "summary": "You do not need a monthly salary to need a budget. Here is how to split 500,000 VND a month and still have money on the 28th.",
-          "seoTitle": "How students can budget with pocket money",
-          "seoDescription": "A step-by-step first personal budget guide for high-school students, with Vietnamese currency examples and a sample table to copy.",
-          "blocks": [
-            {
-              "type": "PARAGRAPH",
-              "text": "Most budgeting advice is written for people with jobs. If your income is pocket money and the occasional lucky-money envelope, that advice can feel disconnected from reality. But the principle still holds: you decide in advance where your money will go, instead of trying to remember at month's end where it all went."
+              "title": "Thử ngay",
+              "text": "Mở app ngân hàng hoặc ví điện tử, lọc giao dịch 7 ngày qua. Đánh dấu khoản nào là cần, khoản nào là muốn."
             },
             {
               "type": "HEADING",
-              "text": "Start With Real Numbers",
+              "text": "Ba thứ chi phối ví của bạn",
               "level": 2
             },
             {
-              "type": "PARAGRAPH",
-              "text": "Track every bit of money coming in over four weeks: weekly allowance from your parents, bonuses, money from selling old items. Don't round numbers to make them look nicer. A budget built on guessed numbers is wrong from the very first line."
-            },
-            {
-              "type": "TABLE",
-              "caption": "One month for Linh, an 11th grader",
-              "headers": [
-                "Item",
-                "Amount",
-                "Note"
-              ],
-              "rows": [
-                [
-                  "Weekly allowance",
-                  "400,000 ₫",
-                  "100,000 ₫ × 4 weeks"
-                ],
-                [
-                  "End-of-term bonus",
-                  "200,000 ₫",
-                  "Irregular, not counted in the fixed plan"
-                ],
-                [
-                  "Total monthly income",
-                  "600,000 ₫",
-                  ""
-                ]
+              "type": "LIST",
+              "ordered": true,
+              "items": [
+                "Cảm xúc: stress, buồn, vui quá mức → mua cho đỡ nghĩ",
+                "Bạn bè: không muốn tụt hậu, ngại nói không khi được rủ",
+                "Thói quen: quẹt QR không đau như tiêu tiền mặt"
               ]
             },
             {
-              "type": "HEADING",
-              "text": "Split Into Three Groups, Not Ten",
-              "level": 2
-            },
-            {
               "type": "PARAGRAPH",
-              "text": "The more line items a budget has, the easier it is to abandon. Three groups are enough: required spending, spending on yourself, and savings. With a small income, the 50/30/20 ratio still works — the numbers are just smaller."
-            },
-            {
-              "type": "TABLE",
-              "caption": "600,000 ₫ split by the 50/30/20 ratio",
-              "headers": [
-                "Group",
-                "Ratio",
-                "Amount"
-              ],
-              "rows": [
-                [
-                  "Required spending (lunch, bus, school supplies)",
-                  "50%",
-                  "300,000 ₫"
-                ],
-                [
-                  "Spending on yourself (coffee, games, gifts)",
-                  "30%",
-                  "180,000 ₫"
-                ],
-                [
-                  "Savings",
-                  "20%",
-                  "120,000 ₫"
-                ]
-              ]
-            },
-            {
-              "type": "KEY_TERM",
-              "term": "Required spending",
-              "definition": "An expense that, if cut, immediately disrupts your schooling and daily life: school lunch, bus fare, notebooks and pens. Not something you find hard to give up, but something you genuinely cannot give up."
-            },
-            {
-              "type": "HEADING",
-              "text": "Check In on the 15th",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Mid-month, add up how much you've spent in the second group. If you've already spent more than half, you still have two weeks to adjust, instead of finding out only when your wallet is empty. A five-minute check is enough."
-            },
-            {
-              "type": "CALLOUT",
-              "variant": "TIP",
-              "title": "A small tip",
-              "text": "Move your savings out of your wallet the day you receive money. Money that isn't within easy reach is much harder to spend."
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Your first budget might not match reality very well. That's completely normal. Adjust the numbers after the first month and keep going; after a few months, budgeting will become much easier."
+              "text": "Nhận ra mình thuộc nhóm nào không có nghĩa là xấu. Đó là bước đầu để chọn cách chi khác ,  chứ không phải cắt hết mọi thứ vui."
             }
           ]
         }
       }
     },
     {
-      "slug": "lai-kep-hoat-dong-the-nao",
+      "slug": "fomo-va-tieu-dung",
       "category": "EXPLAINER",
       "readMinutes": 5,
-      "authorName": "Ban biên tập MoneyLab",
-      "relatedCourseSlug": "ngan-sach-va-tiet-kiem",
-      "publishedDaysAgo": 6,
+      "authorName": "MoneyLab",
+      "publishedDaysAgo": 3,
       "i18n": {
         "vi": {
-          "title": "Lãi kép hoạt động thế nào? Giải thích bằng bảng số",
-          "summary": "Lãi kép thường được ví như “kỳ quan thứ tám”. Bảng dưới đây cho thấy nó tác động thế nào đến 1.000.000 đồng theo thời gian.",
-          "seoTitle": "Lãi kép là gì và ảnh hưởng ra sao tới tiền tiết kiệm",
-          "seoDescription": "Giải thích lãi kép bằng ví dụ cụ thể với tiền Việt, so sánh lãi đơn và lãi kép qua mười năm, kèm công cụ tính thử.",
+          "title": "FOMO và áp lực tiêu dùng trên mạng xã hội",
+          "summary": "Story bạn bè, trend TikTok, flash sale ,  tiền bay trước khi kịp suy nghĩ.",
+          "seoTitle": "FOMO và chi tiêu học sinh",
+          "seoDescription": "Cách mạng xã hội khiến bạn tiêu nhiều hơn và làm gì để giảm áp lực.",
           "blocks": [
             {
-              "type": "PARAGRAPH",
-              "text": "Lãi đơn chỉ trả lãi trên số tiền gốc. Lãi kép trả lãi trên cả gốc lẫn phần lãi đã sinh ra trước đó. Chênh lệch nghe có vẻ không đáng kể, nhưng sau vài năm thì khác hẳn."
-            },
-            {
-              "type": "KEY_TERM",
-              "term": "Lãi kép",
-              "definition": "Lãi được cộng vào gốc theo từng kỳ, nên kỳ sau bạn nhận lãi trên một số tiền lớn hơn kỳ trước."
-            },
-            {
               "type": "HEADING",
-              "text": "Một triệu đồng, lãi 6% một năm",
+              "text": "FOMO là gì?",
               "level": 2
             },
             {
-              "type": "TABLE",
-              "caption": "So sánh lãi đơn và lãi kép, làm tròn tới nghìn đồng",
-              "headers": [
-                "Năm",
-                "Lãi đơn",
-                "Lãi kép"
-              ],
-              "rows": [
-                [
-                  "1",
-                  "1.060.000 ₫",
-                  "1.060.000 ₫"
-                ],
-                [
-                  "3",
-                  "1.180.000 ₫",
-                  "1.191.000 ₫"
-                ],
-                [
-                  "5",
-                  "1.300.000 ₫",
-                  "1.338.000 ₫"
-                ],
-                [
-                  "10",
-                  "1.600.000 ₫",
-                  "1.791.000 ₫"
-                ],
-                [
-                  "20",
-                  "2.200.000 ₫",
-                  "3.207.000 ₫"
-                ]
-              ]
-            },
-            {
               "type": "PARAGRAPH",
-              "text": "Trong năm đầu, hai cột giống hệt nhau. Đó là lý do lãi kép dễ bị xem nhẹ: tác động rõ rệt thường xuất hiện sau một thời gian dài, chứ không phải ngay từ đầu. Nếu dừng lại quá sớm, bạn sẽ khó thấy được lợi ích đó."
+              "text": "FOMO (Fear Of Missing Out) là nỗi sợ bị bỏ lại phía sau. Trên TikTok, Instagram, bạn thấy bạn đi cafe, concert, mua đồ mới ,  não bạn hiểu đó là highlight reel, nhưng cảm xúc vẫn muốn bắt kịp."
             },
             {
-              "type": "HEADING",
-              "text": "Lãi kép cũng có chiều ngược lại",
-              "level": 2
+              "type": "EXAMPLE",
+              "title": "Tình huống quen",
+              "text": "Nhóm chat rủ đi uống trà sữa sau giờ học. Bạn không đói, nhưng sợ ngồi một mình ở nhà. Kết quả: 35k ly trà sữa thứ ba trong tuần."
             },
             {
               "type": "CALLOUT",
-              "variant": "WARNING",
-              "title": "Nợ cũng cộng dồn",
-              "text": "Dư nợ thẻ tín dụng và các khoản vay tiêu dùng cũng có thể tăng theo cơ chế đó, nhưng lúc này bạn là người phải trả. Lãi 2,5% một tháng nghe có vẻ nhẹ, nhưng nếu cộng dồn theo tháng thì tương đương hơn 34% một năm."
-            },
-            {
-              "type": "CALCULATOR",
-              "tool": "compound-interest",
-              "presets": {
-                "principalVnd": 1000000,
-                "ratePercent": 6,
-                "years": 10
-              }
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Hãy thử thay số của chính bạn vào công cụ trên. Điều đáng chú ý không phải là lãi suất, mà là số năm: kéo dài thời gian thường có tác dụng mạnh hơn việc cố tìm thêm một phần trăm lãi suất."
-            }
-          ]
-        },
-        "en": {
-          "title": "How Compound Interest Works — Explained With a Number Table",
-          "summary": "Compound interest is often called the \"eighth wonder.\" The table below shows what it does to 1,000,000 VND over time.",
-          "seoTitle": "What compound interest is and how it affects savings",
-          "seoDescription": "Compound interest explained with concrete Vietnamese currency examples, comparing simple and compound interest over ten years, plus a try-it calculator.",
-          "blocks": [
-            {
-              "type": "PARAGRAPH",
-              "text": "Simple interest pays interest only on the principal. Compound interest pays interest on both the principal and the interest already earned. The difference sounds minor at first, but after a few years it's anything but."
-            },
-            {
-              "type": "KEY_TERM",
-              "term": "Compound interest",
-              "definition": "Interest that gets added to the principal each period, so in the next period you earn interest on a larger amount than before."
+              "variant": "INFO",
+              "text": "Không phải lúc nào cũng phải từ chối hết. Mục tiêu là chọn khi nào tham gia ,  chứ không phải tham gia mọi lúc."
             },
             {
               "type": "HEADING",
-              "text": "One Million VND at 6% a Year",
+              "text": "Ba cách giảm FOMO chi tiêu",
               "level": 2
             },
             {
-              "type": "TABLE",
-              "caption": "Comparing simple and compound interest, rounded to the nearest thousand VND",
-              "headers": [
-                "Year",
-                "Simple interest",
-                "Compound interest"
-              ],
-              "rows": [
-                [
-                  "1",
-                  "1,060,000 ₫",
-                  "1,060,000 ₫"
-                ],
-                [
-                  "3",
-                  "1,180,000 ₫",
-                  "1,191,000 ₫"
-                ],
-                [
-                  "5",
-                  "1,300,000 ₫",
-                  "1,338,000 ₫"
-                ],
-                [
-                  "10",
-                  "1,600,000 ₫",
-                  "1,791,000 ₫"
-                ],
-                [
-                  "20",
-                  "2,200,000 ₫",
-                  "3,207,000 ₫"
-                ]
+              "type": "LIST",
+              "ordered": false,
+              "items": [
+                "Đặt trần chi tiêu đi chơi cuối tuần trước thứ Sáu",
+                "Đề xuất hoạt động miễn phí: đi bộ, chơi thể thao ở trường",
+                "Tắt thông báo shop/sale 1 tuần thử xem có thiếu gì không"
               ]
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "In the first year, the two columns are identical. That's why compound interest is easy to underestimate: its real impact usually shows up after a long stretch of time, not right away. If you stop too early, you'll rarely see that benefit."
-            },
-            {
-              "type": "HEADING",
-              "text": "Compound Interest Also Works in Reverse",
-              "level": 2
-            },
-            {
-              "type": "CALLOUT",
-              "variant": "WARNING",
-              "title": "Debt Compounds Too",
-              "text": "Credit card balances and consumer loans can grow through the same mechanism — except now you're the one paying. 2.5% a month sounds light, but compounded monthly it works out to more than 34% a year."
-            },
-            {
-              "type": "CALCULATOR",
-              "tool": "compound-interest",
-              "presets": {
-                "principalVnd": 1000000,
-                "ratePercent": 6,
-                "years": 10
-              }
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Try plugging your own numbers into the tool above. What matters most isn't the interest rate — it's the number of years: stretching out time usually has a stronger effect than chasing an extra percentage point of rate."
             }
           ]
         }
       }
     },
     {
-      "slug": "nam-dau-hieu-cua-mot-tin-nhan-lua-dao",
+      "slug": "mua-sam-giam-stress",
       "category": "GUIDE",
-      "relatedCourseSlug": "vay-no-va-lua-dao",
       "readMinutes": 4,
-      "authorName": "Ban biên tập MoneyLab",
-      "publishedDaysAgo": 9,
+      "authorName": "MoneyLab",
+      "publishedDaysAgo": 5,
       "i18n": {
         "vi": {
-          "title": "Năm dấu hiệu nhận biết tin nhắn lừa đảo",
-          "summary": "Kẻ lừa đảo không cần bạn thiếu hiểu biết; chúng chỉ cần bạn mất cảnh giác. Dưới đây là năm dấu hiệu giúp bạn nhận ra rủi ro trước khi bấm vào liên kết.",
-          "seoTitle": "Năm dấu hiệu nhận biết tin nhắn lừa đảo qua điện thoại",
-          "seoDescription": "Cách nhận diện tin nhắn và cuộc gọi lừa đảo phổ biến tại Việt Nam, với ví dụ thật và các bước xử lý khi đã lỡ bấm vào liên kết.",
+          "title": "Mua sắm để giảm stress ,  khi nào thành vấn đề?",
+          "summary": "Retail therapy không xấu, nhưng nếu thành thói quen thì ví phản ứng trước.",
+          "seoTitle": "Retail therapy và học sinh",
+          "seoDescription": "Nhận biết khi mua sắm cảm xúc và cách thay thế rẻ hơn.",
           "blocks": [
             {
-              "type": "PARAGRAPH",
-              "text": "Lừa đảo qua tin nhắn thường thành công vì đánh vào phản xạ chứ không phải vì nạn nhân thiếu hiểu biết. Khi hoảng hốt, chúng ta thường khó kiểm tra và đối chiếu thông tin. Vì vậy, cách phòng vệ tốt nhất là ghi nhớ một vài dấu hiệu để nhận ra rủi ro ngay cả khi đang vội."
-            },
-            {
               "type": "HEADING",
-              "text": "1. Gấp một cách vô lý",
+              "text": "Mua vì vui vs mua vì thoát",
               "level": 2
             },
             {
               "type": "PARAGRAPH",
-              "text": "Tài khoản sẽ bị khóa trong 30 phút. Đơn hàng sẽ bị hủy nếu không xác nhận ngay. Ngân hàng thật không đặt đồng hồ đếm ngược cho bạn."
+              "text": "Sau một ngày thi căng, mua snack hoặc đồ nhỏ có thể giúp bạn cảm thấy tốt hơn. Vấn đề bắt đầu khi đó trở thành cách duy nhất để xử lý cảm xúc ,  và bạn không nhớ mình đã quẹt bao nhiêu lần."
             },
             {
-              "type": "HEADING",
-              "text": "2. Liên kết gần giống thật",
-              "level": 2
+              "type": "KEY_TERM",
+              "term": "Retail therapy",
+              "definition": "Mua sắm để cải thiện tâm trạng. Ngắn hạn có thể hiệu quả; dài hạn dễ thành nợ cảm xúc lẫn nợ tiền."
             },
             {
-              "type": "PARAGRAPH",
-              "text": "vietcom-bank.info, shopee-vn.top, momo-hotro.com. Tên miền thật của một tổ chức lớn hiếm khi có dấu gạch ngang chen vào giữa hoặc đuôi bất thường. Hãy đọc phần ngay trước dấu chấm cuối cùng, đó mới là tên miền thật."
-            },
-            {
-              "type": "HEADING",
-              "text": "3. Hỏi mã OTP",
-              "level": 2
-            },
-            {
-              "type": "CALLOUT",
-              "variant": "WARNING",
-              "title": "Không có ngoại lệ",
-              "text": "Không nhân viên ngân hàng, sàn thương mại điện tử hay công an nào cần mã OTP của bạn. Ai hỏi mã OTP đều đang lừa bạn, kể cả khi họ đọc đúng tên và địa chỉ của bạn."
-            },
-            {
-              "type": "HEADING",
-              "text": "4. Phần thưởng không rõ nguồn gốc",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Bạn trúng thưởng một cuộc thi chưa từng tham gia. Chỉ cần đóng phí vận chuyển nhỏ để nhận. Khoản phí nhỏ đó là toàn bộ mục tiêu của trò lừa."
-            },
-            {
-              "type": "HEADING",
-              "text": "5. Liên lạc qua kênh không chính thức",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Người gọi tự xưng là ngân hàng hoặc công an qua tài khoản cá nhân, rồi yêu cầu bạn chuyển sang một ứng dụng khác. Khi cần làm việc, tổ chức thật sẽ hướng dẫn bạn qua kênh chính thức."
-            },
-            {
-              "type": "EXAMPLE",
-              "title": "Nếu đã lỡ bấm vào",
-              "text": "Đừng nhập thêm thông tin và hãy đóng trang lại. Nếu đã nhập thông tin đăng nhập, hãy đổi mật khẩu từ một thiết bị khác rồi gọi tổng đài ngân hàng theo số in trên thẻ, không dùng số trong tin nhắn. Nếu đã chuyển tiền, hãy báo ngân hàng càng sớm càng tốt để họ hướng dẫn tra soát giao dịch."
-            },
-            {
-              "type": "SIM_LINK",
-              "simSlug": "san-lua-dao",
-              "label": "Luyện nhận diện lừa đảo trong mô phỏng"
-            }
-          ]
-        },
-        "en": {
-          "title": "Five Signs of a Scam Message",
-          "summary": "Scammers do not need you to be uninformed — they only need you to let your guard down. Here are five signs that help you spot risk before you tap a link.",
-          "seoTitle": "Five signs of phone scam messages",
-          "seoDescription": "How to recognize common scam texts and calls in Vietnam, with real examples and steps if you already clicked a link.",
-          "blocks": [
-            {
-              "type": "PARAGRAPH",
-              "text": "Message scams usually succeed by exploiting reflexes, not because victims lack knowledge. When we panic, it's hard to stop and verify information. So the best defense is memorizing a few signs that let you spot risk even when you're in a hurry."
-            },
-            {
-              "type": "HEADING",
-              "text": "1. Unreasonable Urgency",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Your account will be locked in 30 minutes. Your order will be canceled if you don't confirm right now. A real bank never puts a countdown timer on you."
-            },
-            {
-              "type": "HEADING",
-              "text": "2. Links That Look Almost Real",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "vietcom-bank.info, shopee-vn.top, momo-hotro.com. A large organization's real domain rarely has a hyphen wedged into the middle or an unusual ending. Read the part right before the last dot — that's the actual domain."
-            },
-            {
-              "type": "HEADING",
-              "text": "3. Asking for Your OTP",
-              "level": 2
-            },
-            {
-              "type": "CALLOUT",
-              "variant": "WARNING",
-              "title": "No Exceptions",
-              "text": "No bank employee, e-commerce platform, or police officer ever needs your OTP. Anyone who asks for it is scamming you, even if they correctly recite your name and address."
-            },
-            {
-              "type": "HEADING",
-              "text": "4. Prizes From Nowhere",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "You've won a contest you never entered. Just pay a small shipping fee to claim it. That small fee is the entire point of the scam."
-            },
-            {
-              "type": "HEADING",
-              "text": "5. Contact Through Unofficial Channels",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Someone claiming to be from a bank or the police contacts you from a personal account, then asks you to switch to another app. When a real organization needs to reach you, it does so through official channels."
-            },
-            {
-              "type": "EXAMPLE",
-              "title": "If You Already Clicked",
-              "text": "Don't enter any more information, and close the page. If you already entered login details, change your password from a different device, then call the bank hotline using the number printed on your card — not the number from the message. If you already transferred money, report it to the bank as soon as possible so they can guide you through disputing the transaction."
-            },
-            {
-              "type": "SIM_LINK",
-              "simSlug": "san-lua-dao",
-              "label": "Practice spotting scams in the simulation"
+              "type": "LIST",
+              "ordered": false,
+              "items": [
+                "Đi bộ 15 phút thay vì mở app shop",
+                "Gọi cho một người bạn thay vì thêm vào giỏ",
+                "Ghi 1 câu: mình đang cảm thấy gì trước khi mua"
+              ]
             }
           ]
         }
       }
     },
     {
-      "slug": "vay-tra-gop-dien-thoai-co-that-su-0-dong",
+      "slug": "the-tin-dung-lam-ban-tieu-nhieu-hon",
       "category": "EXPLAINER",
-      "relatedCourseSlug": "vay-no-va-lua-dao",
-      "readMinutes": 6,
-      "authorName": "Ban biên tập MoneyLab",
-      "publishedDaysAgo": 14,
-      "i18n": {
-        "vi": {
-          "title": "Trả góp 0% có thật sự miễn phí không?",
-          "summary": "Một chiếc điện thoại 12.000.000 đồng, trả góp 12 tháng, lãi suất 0%. Nghe thì như không mất gì. Hãy đọc kỹ ba dòng phí.",
-          "seoTitle": "Trả góp 0% lãi suất: chi phí thật nằm ở đâu",
-          "seoDescription": "Phân tích chi phí thật của hình thức mua trả góp 0% tại Việt Nam, gồm phí hồ sơ, phí thu hộ và bảo hiểm khoản vay, kèm cách tự tính.",
-          "blocks": [
-            {
-              "type": "PARAGRAPH",
-              "text": "Trả góp 0% không nhất thiết là quảng cáo sai: lãi suất có thể đúng là 0%. Nhưng lãi suất chỉ là một trong các chi phí của khoản vay, còn những khoản khác thường không được quảng cáo nổi bật như vậy."
-            },
-            {
-              "type": "HEADING",
-              "text": "Ba dòng phí thường gặp",
-              "level": 2
-            },
-            {
-              "type": "TABLE",
-              "caption": "Điện thoại 12.000.000 ₫, trả góp 12 tháng",
-              "headers": [
-                "Khoản",
-                "Số tiền",
-                "Ghi chú"
-              ],
-              "rows": [
-                [
-                  "Giá máy trả thẳng",
-                  "11.400.000 ₫",
-                  "Giá khi thanh toán một lần, thường thấp hơn"
-                ],
-                [
-                  "Phí hồ sơ",
-                  "300.000 ₫",
-                  "Thu một lần khi ký"
-                ],
-                [
-                  "Phí thu hộ hằng tháng",
-                  "11.000 ₫ x 12",
-                  "Tổng 132.000 ₫"
-                ],
-                [
-                  "Bảo hiểm khoản vay",
-                  "480.000 ₫",
-                  "Có nơi mặc định chọn sẵn"
-                ],
-                [
-                  "Tổng thực trả",
-                  "12.912.000 ₫",
-                  ""
-                ]
-              ]
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "So với giá trả thẳng 11.400.000 ₫, bạn trả thêm 1.512.000 ₫ cho một năm sử dụng tiền của người khác. Quy đổi theo tổng chi phí, mức này xấp xỉ 25% một năm, không phải 0%."
-            },
-            {
-              "type": "KEY_TERM",
-              "term": "Lãi suất thực (APR)",
-              "definition": "Tổng chi phí vay quy về tỷ lệ phần trăm một năm, gồm cả lãi lẫn phí. Đây là con số dùng để so sánh giữa hai khoản vay, chứ không phải lãi suất quảng cáo."
-            },
-            {
-              "type": "CALLOUT",
-              "variant": "INFO",
-              "title": "Cách kiểm tra trong hai phút",
-              "text": "Hãy hỏi nhân viên hai câu: giá trả thẳng hôm nay là bao nhiêu và tổng số tiền tôi phải trả trong 12 tháng là bao nhiêu. Lấy hiệu hai con số để biết chi phí thực của việc trả góp."
-            },
-            {
-              "type": "CALCULATOR",
-              "tool": "loan-payment",
-              "presets": {
-                "principalVnd": 11400000,
-                "ratePercent": 25,
-                "termMonths": 12
-              }
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Trả góp không phải lúc nào cũng là lựa chọn sai. Với một khoản chi thực sự cần thiết và kế hoạch trả nợ rõ ràng, hình thức này giúp bạn không phải dồn hết tiền trong một tháng. Rủi ro xuất hiện khi bạn tưởng khoản vay là miễn phí và mua thứ mình chưa cần."
-            }
-          ]
-        },
-        "en": {
-          "title": "Is 0% Installment Financing Really Free?",
-          "summary": "A 12,000,000 VND phone on 12-month, 0% interest installments sounds like you pay nothing extra. Read the three fee lines carefully.",
-          "seoTitle": "0% interest installments: where the real cost hides",
-          "seoDescription": "A breakdown of the true cost of 0% installment plans in Vietnam — application fees, collection fees, and loan insurance — plus how to calculate it yourself.",
-          "blocks": [
-            {
-              "type": "PARAGRAPH",
-              "text": "0% installment financing isn't necessarily false advertising — the interest rate really can be 0%. But interest is just one of several costs in a loan, and the others are usually not advertised as prominently."
-            },
-            {
-              "type": "HEADING",
-              "text": "Three Common Fee Lines",
-              "level": 2
-            },
-            {
-              "type": "TABLE",
-              "caption": "A 12,000,000 ₫ phone, 12-month installments",
-              "headers": [
-                "Item",
-                "Amount",
-                "Note"
-              ],
-              "rows": [
-                [
-                  "Cash price",
-                  "11,400,000 ₫",
-                  "The price when paying in full, usually lower"
-                ],
-                [
-                  "Application fee",
-                  "300,000 ₫",
-                  "Charged once when you sign"
-                ],
-                [
-                  "Monthly collection fee",
-                  "11,000 ₫ × 12",
-                  "Total 132,000 ₫"
-                ],
-                [
-                  "Loan insurance",
-                  "480,000 ₫",
-                  "Some places select it by default"
-                ],
-                [
-                  "Total actually paid",
-                  "12,912,000 ₫",
-                  ""
-                ]
-              ]
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Compared to the 11,400,000 ₫ cash price, you pay an extra 1,512,000 ₫ for a year of using someone else's money. Converted to a total-cost basis, that's roughly 25% a year, not 0%."
-            },
-            {
-              "type": "KEY_TERM",
-              "term": "Effective interest rate (APR)",
-              "definition": "The total cost of borrowing converted into a yearly percentage, including both interest and fees. This is the number to use when comparing two loans — not the advertised rate."
-            },
-            {
-              "type": "CALLOUT",
-              "variant": "INFO",
-              "title": "A Two-Minute Check",
-              "text": "Ask the salesperson two questions: what's the cash price today, and what's the total I'll pay over 12 months? The difference between the two numbers is the real cost of the installment plan."
-            },
-            {
-              "type": "CALCULATOR",
-              "tool": "loan-payment",
-              "presets": {
-                "principalVnd": 11400000,
-                "ratePercent": 25,
-                "termMonths": 12
-              }
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Installment financing isn't always the wrong choice. For a genuinely necessary expense with a clear repayment plan, it keeps you from having to pay everything in a single month. The risk shows up when you assume the loan is free and buy something you don't actually need yet."
-            }
-          ]
-        }
-      }
-    },
-    {
-      "slug": "quy-khan-cap-can-bao-nhieu-la-du",
-      "category": "GUIDE",
       "readMinutes": 5,
-      "authorName": "Ban biên tập MoneyLab",
-      "relatedCourseSlug": "ngan-sach-va-tiet-kiem",
-      "publishedDaysAgo": 20,
+      "authorName": "MoneyLab",
+      "publishedDaysAgo": 7,
       "i18n": {
         "vi": {
-          "title": "Quỹ khẩn cấp cần bao nhiêu là đủ?",
-          "summary": "Lời khuyên phổ biến là sáu tháng chi phí sinh hoạt. Với học sinh, con số đó vừa xa vời vừa không đúng trọng tâm.",
-          "seoTitle": "Quỹ khẩn cấp bao nhiêu là đủ cho học sinh",
-          "seoDescription": "Cách xác định quy mô quỹ khẩn cấp phù hợp với thu nhập nhỏ, phân biệt khẩn cấp thật và chi tiêu bất chợt.",
+          "title": "Thẻ tín dụng & trả góp: vì sao bạn tiêu nhiều hơn?",
+          "summary": "Quẹt thẻ không đau như tiền mặt ,  não biết cách lừa chính mình.",
+          "seoTitle": "Thẻ tín dụng và học sinh",
+          "seoDescription": "Hiểu hiệu ứng thanh toán không dùng tiền mặt trước khi dùng thẻ phụ huynh.",
           "blocks": [
             {
-              "type": "PARAGRAPH",
-              "text": "Quỹ khẩn cấp không phải để làm giàu. Mục đích của nó là để một sự cố nhỏ không biến thành một khoản nợ. Với người đi làm, mức thường gặp là ba đến sáu tháng chi phí. Với học sinh, phần lớn chi phí sinh hoạt do gia đình lo, nên con số đó không phản ánh đúng rủi ro của bạn."
-            },
-            {
               "type": "HEADING",
-              "text": "Bắt đầu từ danh sách sự cố thật",
+              "text": "Hiệu ứng tiền mặt vs không tiền mặt",
               "level": 2
             },
             {
-              "type": "LIST",
-              "items": [
-                "Điện thoại rơi vỡ màn hình",
-                "Xe đạp hoặc xe máy hỏng cần sửa gấp",
-                "Làm mất sách hoặc thiết bị mượn của trường",
-                "Chi phí phát sinh cho một chuyến đi đã đăng ký"
-              ]
-            },
-            {
               "type": "PARAGRAPH",
-              "text": "Hãy cộng chi phí ước tính của hai sự cố tốn kém nhất trong danh sách. Với hầu hết học sinh, tổng nằm trong khoảng 1.500.000 đến 3.000.000 đồng. Đó là mục tiêu đầu tiên, và nó gần hơn nhiều so với sáu tháng sinh hoạt phí."
+              "text": "Khi trả bằng tiền mặt, bạn thấy ví mỏng đi. Khi quẹt thẻ hoặc trả góp 0%, cảm giác chi tiêu bị trì hoãn ,  bạn tận hưởng ngay, đau ví sau. Nhiều học sinh THPT dùng thẻ phụ huynh hoặc ví điện tử liên kết ngân hàng mà không theo dõi tổng tháng."
             },
             {
               "type": "CALLOUT",
-              "variant": "TIP",
-              "title": "Chia nhỏ mục tiêu",
-              "text": "Để dành 120.000 đồng mỗi tháng thì sau một năm bạn có gần 1.500.000 đồng. Mục tiêu cả năm trông xa vời, còn mục tiêu từng tháng thì không."
-            },
-            {
-              "type": "HEADING",
-              "text": "Khẩn cấp và bất chợt không giống nhau",
-              "level": 2
-            },
-            {
-              "type": "TABLE",
-              "headers": [
-                "Tình huống",
-                "Khẩn cấp",
-                "Vì sao"
-              ],
-              "rows": [
-                [
-                  "Màn hình điện thoại vỡ, cần liên lạc",
-                  "Có",
-                  "Không hoãn được, ảnh hưởng việc học"
-                ],
-                [
-                  "Đợt giảm giá giày yêu thích",
-                  "Không",
-                  "Có thể chờ, không gây thiệt hại"
-                ],
-                [
-                  "Sinh nhật bạn thân, muốn mua quà lớn",
-                  "Không",
-                  "Biết trước ngày, nên lên kế hoạch riêng"
-                ]
-              ]
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Nếu dùng quỹ khẩn cấp cho các khoản chi không cấp thiết, bạn sẽ khó xây đủ quỹ. Một cách để giữ ranh giới là đặt quỹ ở nơi mất khoảng một ngày mới rút được: đủ chậm để bạn cân nhắc, nhưng vẫn đủ nhanh khi thật sự cần."
-            }
-          ]
-        },
-        "en": {
-          "title": "How Much Emergency Fund Is Enough?",
-          "summary": "Common advice is six months of living costs. For students, that figure is both distant and off-target.",
-          "seoTitle": "How much emergency fund is enough for students",
-          "seoDescription": "How to size an emergency fund for small incomes, and how to tell true emergencies from impulse spending.",
-          "blocks": [
-            {
-              "type": "PARAGRAPH",
-              "text": "An emergency fund isn't for getting rich. Its purpose is to keep a small mishap from turning into debt. For working adults, the common guideline is three to six months of expenses. For students, your family covers most living costs, so that figure doesn't reflect your actual risk."
-            },
-            {
-              "type": "HEADING",
-              "text": "Start From a List of Real Mishaps",
-              "level": 2
+              "variant": "WARNING",
+              "title": "Cẩn thận trả góp",
+              "text": "0% lãi suất không có nghĩa miễn phí. Phí ẩn, mua thêm vì trả chậm, và nợ chồng nợ là rủi ro thật ,  kể cả với người trẻ."
             },
             {
               "type": "LIST",
+              "ordered": false,
               "items": [
-                "A dropped phone with a cracked screen",
-                "A bike or motorbike that breaks down and needs urgent repair",
-                "Losing a book or equipment borrowed from school",
-                "Unexpected costs for a trip you already signed up for"
+                "Hỏi bố mẹ hạn mức và quy tắc dùng thẻ",
+                "Ghi lại mỗi giao dịch trong app Chia ví",
+                "Chờ 24h trước khi mua đồ >100k bằng thẻ"
               ]
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Add up the estimated cost of the two most expensive mishaps on your list. For most students, the total falls between 1,500,000 and 3,000,000 VND. That's your first target, and it's far more attainable than six months of living expenses."
-            },
-            {
-              "type": "CALLOUT",
-              "variant": "TIP",
-              "title": "Break the Goal Into Pieces",
-              "text": "Save 120,000 VND a month and after a year you'll have nearly 1,500,000 VND. A year-long goal looks distant, but a monthly one doesn't."
-            },
-            {
-              "type": "HEADING",
-              "text": "Emergencies and Impulses Are Not the Same",
-              "level": 2
-            },
-            {
-              "type": "TABLE",
-              "headers": [
-                "Situation",
-                "Emergency?",
-                "Why"
-              ],
-              "rows": [
-                [
-                  "A cracked phone screen, needed to stay in contact",
-                  "Yes",
-                  "Cannot be postponed, affects your schooling"
-                ],
-                [
-                  "A sale on shoes you like",
-                  "No",
-                  "Can wait, causes no harm"
-                ],
-                [
-                  "A close friend's birthday, wanting a big gift",
-                  "No",
-                  "The date is known in advance, so plan for it separately"
-                ]
-              ]
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "If you dip into your emergency fund for non-urgent expenses, you'll struggle to build it up. One way to keep the boundary is to keep the fund somewhere that takes about a day to withdraw from: slow enough to make you think twice, but fast enough for when you truly need it."
             }
           ]
         }
       }
     },
     {
-      "slug": "mot-thang-luong-dau-tien-cua-nam",
+      "slug": "yolo-va-chi-tieu",
       "category": "STORY",
-      "readMinutes": 5,
-      "authorName": "Ban biên tập MoneyLab",
-      "publishedDaysAgo": 27,
+      "readMinutes": 4,
+      "authorName": "MoneyLab",
+      "publishedDaysAgo": 10,
       "i18n": {
         "vi": {
-          "title": "Tháng lương đầu tiên của Nam đã đi đâu?",
-          "summary": "Nam nhận 4.200.000 đồng cho công việc làm thêm mùa hè đầu tiên. Ba tuần sau, tài khoản chỉ còn 180.000 đồng. Đây là một tình huống rất quen thuộc.",
-          "seoTitle": "Câu chuyện: tháng lương làm thêm đầu tiên biến mất thế nào",
-          "seoDescription": "Một câu chuyện điển hình về tháng lương đầu tiên và những bài học chi tiêu rút ra được, kể lại theo dòng tiền thực tế.",
+          "title": "YOLO và chi tiêu: sống hiện tại sao cho đúng?",
+          "summary": "\"Chỉ sống một lần\" đúng ,  nhưng hết tiền giữa tháng thì sống kiểu gì?",
+          "seoTitle": "YOLO và tiền tiêu vặt",
+          "seoDescription": "Cân bằng trải nghiệm và tương lai khi còn đi học.",
           "blocks": [
             {
-              "type": "PARAGRAPH",
-              "text": "Nam, 17 tuổi, làm phục vụ ở một quán cà phê gần nhà trong sáu tuần hè. Lương tháng đầu là 4.200.000 đồng, được chuyển khoản vào một ngày thứ Sáu. Nam nhớ rất rõ cảm giác khi nhìn con số đó hiện trên màn hình."
-            },
-            {
               "type": "HEADING",
-              "text": "Tuần một",
+              "text": "YOLO không có nghĩa tiêu hết mọi thứ",
               "level": 2
             },
             {
               "type": "PARAGRAPH",
-              "text": "Nam mua chiếc tai nghe 1.200.000 đồng đã ngắm từ lâu, rồi mời ba người bạn đi ăn hết 600.000 đồng. Lúc đó, trong suy nghĩ của Nam, cả hai khoản đều có lý do chính đáng: đây là tiền tự mình kiếm được, và ai cũng nên tự thưởng cho mình một lần."
+              "text": "Tuổi học sinh là lúc tạo kỷ niệm ,  concert, đi chơi nhóm, thử đồ mới. Nhưng YOLO bản toxic là dùng làm lý do chi mọi thứ rồi phải vay bạn bè giữa tháng."
             },
             {
-              "type": "TABLE",
-              "caption": "Dòng tiền ba tuần của Nam",
-              "headers": [
-                "Tuần",
-                "Chi",
-                "Còn lại"
-              ],
-              "rows": [
-                [
-                  "Nhận lương",
-                  "",
-                  "4.200.000 ₫"
-                ],
-                [
-                  "Tuần 1",
-                  "1.800.000 ₫",
-                  "2.400.000 ₫"
-                ],
-                [
-                  "Tuần 2",
-                  "1.350.000 ₫",
-                  "1.050.000 ₫"
-                ],
-                [
-                  "Tuần 3",
-                  "870.000 ₫",
-                  "180.000 ₫"
-                ]
-              ]
-            },
-            {
-              "type": "HEADING",
-              "text": "Điều Nam nhận ra",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Không có khoản nào trong danh sách là vô lý. Cũng không có khoản nào quá lớn. Vấn đề là chúng nối tiếp nhau mà không hề có một giới hạn nào được đặt ra từ trước. Lần nào Nam cũng chỉ nhìn số dư còn lại để quyết định, mà số dư thì lúc nào cũng trông có vẻ đủ, cho tới khi hết thật."
+              "type": "EXAMPLE",
+              "title": "Cách YOLO lành mạnh",
+              "text": "Chọn 1–2 trải nghiệm/tháng thật sự muốn (ví dụ: concert, đi chơi xa). Phần còn lại: ăn rẻ quanh trường, thử thách không trà sữa, tiết kiệm cho khoản đó."
             },
             {
               "type": "CALLOUT",
-              "variant": "INFO",
-              "title": "Điều Nam làm khác đi ở tháng thứ hai",
-              "text": "Ngay hôm nhận lương, Nam chuyển 800.000 đồng sang một tài khoản tiết kiệm riêng và tự đặt hạn mức 400.000 đồng mỗi tuần cho chi tiêu cá nhân. Cuối tháng đó Nam giữ lại được 1.100.000 đồng, chứ không phải vì tháng ấy kiếm được nhiều hơn."
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Đây là kiểu bài học mà đọc thì thấy hiển nhiên, còn trải qua thì tốn một tháng lương. Nếu bạn sắp nhận khoản tiền tự kiếm đầu tiên, hãy quyết định phần để dành trước khi tiêu đồng đầu tiên, chứ không phải sau đồng cuối cùng."
-            },
-            {
-              "type": "SIM_LINK",
-              "simSlug": "thang-luong-dau-tien",
-              "label": "Thử mô phỏng tháng lương đầu tiên"
-            }
-          ]
-        },
-        "en": {
-          "title": "Where Did Nam's First Paycheck Go?",
-          "summary": "Nam received 4,200,000 VND for his first summer side job. Three weeks later, only 180,000 VND remained. A very familiar situation.",
-          "seoTitle": "Story: how a first side-job paycheck disappeared",
-          "seoDescription": "A typical first-paycheck story and the spending lessons that follow, told through the actual cash flow.",
-          "blocks": [
-            {
-              "type": "PARAGRAPH",
-              "text": "Nam, 17, worked as a server at a coffee shop near his home for six weeks over the summer. His first paycheck was 4,200,000 VND, deposited on a Friday. He remembers exactly how it felt seeing that number appear on his screen."
-            },
-            {
-              "type": "HEADING",
-              "text": "Week One",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "Nam bought the 1,200,000 VND headphones he had wanted for a long time, then treated three friends to a meal that cost 600,000 VND. At the time, both purchases felt perfectly justified to him: this was money he'd earned himself, and everyone deserves to treat themselves once."
-            },
-            {
-              "type": "TABLE",
-              "caption": "Nam's cash flow over three weeks",
-              "headers": [
-                "Week",
-                "Spent",
-                "Remaining"
-              ],
-              "rows": [
-                [
-                  "Paycheck received",
-                  "",
-                  "4,200,000 ₫"
-                ],
-                [
-                  "Week 1",
-                  "1,800,000 ₫",
-                  "2,400,000 ₫"
-                ],
-                [
-                  "Week 2",
-                  "1,350,000 ₫",
-                  "1,050,000 ₫"
-                ],
-                [
-                  "Week 3",
-                  "870,000 ₫",
-                  "180,000 ₫"
-                ]
-              ]
-            },
-            {
-              "type": "HEADING",
-              "text": "What Nam Realized",
-              "level": 2
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "None of these purchases were unreasonable. None were huge either. The problem was that they piled up one after another with no limit set in advance. Every time, Nam just looked at his remaining balance to decide, and the balance always looked like enough — until it truly wasn't."
-            },
-            {
-              "type": "CALLOUT",
-              "variant": "INFO",
-              "title": "What Nam Did Differently in Month Two",
-              "text": "The moment he got paid, Nam transferred 800,000 VND into a separate savings account and set himself a limit of 400,000 VND a week for personal spending. By the end of that month he had 1,100,000 VND left — not because he earned more that month, but because of the plan."
-            },
-            {
-              "type": "PARAGRAPH",
-              "text": "This is the kind of lesson that seems obvious to read but costs a full paycheck to learn firsthand. If you're about to receive your first self-earned money, decide on your savings amount before you spend the first cent, not after the last one."
-            },
-            {
-              "type": "SIM_LINK",
-              "simSlug": "thang-luong-dau-tien",
-              "label": "Try the First Paycheck Month simulation"
+              "variant": "TIP",
+              "text": "Hỏi: \"Mình sẽ nhớ khoản này sau 1 tháng không?\" Nếu không ,  có thể bỏ qua."
             }
           ]
         }

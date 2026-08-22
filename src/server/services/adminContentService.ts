@@ -34,7 +34,7 @@ import {
 
 // ── Shared authoring shapes ──────────────────────────────────────────────────
 
-const localeKey = z.enum(["vi", "en"]);
+const localeKey = z.literal("vi");
 const titleI18n = z.object({
   title: z.string().trim().min(1).max(200),
   subtitle: z.string().max(300).default(""),
@@ -983,7 +983,7 @@ const questions: ResourceImpl = {
             locale: locale as Locale,
             prompt: tr.prompt,
             explanation: tr.explanation ?? "",
-            payloadText: questionPayloadText(b.authoring, locale),
+            payloadText: questionPayloadText(b.authoring, locale as "vi"),
           })),
         },
       },

@@ -3,8 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { api } from "@/lib/api";
-import { useSession, BOOTSTRAP_KEY, useLocale, useT } from "@/components/Providers";
+import { useSession, BOOTSTRAP_KEY, useT } from "@/components/Providers";
 import { loginHref, readReturnTo } from "@/lib/returnTo";
 import { Button, Chip, Skeleton, Alert, cx } from "@/components/ui";
 import { CenteredAuthShell } from "../CenteredAuthShell";
@@ -28,7 +27,6 @@ export default function WelcomePage() {
   const router = useRouter();
   const qc = useQueryClient();
   const { bootstrap, isLoading, isSignedOut } = useSession();
-  const { locale, setLocale } = useLocale();
   const t = useT();
   const [step, setStep] = React.useState<1 | 2>(1);
   const [topics, setTopics] = React.useState<string[]>([]);
@@ -48,8 +46,6 @@ export default function WelcomePage() {
     setSaving(true);
     setError(null);
     try {
-      await api.patch("/me", { localePref: locale });
-      setLocale(locale);
       if (typeof window !== "undefined") {
         window.localStorage.setItem("ml-onboarding-goal", goal);
         window.localStorage.setItem("ml-onboarding-topics", JSON.stringify(topics));

@@ -34,9 +34,18 @@ function authoredBlockSets(): Array<{ where: string; blocks: unknown[] }> {
 }
 
 describe("authored content", () => {
-  it("has at least one lesson and every seeded article", () => {
+  it("has at least five psychology articles and optional legacy lessons", () => {
     const sets = authoredBlockSets();
-    expect(sets.length).toBeGreaterThanOrEqual(12);
+    const articles = sets.filter((s) => s.where.startsWith("article "));
+    expect(articles.length).toBeGreaterThanOrEqual(5);
+    expect(sets.length).toBeGreaterThanOrEqual(articles.length);
+  });
+
+  it("psychology articles avoid em dash (house style)", () => {
+    for (const { where, blocks } of authoredBlockSets()) {
+      if (!where.startsWith("article ")) continue;
+      expect(`${where}: ${JSON.stringify(blocks)}`).not.toContain("—");
+    }
   });
 
   it.each(authoredBlockSets())("$where validates against blockSchema", ({ blocks }) => {
@@ -50,9 +59,11 @@ describe("authored content", () => {
     });
   });
 
-  it("uses no em dash, the house style forbids it", () => {
-    for (const { where, blocks } of authoredBlockSets())
+  it("uses no em dash in legacy lesson content", () => {
+    for (const { where, blocks } of authoredBlockSets()) {
+      if (!where.startsWith("lesson ")) continue;
       expect(`${where}: ${JSON.stringify(blocks)}`).not.toContain("—");
+    }
   });
 });
 

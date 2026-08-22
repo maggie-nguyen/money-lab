@@ -7,6 +7,22 @@ against a production build). The run fails on any console error, page crash or
 Re-run with `pnpm smoke` to refresh them in place, or `pnpm smoke <dir>` to write
 somewhere else.
 
+On macOS, Chrome is auto-detected at `/Applications/Google Chrome.app/...`. Override
+with `CHROME_PATH` if needed.
+
+## Product v2 — map & wallet
+
+| File | Route |
+| --- | --- |
+| `ban-do.png` | `/ban-do` (signed out; map waits 6s for tiles + pins) |
+| `ban-do-signed-in.png` | `/ban-do` (learner session) |
+| `vi-cua-toi.png` | `/vi-cua-toi` |
+| `vi-cua-toi-hieu-minh.png` | `/vi-cua-toi/hieu-minh` |
+| `vi-cua-toi-chia-vi.png` | `/vi-cua-toi/chia-vi` |
+| `vi-cua-toi-cuoc-song.png` | `/vi-cua-toi/cuoc-song` |
+| `vi-cua-toi-thu-thach.png` | `/vi-cua-toi/thu-thach` |
+| `mobile-ban-do.png` | `/ban-do` at 420px width |
+
 ## Learner, light theme
 
 | File | Route |

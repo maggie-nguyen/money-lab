@@ -5,7 +5,7 @@
  * On a 401 the client refreshes once and replays the request; a second failure
  * surfaces as ApiError so the UI can send the user to the login screen.
  *
- * Content reads append ?locale= from LocaleProvider via getClientLocale().
+ * Content reads append ?locale=vi on catalog/library routes.
  */
 
 import { getClientLocale } from "@/lib/locale";
@@ -68,7 +68,7 @@ interface RequestOptions {
 
 const BASE = "/api/v1";
 
-/** Paths that accept ?locale=vi|en (doc 03). Others ignore the param harmlessly if sent; we only attach where useful. */
+/** Paths that accept ?locale=vi (doc 03). */
 const LOCALE_QUERY_PREFIXES = [
   "/catalog/",
   "/library/",
@@ -78,6 +78,8 @@ const LOCALE_QUERY_PREFIXES = [
   "/me/enrollments",
   "/me/certificates",
   "/me/quests",
+  "/food/",
+  "/challenges",
   "/quizzes/",
   "/tutor/",
   "/tools/",
@@ -88,9 +90,12 @@ function wantsLocaleQuery(path: string): boolean {
 }
 
 function buildUrl(path: string, query?: RequestOptions["query"]): string {
-  const url = `${BASE}${path}`;
-  const params = new URLSearchParams();
-  if (wantsLocaleQuery(path) && (query?.locale === undefined || query?.locale === null || query?.locale === "")) {
+  const qIndex = path.indexOf("?");
+  const pathname = qIndex >= 0 ? path.slice(0, qIndex) : path;
+  const existing = qIndex >= 0 ? path.slice(qIndex + 1) : "";
+  const url = `${BASE}${pathname}`;
+  const params = new URLSearchParams(existing);
+  if (wantsLocaleQuery(pathname) && (query?.locale === undefined || query?.locale === null || query?.locale === "")) {
     params.set("locale", getClientLocale());
   }
   if (query) {
@@ -276,11 +281,8 @@ export const session = {
   }) {
     return sessionCall("/api/session/signup", input);
   },
-  async google(idToken: string, localePref?: "vi" | "en") {
-    return sessionCall("/api/session/google", {
-      idToken,
-      ...(localePref ? { localePref } : {}),
-    });
+  async google(idToken: string) {
+    return sessionCall("/api/session/google", { idToken });
   },
   async logout() {
     return sessionCall("/api/session/logout", {});

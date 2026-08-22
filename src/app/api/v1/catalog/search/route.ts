@@ -4,7 +4,7 @@ import { search } from "@/server/services/catalogService";
 
 const q = z.object({
   q: z.string().trim().min(2).max(100),
-  locale: z.enum(["vi", "en"]).default("vi"),
+  locale: z.literal("vi").default("vi"),
   limit: z.coerce.number().int().min(1).max(50).default(20),
 });
 

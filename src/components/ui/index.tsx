@@ -9,6 +9,7 @@
 "use client";
 
 import * as React from "react";
+import Link from "next/link";
 
 import { formatVnd, formatVndApprox } from "@/lib/format";
 import { getClientLocale } from "@/lib/locale";
@@ -302,6 +303,113 @@ export function Field({
     </div>
   );
 }
+
+/* ---------------------------------------------------------------- Navigation */
+
+function ChevronLeft({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M10 3.5 5.5 8 10 12.5" />
+    </svg>
+  );
+}
+
+function ChevronRight({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 16 16"
+      className={className}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <path d="M6 3.5 10.5 8 6 12.5" />
+    </svg>
+  );
+}
+
+/** Breadcrumb-style back link with ledger spacing — not a bare “← text” line. */
+export function PageBackLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <nav className="mb-5 border-b border-rule pb-4" aria-label={typeof children === "string" ? children : undefined}>
+      <Link
+        href={href}
+        className="group inline-flex max-w-full items-center gap-2.5 rounded-[var(--radius-control)] py-1 pr-2 text-sm text-ink-soft transition-colors hover:text-moss-600"
+      >
+        <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-[var(--radius-control)] border border-rule bg-paper-sunken text-moss-500 transition-colors group-hover:border-moss-200 group-hover:bg-moss-50">
+          <ChevronLeft className="h-3.5 w-3.5" />
+        </span>
+        <span className="truncate font-medium">{children}</span>
+      </Link>
+    </nav>
+  );
+}
+
+/** Section footer card for “continue to next area” — not “label →” inline text. */
+export function SectionContinueLink({
+  href,
+  label,
+  hint,
+}: {
+  href: string;
+  label: string;
+  hint?: string;
+}) {
+  return (
+    <div className="border-t border-rule pt-6">
+      <Link
+        href={href}
+        className="group flex items-center gap-4 rounded-[var(--radius-card)] border border-rule bg-paper-sunken px-4 py-3.5 transition-colors hover:border-moss-200 hover:bg-paper-raised"
+      >
+        <div className="min-w-0 flex-1">
+          {hint && <p className="text-xs text-ink-faint">{hint}</p>}
+          <p className="mt-0.5 text-sm font-medium text-ink group-hover:text-moss-600">{label}</p>
+        </div>
+        <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--radius-control)] border border-rule bg-paper-raised text-moss-500 transition-colors group-hover:border-moss-200 group-hover:bg-moss-50">
+          <ChevronRight className="h-4 w-4" />
+        </span>
+      </Link>
+    </div>
+  );
+}
+
+/** Compact row link for sidebars and related links. */
+export function RelatedNavLink({ href, children }: { href: string; children: React.ReactNode }) {
+  return (
+    <Link
+      href={href}
+      className="group flex items-center justify-between gap-3 rounded-[var(--radius-control)] border border-transparent px-2 py-2 text-sm text-ink-soft transition-colors hover:border-rule hover:bg-paper-sunken hover:text-moss-600"
+    >
+      <span className="min-w-0 truncate">{children}</span>
+      <ChevronRight className="h-3.5 w-3.5 shrink-0 text-ink-faint transition-colors group-hover:text-moss-500" />
+    </Link>
+  );
+}
+
+export function CardNavFooter({ label }: { label: string }) {
+  return (
+    <div className="mt-auto flex items-center justify-between gap-3 border-t border-rule pt-3">
+      <span className="text-sm font-medium text-moss-600">{label}</span>
+      <span className="flex h-7 w-7 items-center justify-center rounded-[var(--radius-control)] border border-moss-200 bg-moss-50 text-moss-600">
+        <ChevronRight className="h-3.5 w-3.5" />
+      </span>
+    </div>
+  );
+}
+
+export { ChevronRight };
 
 const CONTROL =
   "w-full rounded-[var(--radius-control)] border border-rule-strong bg-paper-raised px-3 py-2 " +

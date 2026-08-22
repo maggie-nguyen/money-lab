@@ -4,7 +4,7 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { session, ApiError } from "@/lib/api";
-import { BOOTSTRAP_KEY, useLocale, useT } from "@/components/Providers";
+import { BOOTSTRAP_KEY, useT } from "@/components/Providers";
 import { readReturnTo, welcomeHref } from "@/lib/returnTo";
 import { Alert } from "@/components/ui";
 
@@ -72,7 +72,6 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
   const router = useRouter();
   const qc = useQueryClient();
   const t = useT();
-  const { locale } = useLocale();
   const hostRef = React.useRef<HTMLDivElement | null>(null);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -84,7 +83,7 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
     setError(null);
     void (async () => {
       try {
-        const data = (await session.google(res.credential as string, locale)) as { isNewUser?: boolean };
+        const data = (await session.google(res.credential as string)) as { isNewUser?: boolean };
         await qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
         // A returning learner goes back to whatever sent them here. A new one
         // needs the welcome flow first, so their destination waits.
@@ -122,7 +121,7 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
           shape: "rectangular",
           text: label,
           logo_alignment: "center",
-          locale,
+          locale: "vi",
           width: 320,
         });
       })
@@ -132,7 +131,7 @@ export function GoogleButton({ label = "signin_with" }: { label?: "signin_with" 
     return () => {
       cancelled = true;
     };
-  }, [label, locale, t]);
+  }, [label, t]);
 
   if (!CLIENT_ID) return null;
 

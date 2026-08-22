@@ -2,26 +2,19 @@
 
 > **Read this first.** Every other document assumes the vocabulary, IDs and scope defined here.
 > Docs index:
-> - `00-OVERVIEW.md` - this file (scope, personas, glossary, MVP cut)
-> - `01-ARCHITECTURE.md` - stack, deployment, repo layout, auth, cross-cutting API conventions
-> - `02-DATA-MODEL.md` - full database schema (Prisma + SQL), every table, every index
-> - `03-API-SPEC.md` - **every endpoint**, request/response/errors
-> - `04-SIMULATIONS-SPEC.md` - deterministic rules for each game/simulation engine
-> - `05-CONTENT-SCHEMA.md` - lesson/quiz authoring JSON format + i18n
-> - `06-FRONTEND-TEMPLATES.md` - existing UI templates to reuse, mapped screen-by-screen
-> - `07-IMPLEMENTATION-PLAN.md` - ordered tickets with acceptance criteria
+> - `00-OVERVIEW.md` - this file (scope, personas, glossary)
+> - `08-PRODUCT-ARCHITECTURE-V2.md` - **active product** (map, ví, thử thách)
+> - `09-BACKEND-PLATFORM.md` - **production backend** (DB, API, scaling, mobile)
+> - `01-ARCHITECTURE.md` - stack, deployment, cross-cutting API conventions
+> - `02-DATA-MODEL.md` - full database schema (Prisma + SQL)
+> - `03-API-SPEC.md` - every endpoint, request/response/errors
+> - `04`–`07` - sims, content schema, frontend templates, implementation plan (legacy LMS)
 
 ---
 
 ## 1. One-paragraph product definition
 
-MoneyLab is a Vietnamese-first (vi-VN primary, en fallback) web platform where high-school and
-early-university students learn personal finance through **short lessons** (5–8 min), **immediate
-practice** (quiz + interactive checks), and **server-authoritative simulations** (budgeting a month
-of income, comparing loans, spotting scams, running a micro-business, managing a fake investment
-portfolio). Progress is gamified (XP, levels, streaks, badges, leaderboards). An **AI Tutor**
-answers questions about the current lesson or simulation. The team can run **user research**
-in-product (surveys, NPS, event analytics) because iterative improvement is an explicit project goal.
+MoneyLab is a **Vietnamese-only**, phone-first web app for học sinh THPT (sinh viên secondary) to **spend smarter day-to-day**: a **cheap-eats map** (Sài Gòn + Hà Nội), **spending psychology** articles, **monthly spending jars**, and **savings challenges**. The backend is a shared REST API (`/api/v1`) designed for a future native mobile app. Legacy LMS content (courses, sims, tutor, shop) is frozen — see `08-PRODUCT-ARCHITECTURE-V2.md` and `09-BACKEND-PLATFORM.md`.
 
 ## 2. Personas (drive every authorization rule)
 

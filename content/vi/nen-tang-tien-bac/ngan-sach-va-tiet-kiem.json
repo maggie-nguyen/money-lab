@@ -9,11 +9,6 @@
         "title": "Nền tảng tiền bạc",
         "subtitle": "Kiếm tiền, chi tiêu, ngân sách và tiết kiệm",
         "description": "Điểm khởi đầu cho mọi kỹ năng tài chính: hiểu tiền đến từ đâu, đi về đâu, và làm sao giữ lại một phần cho tương lai."
-      },
-      "en": {
-        "title": "Money Foundations",
-        "subtitle": "Earning, spending, budgeting, and saving",
-        "description": "The starting point for every money skill: understand where money comes from, where it goes, and how to keep some for the future."
       }
     }
   },
@@ -35,18 +30,6 @@
           "Tính lãi đơn và hình dung được cách lãi kép vận hành",
           "Lập kế hoạch chi tiêu một tháng hoàn chỉnh"
         ]
-      },
-      "en": {
-        "title": "Budgeting and Saving",
-        "subtitle": "Take control of your first money",
-        "description": "Six short lessons to help you build your first budget, create an emergency fund, and turn saving into a habit — ending with a \"First Paycheck Month\" simulation.",
-        "learningObjectives": [
-          "Tell needs from wants in everyday spending",
-          "Apply the 50/30/20 rule to your own income",
-          "Explain why you need an emergency fund and how to build one",
-          "Calculate simple interest and picture how compound interest works",
-          "Make a complete one-month spending plan"
-        ]
       }
     },
     "modules": [
@@ -56,9 +39,6 @@
         "i18n": {
           "vi": {
             "title": "Hiểu về ngân sách"
-          },
-          "en": {
-            "title": "Understanding Budgets"
           }
         }
       },
@@ -68,9 +48,6 @@
         "i18n": {
           "vi": {
             "title": "Tiết kiệm thông minh"
-          },
-          "en": {
-            "title": "Smart Saving"
           }
         }
       }
@@ -168,92 +145,6 @@
                 "text": "Bài tiếp theo giới thiệu quy tắc 50/30/20, cách chia thu nhập đơn giản nhất mà người mới bắt đầu nào cũng áp dụng được."
               }
             ]
-          },
-          "en": {
-            "title": "Why Do You Need a Budget?",
-            "summary": "A budget isn't a cage — it's a map for your money.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=jXMu2wNq_Wk",
-                "caption": "Personal finance skills for young people (a life story)"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "Have you ever received lucky money, a bonus, or pay from a part-time job, and two weeks later couldn't remember where it went? That doesn't mean you're a big spender. Without a plan, small expenses add up into a large amount very easily."
-              },
-              {
-                "type": "KEY_TERM",
-                "term": "Budget",
-                "definition": "A plan for dividing your income among spending and saving before you spend it, instead of looking back after the money is already gone."
-              },
-              {
-                "type": "HEADING",
-                "text": "The Three Biggest Benefits",
-                "level": 2
-              },
-              {
-                "type": "LIST",
-                "ordered": true,
-                "items": [
-                  "Clear visibility: you know exactly where your money goes every month.",
-                  "Active choices: you decide what matters, instead of letting ads decide for you.",
-                  "Less worry: no more anxious feeling every time you open your wallet at month's end."
-                ]
-              },
-              {
-                "type": "EXAMPLE",
-                "title": "Lan, age 17",
-                "text": "Lan earns 2,000,000 VND a month from a part-time job. Without a plan, she had nothing left by the end of the month. Once she started budgeting, Lan set aside 400,000 VND on payday itself, and after ten months she had enough to buy the phone she had wanted for a long time."
-              },
-              {
-                "type": "SIM_LINK",
-                "simSlug": "thang-luong-dau-tien",
-                "label": "Try the First Paycheck Month simulation in advance"
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "ngan-sach-la-gi",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "What does a budget mainly help you do?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "Stop yourself from spending on things you like"
-                    },
-                    {
-                      "key": "b",
-                      "text": "Decide in advance where your money will go"
-                    },
-                    {
-                      "key": "c",
-                      "text": "Earn more money each month"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "A budget doesn't create income and it doesn't forbid anything. It simply moves the spending decision from the moment you're standing at the counter to a moment when you're thinking clearly."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "ngan-sach-va-giai-tri",
-                  "type": "TRUE_FALSE",
-                  "prompt": "A good budget has no room for entertainment.",
-                  "answerKey": {
-                    "correct": false
-                  },
-                  "explanation": "Every budget should include room for entertainment. The difference is that the amount is set in advance, so it doesn't eat into money for school or savings."
-                }
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "The next lesson introduces the 50/30/20 rule, the simplest way to split income that any beginner can use."
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -273,10 +164,6 @@
                 "vi": {
                   "prompt": "Ngân sách nghĩa là không được tiêu tiền cho giải trí.",
                   "explanation": "Ngân sách nào cũng nên có khoản cho giải trí. Khác biệt nằm ở chỗ bạn quyết định trước con số, để nó không lấn sang tiền học hay tiền tiết kiệm."
-                },
-                "en": {
-                  "prompt": "A budget means you are not allowed to spend money on entertainment.",
-                  "explanation": "Every budget should include room for fun. The difference is that you decide the amount in advance so it does not eat into school or savings money."
                 }
               }
             },
@@ -301,16 +188,6 @@
                     "b": "Khi thấy tài khoản sắp hết tiền",
                     "c": "Ngay khi nhận được tiền",
                     "d": "Chỉ khi có khoản chi lớn sắp tới"
-                  }
-                },
-                "en": {
-                  "prompt": "When is the best time to split money into different buckets?",
-                  "explanation": "Splitting money as soon as you receive it — paying yourself first — works far better than waiting until month-end, when there is often nothing left to split.",
-                  "optionsText": {
-                    "a": "At the end of the month, after spending is done",
-                    "b": "When the account is almost empty",
-                    "c": "As soon as you receive the money",
-                    "d": "Only when a large expense is coming up"
                   }
                 }
               }
@@ -453,135 +330,6 @@
                 "text": "Quy tắc 50/30/20 là điểm bắt đầu, không phải quy định bắt buộc. Nếu sống cùng gia đình, bạn có thể để dành tới 40%, còn người phải thuê nhà ở thành phố lớn có khi cần tới 60% cho nhu cầu. Hãy hiểu nguyên tắc trước, rồi chỉnh con số cho vừa với hoàn cảnh của mình."
               }
             ]
-          },
-          "en": {
-            "title": "The 50/30/20 Rule",
-            "summary": "A simple formula for splitting income into needs, wants, and savings.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=4mkJbPUbyRo",
-                "caption": "Five simple steps to managing your personal finances"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "The 50/30/20 rule splits your income into three parts: 50% for needs, 30% for wants, and 20% for savings. You can start without any complicated spreadsheet."
-              },
-              {
-                "type": "KEY_TERM",
-                "term": "Needs and wants",
-                "definition": "A need is something that causes real difficulty in your life if you don't pay for it: meals, transportation, tuition. A want is everything else, even things that feel hard to say no to."
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "When you're unsure, ask yourself: if I don't spend on this, will it cause real difficulty in my life? If yes, it's a need; if not, it's a want."
-              },
-              {
-                "type": "TABLE",
-                "caption": "Try classifying a few familiar expenses",
-                "headers": [
-                  "Expense",
-                  "Need or want"
-                ],
-                "rows": [
-                  [
-                    "Lunch at the school canteen",
-                    "Need"
-                  ],
-                  [
-                    "A large bubble tea with extra tapioca pearls",
-                    "Want"
-                  ],
-                  [
-                    "Bus ticket to school",
-                    "Need"
-                  ],
-                  [
-                    "A new skin in a game",
-                    "Want"
-                  ],
-                  [
-                    "Textbooks",
-                    "Need"
-                  ]
-                ]
-              },
-              {
-                "type": "EXAMPLE",
-                "title": "With an income of 3,000,000 VND",
-                "text": "1,500,000 VND for needs, 900,000 VND for wants, 600,000 VND for savings. This ratio can be adjusted to 55/25/20 or 60/20/20 depending on your situation. What matters is choosing a clear ratio you can actually stick to."
-              },
-              {
-                "type": "CALCULATOR",
-                "tool": "budget-503020",
-                "presets": {
-                  "incomeVnd": 3000000
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "chia-theo-503020",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "Your monthly income is 4,000,000 VND. Under 50/30/20, how much should you save?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "400,000 VND"
-                    },
-                    {
-                      "key": "b",
-                      "text": "800,000 VND"
-                    },
-                    {
-                      "key": "c",
-                      "text": "1,200,000 VND"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "The savings share is 20%: 4,000,000 × 0.2 = 800,000 VND."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "nhu-cau-hay-mong-muon",
-                  "type": "MULTI_CHOICE",
-                  "prompt": "Which of these belongs in the needs group?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "Daily bus fare to school"
-                    },
-                    {
-                      "key": "b",
-                      "text": "Weekend movie ticket"
-                    },
-                    {
-                      "key": "c",
-                      "text": "Lunch at school"
-                    },
-                    {
-                      "key": "d",
-                      "text": "New headphones when the old ones still work"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": [
-                      "a",
-                      "c"
-                    ]
-                  },
-                  "explanation": "Bus fare and lunch directly affect your daily schooling. A movie ticket and replacement headphones can both be postponed without real harm."
-                }
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "The 50/30/20 rule is a starting point, not a strict requirement. If you live with your family, you might save up to 40%; someone renting in a big city might need 60% just for needs. Understand the principle first, then adjust the numbers to fit your situation."
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -618,17 +366,6 @@
                     "d": "Vé xem phim cuối tuần",
                     "e": "Ốp điện thoại mới"
                   }
-                },
-                "en": {
-                  "prompt": "Select all items that belong in the needs group.",
-                  "explanation": "Lunch money and a bus ticket to school are required for living and studying. Bubble tea, movie tickets, and a new phone case are wants you can cut when needed.",
-                  "optionsText": {
-                    "a": "Lunch money",
-                    "b": "Bubble tea with friends every afternoon",
-                    "c": "Bus ticket to school",
-                    "d": "Weekend movie ticket",
-                    "e": "A new phone case"
-                  }
                 }
               }
             },
@@ -644,10 +381,6 @@
                 "vi": {
                   "prompt": "Với thu nhập 5.000.000 đồng một tháng và quy tắc 50/30/20, số tiền tối đa dành cho nhóm mong muốn là bao nhiêu?",
                   "explanation": "30% của 5.000.000 đồng là 1.500.000 đồng dành cho nhóm mong muốn."
-                },
-                "en": {
-                  "prompt": "With monthly income of 5,000,000 VND and the 50/30/20 rule, what is the maximum for the wants group?",
-                  "explanation": "30% of 5,000,000 VND is 1,500,000 VND for wants."
                 }
               }
             }
@@ -753,99 +486,6 @@
                 "text": "Mẹo xây quỹ nhanh: coi quỹ khẩn cấp là hóa đơn bắt buộc đầu tiên của tháng. Để dành 100.000 đồng mỗi tuần thì sau một năm bạn có hơn 5.000.000 đồng."
               }
             ]
-          },
-          "en": {
-            "title": "Emergency Fund: Your Safety Cushion",
-            "summary": "Unexpected costs happen. An emergency fund keeps them from becoming a big burden.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=cOmVnRiFSmE",
-                "caption": "How to build a financial reserve fund"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "A bike breaks down on the road. A phone screen cracks. You get sick and need medicine. These things arrive without warning and can throw your budget off if you're not prepared."
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "Without an emergency fund, a 700,000 VND mishap can force you to borrow, and that small loan is often far more expensive than the original cost."
-              },
-              {
-                "type": "KEY_TERM",
-                "term": "Emergency fund",
-                "definition": "Money set aside for unexpected problems only — not for sales, and not for a spontaneous trip."
-              },
-              {
-                "type": "HEADING",
-                "text": "How much is enough",
-                "level": 2
-              },
-              {
-                "type": "LIST",
-                "items": [
-                  "Just starting out: 500,000 to 1,000,000 VND is enough to cover most common mishaps at student age.",
-                  "Once you're working: aim for three to six months of living expenses."
-                ]
-              },
-              {
-                "type": "CALLOUT",
-                "variant": "WARNING",
-                "title": "Payday loans are the most expensive trap",
-                "text": "Borrowing through an unverified app to cover a small mishap can leave you paying tens of percent in interest every month. An emergency fund is your first line of defense against predatory lending."
-              },
-              {
-                "type": "CALCULATOR",
-                "tool": "savings-goal",
-                "presets": {
-                  "goalVnd": 4500000,
-                  "currentVnd": 0,
-                  "contributionVnd": 500000
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "dung-quy-khan-cap",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "Which situation below should you use your emergency fund for?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "A sale on shoes you've wanted for a while"
-                    },
-                    {
-                      "key": "b",
-                      "text": "Your bike breaks down and needs fixing right away to get to school"
-                    },
-                    {
-                      "key": "c",
-                      "text": "Friends invite you to a birthday celebration"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "Only a situation that can't be postponed and affects your daily life truly counts as an emergency. The other two are expenses you can plan for or that can wait."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "noi-de-quy-khan-cap",
-                  "type": "TRUE_FALSE",
-                  "prompt": "Your emergency fund should be kept somewhere you can withdraw from within one or two days.",
-                  "answerKey": {
-                    "correct": true
-                  },
-                  "explanation": "If it's too easy to withdraw, you'll end up spending it; if it's too hard, it won't help when you actually need it. A separate savings account is a reasonable balance."
-                }
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "A quick tip for building the fund: treat your emergency fund like the first mandatory bill of the month. Save 100,000 VND a week and you'll have more than 5,000,000 VND after a year."
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -877,16 +517,6 @@
                     "c": "Xe đạp điện hỏng, cần sửa ngay để đi học",
                     "d": "Ra mắt điện thoại đời mới"
                   }
-                },
-                "en": {
-                  "prompt": "Which situation is a CORRECT use of the emergency fund?",
-                  "explanation": "A broken bike that must be fixed right away to get to school is an unexpected, non-deferrable cost. The other three are wants or can be planned ahead.",
-                  "optionsText": {
-                    "a": "A big year-end sale",
-                    "b": "A close friend's birthday gift",
-                    "c": "An e-bike broke and needs fixing immediately to get to school",
-                    "d": "A new phone model just launched"
-                  }
                 }
               }
             },
@@ -900,10 +530,6 @@
                 "vi": {
                   "prompt": "Nên giữ quỹ khẩn cấp tách riêng khỏi tài khoản chi tiêu hằng ngày.",
                   "explanation": "Tiền để chung rất dễ bị tiêu mất theo kiểu tiện tay. Tách riêng ra tạo được một rào cản nhỏ nhưng hiệu quả."
-                },
-                "en": {
-                  "prompt": "You should keep the emergency fund separate from your everyday spending account.",
-                  "explanation": "Money left in one shared pot is easy to spend casually. Separating it creates a small but effective barrier."
                 }
               }
             }
@@ -1017,107 +643,6 @@
                 "text": "Bài sau nói về chuyện tiền tiết kiệm có thể tự sinh thêm tiền, nhờ lãi suất."
               }
             ]
-          },
-          "en": {
-            "title": "Turn Saving Into a Habit",
-            "summary": "Don't rely on willpower alone. An automatic system helps you save more consistently.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=FzPQdifOn9Q",
-                "caption": "Money management: a starter's handbook for independence"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "Most people save by spending first and setting aside whatever is left. The familiar result is nothing left at all."
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "People who save successfully do the opposite: they set money aside first, then spend what remains. This principle is usually called \"pay yourself first\"."
-              },
-              {
-                "type": "KEY_TERM",
-                "term": "Pay yourself first",
-                "definition": "Move your savings out of your spending account on the day you get paid, before any other expense happens."
-              },
-              {
-                "type": "CALLOUT",
-                "variant": "TIP",
-                "title": "Let a system do the work instead of willpower",
-                "text": "If you use a banking app, set up an automatic transfer of a fixed amount to your savings account on payday. When you no longer have to decide every month, you also lose the chance to give up."
-              },
-              {
-                "type": "HEADING",
-                "text": "Four Ways to Keep the Habit",
-                "level": 2
-              },
-              {
-                "type": "LIST",
-                "ordered": true,
-                "items": [
-                  "Start small: 50,000 VND a week still beats saving nothing, and you can raise it once it becomes routine.",
-                  "Name your goal: a 15,000,000 VND laptop fund is easier to stick with than saving in general.",
-                  "Separate your accounts: savings shouldn't sit in the same place as your everyday spending money.",
-                  "Mark milestones: saving your first 1,000,000 VND is a real achievement — don't let it pass unnoticed."
-                ]
-              },
-              {
-                "type": "EXAMPLE",
-                "title": "Hung, age 18",
-                "text": "Hung set up an automatic transfer of 300,000 VND on the 5th of every month. After twelve months, he had 3,600,000 VND plus interest — and after the initial setup, he didn't have to make any extra effort."
-              },
-              {
-                "type": "CALCULATOR",
-                "tool": "savings-goal",
-                "presets": {
-                  "goalVnd": 2600000,
-                  "currentVnd": 0,
-                  "contributionVnd": 200000
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "tra-cho-minh-truoc",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "What does \"pay yourself first\" mean?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "Spend on yourself before paying other bills"
-                    },
-                    {
-                      "key": "b",
-                      "text": "Transfer your savings away as soon as you receive money"
-                    },
-                    {
-                      "key": "c",
-                      "text": "Only save whatever is left at the end of the month"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "Savings are set aside first; what's left is your spending money. The approach in the last option is exactly why most people fail to save."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "tu-dong-hoa",
-                  "type": "TRUE_FALSE",
-                  "prompt": "Setting up automatic transfers leads to more consistent saving than relying on willpower every month.",
-                  "answerKey": {
-                    "correct": true
-                  },
-                  "explanation": "One decision made once is far more durable than twelve repeated decisions, because every time you have to decide again is a chance to skip it."
-                }
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "The next lesson covers how saved money can generate more money on its own, through interest."
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -1147,15 +672,6 @@
                     "b": "Tự thưởng bản thân một món đồ mỗi khi nhận lương",
                     "c": "Trả hết các hóa đơn rồi mới tiêu cho bản thân"
                   }
-                },
-                "en": {
-                  "prompt": "What does \"pay yourself first\" mean?",
-                  "explanation": "Move savings as soon as income arrives, before any spending, so your future money does not depend on whatever is left at month-end.",
-                  "optionsText": {
-                    "a": "Transfer to savings as soon as income arrives, before spending",
-                    "b": "Treat yourself to something every payday",
-                    "c": "Pay all bills first, then spend on yourself"
-                  }
                 }
               }
             },
@@ -1169,10 +685,6 @@
                 "vi": {
                   "prompt": "Nếu chỉ tiết kiệm được 50.000 đồng mỗi tuần thì không đáng để bắt đầu.",
                   "explanation": "50.000 đồng mỗi tuần là 2.600.000 đồng một năm, chưa tính lãi. Quan trọng hơn, thói quen đã được hình thành, và số tiền sẽ nâng dần theo thu nhập."
-                },
-                "en": {
-                  "prompt": "If you can only save 50,000 VND a week, it is not worth starting.",
-                  "explanation": "50,000 VND a week is 2,600,000 VND a year before interest. More important, the habit is forming — and the amount will grow with income."
                 }
               }
             }
@@ -1293,114 +805,6 @@
                 }
               }
             ]
-          },
-          "en": {
-            "title": "Interest Rates: When Money Makes More Money",
-            "summary": "Simple interest, compound interest, and why starting early matters more than starting big.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=npIWZ4ropZ8",
-                "caption": "Compound interest explained very simply"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "When you put money into savings, the bank pays you interest — think of it as what the bank pays for the right to use your money. Interest rates are quoted as a percentage per year: deposit 10,000,000 VND at 5% a year, and after one year you earn an extra 500,000 VND."
-              },
-              {
-                "type": "KEY_TERM",
-                "term": "Simple interest and compound interest",
-                "definition": "Simple interest is calculated only on the original principal. Compound interest adds the interest back into the principal, so in the next period you earn interest on both the principal and the previous interest."
-              },
-              {
-                "type": "TABLE",
-                "caption": "Principal of 10,000,000 VND, 5% interest a year",
-                "headers": [
-                  "Year",
-                  "Simple interest",
-                  "Compound interest"
-                ],
-                "rows": [
-                  [
-                    "1",
-                    "10,500,000 ₫",
-                    "10,500,000 ₫"
-                  ],
-                  [
-                    "5",
-                    "12,500,000 ₫",
-                    "12,762,816 ₫"
-                  ],
-                  [
-                    "10",
-                    "15,000,000 ₫",
-                    "16,288,946 ₫"
-                  ],
-                  [
-                    "20",
-                    "20,000,000 ₫",
-                    "26,532,977 ₫"
-                  ]
-                ]
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "Notice the first year: the two columns are identical. As time goes on, the gap between them widens. That's why time is a young person's greatest asset: starting at 16 with a small amount beats starting at 30 with a large one."
-              },
-              {
-                "type": "CALLOUT",
-                "variant": "WARNING",
-                "title": "A double-edged sword",
-                "text": "With debt, compound interest can make what you owe grow over time. A loan that isn't paid on time can balloon through this same mechanism."
-              },
-              {
-                "type": "CALCULATOR",
-                "tool": "compound-interest",
-                "presets": {
-                  "principalVnd": 10000000,
-                  "ratePercent": 5,
-                  "years": 10
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "lai-don-mot-nam",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "You deposit 4,000,000 VND at 6% simple interest a year. How much interest do you earn after one year?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "60,000 VND"
-                    },
-                    {
-                      "key": "b",
-                      "text": "240,000 VND"
-                    },
-                    {
-                      "key": "c",
-                      "text": "600,000 VND"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "6% of 4,000,000 VND is 240,000 VND. Interest is always calculated on the principal, not on some fixed number."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "lai-kep-khac-biet",
-                  "type": "TRUE_FALSE",
-                  "prompt": "In the first year, compound interest and simple interest give the same result.",
-                  "answerKey": {
-                    "correct": true
-                  },
-                  "explanation": "In the first year there is no earlier period for interest to compound on, so both methods give the same result. The difference only appears from the second period onward, growing larger over time."
-                }
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -1444,20 +848,6 @@
                     "r2": "Tỉ lệ phần trăm trả cho việc sử dụng tiền, tính theo năm",
                     "r3": "Lãi chỉ tính trên số tiền gốc ban đầu"
                   }
-                },
-                "en": {
-                  "prompt": "Match each concept with the correct description.",
-                  "explanation": "An interest rate is the price of using money. Simple interest is calculated on principal only; compound interest is calculated on principal plus accumulated interest.",
-                  "leftText": {
-                    "l1": "Interest rate",
-                    "l2": "Simple interest",
-                    "l3": "Compound interest"
-                  },
-                  "rightText": {
-                    "r1": "Interest calculated on both principal and prior interest",
-                    "r2": "The annual percentage charged for using money",
-                    "r3": "Interest calculated only on the original principal"
-                  }
                 }
               }
             },
@@ -1480,15 +870,6 @@
                     "a": "Vì ngân hàng ưu đãi lãi suất cao hơn cho người trẻ",
                     "b": "Vì họ có nhiều thời gian nhất để lãi cộng dồn",
                     "c": "Vì người trẻ có thu nhập cao hơn"
-                  }
-                },
-                "en": {
-                  "prompt": "Why do young people benefit the most from compound interest?",
-                  "explanation": "Compound interest grows stronger over time, so each year of starting earlier is worth more than adding extra money later.",
-                  "optionsText": {
-                    "a": "Because banks offer higher rates to young people",
-                    "b": "Because they have the most time for interest to compound",
-                    "c": "Because young people have higher incomes"
                   }
                 }
               }
@@ -1650,154 +1031,6 @@
                 "label": "Vào mô phỏng \"Tháng lương đầu tiên\""
               }
             ]
-          },
-          "en": {
-            "title": "Practice: A One-Month Plan",
-            "summary": "Put it all together into a complete monthly budget, then try it in the simulation.",
-            "blocks": [
-              {
-                "type": "VIDEO",
-                "url": "https://www.youtube.com/watch?v=QG3Qj0obXSk",
-                "caption": "A personal finance guide for beginners"
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "You now have all the tools: telling needs from wants, the 50/30/20 rule, an emergency fund, paying yourself first, and interest rates. Now let's put it all together into a complete monthly plan."
-              },
-              {
-                "type": "HEADING",
-                "text": "Four Steps",
-                "level": 2
-              },
-              {
-                "type": "LIST",
-                "ordered": true,
-                "items": [
-                  "Record all your income for the month.",
-                  "List your fixed, unavoidable expenses.",
-                  "Set aside savings first, before dividing up flexible spending.",
-                  "Check back at mid-month and adjust if you're off track."
-                ]
-              },
-              {
-                "type": "TABLE",
-                "caption": "A sample month with 6,500,000 VND income",
-                "headers": [
-                  "Item",
-                  "Amount",
-                  "Group"
-                ],
-                "rows": [
-                  [
-                    "Part-time job pay",
-                    "+6,500,000 ₫",
-                    "Income"
-                  ],
-                  [
-                    "Rent",
-                    "-1,800,000 ₫",
-                    "Fixed"
-                  ],
-                  [
-                    "Phone plan",
-                    "-120,000 ₫",
-                    "Fixed"
-                  ],
-                  [
-                    "Food",
-                    "-1,800,000 ₫",
-                    "Need"
-                  ],
-                  [
-                    "Transportation",
-                    "-400,000 ₫",
-                    "Need"
-                  ],
-                  [
-                    "Entertainment",
-                    "-800,000 ₫",
-                    "Want"
-                  ],
-                  [
-                    "Emergency fund",
-                    "-500,000 ₫",
-                    "Savings"
-                  ],
-                  [
-                    "Goal savings",
-                    "-800,000 ₫",
-                    "Savings"
-                  ]
-                ]
-              },
-              {
-                "type": "CALLOUT",
-                "variant": "TIP",
-                "title": "Always leave breathing room",
-                "text": "The plan above leaves a small buffer. A budget balanced to the last cent breaks at the very first mishap."
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "con-lai-bao-nhieu",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "According to the table above, how much is left after all expenses?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "0 VND"
-                    },
-                    {
-                      "key": "b",
-                      "text": "280,000 VND"
-                    },
-                    {
-                      "key": "c",
-                      "text": "1,300,000 VND"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "Total spending is 6,220,000 VND, leaving 280,000 VND. This small buffer is exactly the breathing room for unforeseen costs."
-                }
-              },
-              {
-                "type": "CHECK_QUESTION",
-                "question": {
-                  "id": "thu-tu-lap-ke-hoach",
-                  "type": "SINGLE_CHOICE",
-                  "prompt": "In the four planning steps, where does savings go?",
-                  "options": [
-                    {
-                      "key": "a",
-                      "text": "After all spending has already been divided up"
-                    },
-                    {
-                      "key": "b",
-                      "text": "Before dividing up flexible spending"
-                    },
-                    {
-                      "key": "c",
-                      "text": "Only if there's something left at month's end"
-                    }
-                  ],
-                  "answerKey": {
-                    "correct": "b"
-                  },
-                  "explanation": "Savings are set aside early, right after fixed expenses. If it's placed last in line, it will be the first thing to disappear."
-                }
-              },
-              {
-                "type": "PARAGRAPH",
-                "text": "Now it's your turn to practice. In the \"First Paycheck Month\" simulation, you receive a simulated salary of 6,500,000 VND a month for three months, allocate your own budget, and handle unexpected events like a broken bike or a friend asking to borrow money."
-              },
-              {
-                "type": "SIM_LINK",
-                "simSlug": "thang-luong-dau-tien",
-                "label": "Go to the \"First Paycheck Month\" simulation"
-              }
-            ]
           }
         },
         "checkQuiz": {
@@ -1834,16 +1067,6 @@
                     "k3": "Cộng tất cả nguồn thu nhập",
                     "k4": "Trích khoản tiết kiệm ngay"
                   }
-                },
-                "en": {
-                  "prompt": "Put the four steps of building a monthly budget in the correct order.",
-                  "explanation": "Start with income so you know how much you have. Next come fixed costs you cannot avoid. Then set aside savings — pay yourself first. What remains goes to flexible spending.",
-                  "itemsText": {
-                    "k1": "List fixed expenses",
-                    "k2": "Split the remainder for flexible spending",
-                    "k3": "Add up all income sources",
-                    "k4": "Set aside savings immediately"
-                  }
                 }
               }
             },
@@ -1875,21 +1098,6 @@
                     "a": "Thẳng thắn và giữ được ngân sách. Nói thật về giới hạn tài chính của mình là một kỹ năng đáng quý.",
                     "b": "Rút tiết kiệm để chi cho mong muốn rất dễ thành thói quen, và mỗi lần như vậy thì mục tiêu của bạn lại lùi xa thêm.",
                     "c": "Bạn giữ được ngân sách, giữ được bạn bè, và cho thấy quản lý tiền không có nghĩa là bỏ lỡ niềm vui."
-                  }
-                },
-                "en": {
-                  "prompt": "What do you do?",
-                  "scenarioMd": "Mid-month, you have already spent your wants budget. Friends invite you to a 250,000 VND buffet this weekend.",
-                  "explanation": "Politely declining or suggesting a cheaper option protects both budget and friendship. Taking from savings breaks the rule; lying builds a bad habit.",
-                  "optionsText": {
-                    "a": "Decline directly: \"I'm out of budget this month\"",
-                    "b": "Take 250,000 VND from savings — just this once",
-                    "c": "Suggest another plan: cook together at home, about 50,000 VND each"
-                  },
-                  "feedback": {
-                    "a": "Honest and budget-safe. Being open about your money limits is a valuable skill.",
-                    "b": "Raiding savings for wants easily becomes a habit, and each time pushes your goals further away.",
-                    "c": "You keep the budget, keep your friends, and show that managing money does not mean missing out on fun."
                   }
                 }
               }
@@ -1927,16 +1135,6 @@
                 "c": "Cố định, Linh hoạt, Đầu tư",
                 "d": "Hôm nay, Tháng này, Năm nay"
               }
-            },
-            "en": {
-              "prompt": "Under the 50/30/20 rule, what are the three allocation groups?",
-              "explanation": "50% needs, 30% wants, 20% savings — matching the rule's name in order.",
-              "optionsText": {
-                "a": "Food, Study, Entertainment",
-                "b": "Needs, Wants, Savings",
-                "c": "Fixed, Flexible, Investing",
-                "d": "Today, This month, This year"
-              }
             }
           }
         },
@@ -1967,17 +1165,6 @@
                 "d": "Ốm, cần mua thuốc ngay",
                 "e": "Điện thoại đời mới vừa ra mắt"
               }
-            },
-            "en": {
-              "prompt": "Select all situations where you should use the emergency fund.",
-              "explanation": "Fixing a bike to get to school and buying medicine when sick are unexpected, non-deferrable costs. Sales, trips, and a new phone are wants that can be planned.",
-              "optionsText": {
-                "a": "The December 12 sale",
-                "b": "A broken bike that needs urgent repair for school",
-                "c": "A summer class trip",
-                "d": "Getting sick and needing medicine right away",
-                "e": "A newly released phone"
-              }
             }
           }
         },
@@ -1991,10 +1178,6 @@
             "vi": {
               "prompt": "Với cùng lãi suất và số tiền gốc, gửi lãi kép trong 10 năm cho kết quả cao hơn lãi đơn.",
               "explanation": "Lãi kép tính lãi trên cả phần lãi cũ, nên càng ngày càng bỏ xa lãi đơn. Với 10.000.000 đồng gốc và lãi 5% một năm, đến năm thứ mười chênh lệch đã hơn 1.200.000 đồng."
-            },
-            "en": {
-              "prompt": "With the same interest rate and principal, 10 years of compound interest beats simple interest.",
-              "explanation": "Compound interest earns on prior interest, so it pulls further ahead over time. On 10,000,000 VND at 5% a year, the gap exceeds 1,200,000 VND by year ten."
             }
           }
         },
@@ -2011,10 +1194,6 @@
             "vi": {
               "prompt": "Thu nhập 6.500.000 đồng một tháng, áp dụng quy tắc 50/30/20. Khoản tiết kiệm mỗi tháng là bao nhiêu?",
               "explanation": "20% của 6.500.000 đồng là 1.300.000 đồng, đúng bằng mức gợi ý trong mô phỏng \"Tháng lương đầu tiên\"."
-            },
-            "en": {
-              "prompt": "Monthly income is 6,500,000 VND under 50/30/20. How much is the monthly savings amount?",
-              "explanation": "20% of 6,500,000 VND is 1,300,000 VND — the same suggested amount in the \"First Paycheck Month\" simulation."
             }
           }
         },
@@ -2044,16 +1223,6 @@
                 "k2": "Nhận thu nhập",
                 "k3": "Chi cho mong muốn bằng phần còn lại",
                 "k4": "Chuyển khoản tiết kiệm đã định"
-              }
-            },
-            "en": {
-              "prompt": "Order how you handle money when you just got paid, following \"pay yourself first\".",
-              "explanation": "Receive income, set aside savings immediately, cover needs, then use what remains for wants.",
-              "itemsText": {
-                "k1": "Pay essential needs",
-                "k2": "Receive income",
-                "k3": "Spend on wants with what is left",
-                "k4": "Transfer the planned savings amount"
               }
             }
           }
@@ -2097,22 +1266,6 @@
                 "r3": "Cơm trưa ở trường",
                 "r4": "Tiền sửa xe khi hỏng đột xuất"
               }
-            },
-            "en": {
-              "prompt": "Match each concept with the correct example.",
-              "explanation": "A need is school lunch; a want is bubble tea; an emergency fund covers sudden bike repairs; paying yourself first is an automatic savings transfer on payday.",
-              "leftText": {
-                "l1": "Need",
-                "l2": "Want",
-                "l3": "Emergency fund",
-                "l4": "Pay yourself first"
-              },
-              "rightText": {
-                "r1": "Large bubble tea with friends",
-                "r2": "Automatic transfer to savings on the 5th each month",
-                "r3": "School lunch",
-                "r4": "Money to fix a bike that breaks unexpectedly"
-              }
             }
           }
         },
@@ -2147,23 +1300,6 @@
                 "b": "Tránh được lừa đảo là tốt, nhưng tiêu một nửa số tiền cho mong muốn khi chưa có quỹ khẩn cấp là làm ngược thứ tự ưu tiên.",
                 "c": "Đúng thứ tự ưu tiên: an toàn trước, mục tiêu sau, mong muốn sau cùng, và tránh xa những lời hứa lãi cao chắc chắn.",
                 "d": "Tiền mặt trong ví không sinh lãi và rất dễ tiêu vặt hết. Ít nhất hãy gửi vào một tài khoản tiết kiệm."
-              }
-            },
-            "en": {
-              "prompt": "What would you advise Nam?",
-              "scenarioMd": "Nam, 17, just received a 5,000,000 VND scholarship bonus. He has no emergency fund, wants 2,500,000 VND headphones, and a friend says \"put it in an investing app that pays 30% a month for sure.\"",
-              "explanation": "A promise of \"guaranteed 30% a month\" is a classic scam signal. The right order is build an emergency fund first, consider wants later, and avoid unrealistic investments entirely.",
-              "optionsText": {
-                "a": "Put all 5,000,000 VND into the investing app — 30% a month is rare",
-                "b": "Buy the headphones first for fun; save the rest at a bank",
-                "c": "Build a 1–2 million VND emergency fund, save most of the rest, and consider headphones with a small leftover",
-                "d": "Keep all 5,000,000 VND as cash in a wallet for convenience"
-              },
-              "feedback": {
-                "a": "\"Guaranteed 30% a month\" does not exist legally. This is a Ponzi-style setup — Nam would lose everything.",
-                "b": "Avoiding the scam is good, but spending half on a want before an emergency fund reverses priorities.",
-                "c": "Correct priority order: safety first, goals next, wants last — and stay away from guaranteed high-return promises.",
-                "d": "Cash in a wallet earns nothing and is easy to spend. At least put it in a savings account."
               }
             }
           }

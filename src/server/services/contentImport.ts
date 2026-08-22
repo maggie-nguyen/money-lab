@@ -246,7 +246,8 @@ export function questionPayload(q: QuestionInput): Prisma.InputJsonValue {
 }
 
 export function questionPayloadText(q: QuestionInput, loc: string): Prisma.InputJsonValue {
-  const t = q.i18n[loc as Locale];
+  if (loc !== "vi") return {};
+  const t = q.i18n.vi;
   if (!t) return {};
   return {
     ...(t.optionsText ? { optionsText: t.optionsText } : {}),
@@ -312,7 +313,7 @@ async function upsertQuiz(
           locale: loc as Locale,
           prompt: t.prompt,
           explanation: t.explanation,
-          payloadText: questionPayloadText(q, loc),
+          payloadText: questionPayloadText(q, loc as "vi"),
         },
       });
     }

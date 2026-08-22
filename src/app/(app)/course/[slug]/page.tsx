@@ -28,6 +28,7 @@ import {
   ProgressBar,
   SectionTitle,
   Skeleton,
+  ChevronRight,
 } from "@/components/ui";
 
 function levelLabel(level: 1 | 2 | 3, t: TranslateFn): string {
@@ -91,9 +92,7 @@ function LessonRow({ lesson, number }: { lesson: LessonSummary; number: number }
           <MediaGlyphs lesson={lesson} />
         </span>
       </span>
-      <span className="shrink-0 self-center text-ink-faint" aria-hidden="true">
-        →
-      </span>
+      <ChevronRight className="h-4 w-4 shrink-0 self-center text-ink-faint" aria-hidden />
     </Link>
   );
 }

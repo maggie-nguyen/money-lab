@@ -3,7 +3,9 @@
  * đồng and must be rendered with formatVnd, never parsed as numbers.
  */
 
-export type Locale = "vi" | "en";
+import type { Locale } from "@/lib/locale";
+
+export type { Locale };
 export type Role = "LEARNER" | "ADMIN";
 export type ProgressStatus = "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
 export type SimType = "BUDGET" | "LOANS" | "SCAM" | "BUSINESS" | "INVEST";

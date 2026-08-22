@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, useT } from "@/components/Providers";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { signOut } from "@/lib/signOut";
 import { Button, Chip, cx } from "@/components/ui";
 
@@ -40,7 +39,7 @@ function ThemeToggle() {
 
 function Wordmark() {
   return (
-    <Link href="/learn" className="flex items-baseline gap-2">
+    <Link href="/ban-do" className="flex items-baseline gap-2">
       <span className="font-display text-xl font-semibold tracking-tight">MoneyLab</span>
     </Link>
   );
@@ -151,11 +150,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const t = useT();
   const nav = [
-    { href: "/learn", label: t("nav.courses") },
-    { href: "/library", label: t("nav.library") },
-    { href: "/sims", label: t("nav.sims") },
-    { href: "/tools", label: t("nav.tools") },
-    { href: "/tutor", label: t("nav.tutor") },
+    { href: "/ban-do", label: t("nav.map") },
+    { href: "/vi-cua-toi", label: t("nav.wallet") },
+    { href: "/vi-cua-toi/thu-thach", label: t("nav.challenges") },
+    { href: "/profile", label: t("nav.account") },
   ] as const;
 
   return (
@@ -185,7 +183,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <div className="hidden lg:block">
               <StreakAndCoins />
             </div>
-            <LanguageSwitcher className="hidden sm:inline-flex" />
             <ThemeToggle />
             <AccountMenu />
           </div>
@@ -198,7 +195,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </main>
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-rule bg-paper-raised md:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-rule bg-paper-raised md:hidden"
         aria-label={t("nav.main")}
       >
         {nav.map((item) => {

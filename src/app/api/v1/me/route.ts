@@ -13,7 +13,6 @@ const patchSchema = z.object({
   avatarKey: z.string().max(30).optional(),
   birthYear: z.number().int().min(1940).max(2020).nullable().optional(),
   province: z.string().trim().max(50).nullable().optional(),
-  localePref: z.enum(["vi", "en"]).optional(),
 });
 
 export const PATCH = withApi({ auth: "required", rateLimit: "write" }, async (ctx) => {

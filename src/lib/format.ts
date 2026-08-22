@@ -4,7 +4,7 @@
  */
 
 import type { Locale } from "@/lib/types";
-import { DEFAULT_LOCALE, intlLocale } from "@/lib/locale";
+import { DEFAULT_LOCALE } from "@/lib/locale";
 import { createT } from "@/lib/i18n";
 
 const VN_GROUP = /\B(?=(\d{3})+(?!\d))/g;
@@ -41,13 +41,13 @@ export function formatVndShort(
   const sign = neg ? "-" : "";
   const t = createT(locale);
   if (abs >= 1_000_000_000n) {
-    return `${sign}${oneDecimal(abs, 1_000_000_000n, locale)}${t("format.shortBillion")}`;
+    return `${sign}${oneDecimal(abs, 1_000_000_000n)}${t("format.shortBillion")}`;
   }
   if (abs >= 1_000_000n) {
-    return `${sign}${oneDecimal(abs, 1_000_000n, locale)}${t("format.shortMillion")}`;
+    return `${sign}${oneDecimal(abs, 1_000_000n)}${t("format.shortMillion")}`;
   }
   if (abs >= 1_000n) {
-    return `${sign}${oneDecimal(abs, 1_000n, locale)}${t("format.shortThousand")}`;
+    return `${sign}${oneDecimal(abs, 1_000n)}${t("format.shortThousand")}`;
   }
   return `${sign}${abs.toString()}`;
 }
@@ -79,27 +79,24 @@ export function formatVndApprox(
   const word = unit === 1_000_000_000n ? t("format.billion") : t("format.million");
   const tenths = (abs * 10n) / unit;
   const exact = (tenths * unit) / 10n === abs;
-  const decimal = oneDecimal(abs, unit, locale);
+  const decimal = oneDecimal(abs, unit);
   return `${exact ? "" : t("format.about")}${neg ? "-" : ""}${decimal} ${word}`;
 }
 
-function oneDecimal(abs: bigint, unit: bigint, locale: Locale = DEFAULT_LOCALE): string {
+function oneDecimal(abs: bigint, unit: bigint): string {
   const whole = abs / unit;
   const tenth = ((abs % unit) * 10n) / unit;
-  const sep = locale === "en" ? "." : ",";
-  return tenth === 0n ? whole.toString() : `${whole}${sep}${tenth}`;
+  return tenth === 0n ? whole.toString() : `${whole},${tenth}`;
 }
 
-/** Integer bps → "12,5%" / "12.5%". */
-export function formatBps(bps: number, locale: Locale = DEFAULT_LOCALE): string {
+/** Integer bps → "12,5%". */
+export function formatBps(bps: number): string {
   const pct = bps / 100;
-  const sep = locale === "en" ? "." : ",";
-  return `${pct.toFixed(pct % 1 === 0 ? 0 : 1).replace(".", sep)}%`;
+  return `${pct.toFixed(pct % 1 === 0 ? 0 : 1).replace(".", ",")}%`;
 }
 
-export function formatPct(pct: number, digits = 0, locale: Locale = DEFAULT_LOCALE): string {
-  const sep = locale === "en" ? "." : ",";
-  return `${pct.toFixed(digits).replace(".", sep)}%`;
+export function formatPct(pct: number, digits = 0): string {
+  return `${pct.toFixed(digits).replace(".", ",")}%`;
 }
 
 export function formatInt(n: number): string {
@@ -120,16 +117,6 @@ export function formatDate(
   if (!iso) return "-";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "-";
-  const locale = opts?.locale ?? DEFAULT_LOCALE;
-  if (locale === "en") {
-    return new Intl.DateTimeFormat(intlLocale(locale), {
-      timeZone: "Asia/Ho_Chi_Minh",
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      ...(opts?.weekday ? { weekday: "long" as const } : {}),
-    }).format(d);
-  }
   const vn = new Date(d.getTime() + 7 * 3600 * 1000);
   const base = `${vn.getUTCDate()} ${VN_MONTHS[vn.getUTCMonth()]}, ${vn.getUTCFullYear()}`;
   return opts?.weekday ? `${VN_WEEKDAYS[vn.getUTCDay()]}, ${base}` : base;

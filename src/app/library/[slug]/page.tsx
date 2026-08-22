@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import { PublicChrome } from "@/components/PublicChrome";
 import { LessonBlocks } from "@/components/lesson/Blocks";
-import { Button, Card, CardBody, Chip, LedgerLabel } from "@/components/ui";
+import { Button, Card, CardBody, Chip, LedgerLabel, PageBackLink } from "@/components/ui";
 import { coverStyle } from "@/lib/cover";
 import { CoverArt } from "@/components/art/CoverArt";
 import type { Block, Locale } from "@/lib/types";
@@ -75,11 +75,9 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   return (
     <PublicChrome>
       <article className="mx-auto max-w-3xl px-4 py-12">
-        <Link href="/library" className="text-sm text-moss-400 underline hover:text-moss-600">
-          ← {t("nav.library")}
-        </Link>
+        <PageBackLink href="/library">{t("nav.library")}</PageBackLink>
 
-        <div className="mt-6 flex flex-wrap items-center gap-2 text-xs text-ink-faint">
+        <div className="flex flex-wrap items-center gap-2 text-xs text-ink-faint">
           <Chip>{t(`library.category.${article.category}`)}</Chip>
           <span>{t("common.readMinutes", { count: article.readMinutes })}</span>
           {article.publishedAt && <span>· {formatDate(article.publishedAt, locale)}</span>}

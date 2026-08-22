@@ -39,7 +39,6 @@ export async function patchMe(
     avatarKey?: string;
     birthYear?: number | null;
     province?: string | null;
-    localePref?: "vi" | "en";
   },
 ) {
   if (input.displayName) {
@@ -61,7 +60,6 @@ export async function patchMe(
       ...(input.avatarKey !== undefined ? { avatarKey: input.avatarKey } : {}),
       ...(input.birthYear !== undefined ? { birthYear: input.birthYear } : {}),
       ...(input.province !== undefined ? { province: input.province } : {}),
-      ...(input.localePref !== undefined ? { localePref: input.localePref } : {}),
     },
   });
   return toMeDto(user);

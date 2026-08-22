@@ -18,8 +18,6 @@ import {
 // Calculators - doc 03 §8. Pure functions; the only side effect is a best-effort
 // `tool_used` analytics row when the caller sends X-Anonymous-Id.
 
-type ToolLocale = "vi" | "en";
-
 const SCHEDULE_CAP = 360;
 
 /** Money string: non-negative integer đồng, bounded so bad input can't blow up Decimal. */
@@ -79,10 +77,7 @@ function pct(bpsValue: number): string {
 
 // ── Handlers ─────────────────────────────────────────────────────────────────
 
-export function compoundInterest(
-  input: z.infer<typeof compoundInterestBody>,
-  locale: ToolLocale = "vi",
-) {
+export function compoundInterest(input: z.infer<typeof compoundInterestBody>) {
   const r = compoundProjection(
     parseVnd(input.principalVnd),
     parseVnd(input.monthlyContributionVnd ?? "0"),
@@ -99,16 +94,13 @@ export function compoundInterest(
     },
     meta: {
       formula:
-        locale === "en"
-          ? `Compound interest: each period the balance is multiplied by (1 + ${pct(input.annualRateBps)}% per year divided by the compounding frequency), ` +
-            `and monthly contributions are added at period end. After ${input.years} years, interest earned = final balance − total contributed.`
-          : `Lãi kép: mỗi kỳ số dư được nhân với (1 + ${pct(input.annualRateBps)}% một năm chia theo kỳ ghép lãi), ` +
-            `khoản góp hằng tháng được cộng vào cuối kỳ. Sau ${input.years} năm, tiền lãi = số dư cuối − tổng đã góp.`,
+        `Lãi kép: mỗi kỳ số dư được nhân với (1 + ${pct(input.annualRateBps)}% một năm chia theo kỳ ghép lãi), ` +
+        `khoản góp hằng tháng được cộng vào cuối kỳ. Sau ${input.years} năm, tiền lãi = số dư cuối − tổng đã góp.`,
     },
   };
 }
 
-export function loanPayment(input: z.infer<typeof loanPaymentBody>, locale: ToolLocale = "vi") {
+export function loanPayment(input: z.infer<typeof loanPaymentBody>) {
   const r = loanSchedule(
     parseVnd(input.principalVnd),
     input.annualRateBps,
@@ -123,24 +115,18 @@ export function loanPayment(input: z.infer<typeof loanPaymentBody>, locale: Tool
       schedule: scheduleDto(r.schedule),
       scheduleTruncated: r.schedule.length > SCHEDULE_CAP,
     },
-    meta: { formula: loanFormula(input.method as LoanMethod, input.annualRateBps, locale) },
+    meta: { formula: loanFormula(input.method as LoanMethod, input.annualRateBps) },
   };
 }
 
-function loanFormula(method: LoanMethod, annualRateBps: number, locale: ToolLocale = "vi"): string {
-  if (locale === "en") {
-    const i = `monthly rate i = ${pct(annualRateBps)}% per year ÷ 12`;
-    return method === "ANNUITY"
-      ? `Equal installments: M = P · i / (1 − (1+i)^−n), where ${i}. Each month interest is charged on the remaining balance; the rest reduces principal.`
-      : `Declining balance: principal each month = P / n, interest in month k = remaining balance · i, where ${i}. Payments fall over time.`;
-  }
+function loanFormula(method: LoanMethod, annualRateBps: number): string {
   const i = `lãi suất tháng i = ${pct(annualRateBps)}% một năm ÷ 12`;
   return method === "ANNUITY"
     ? `Trả góp đều: M = P · i / (1 − (1+i)^−n), với ${i}. Mỗi tháng lãi tính trên dư nợ còn lại, phần còn lại trừ vào gốc.`
     : `Dư nợ giảm dần: gốc trả mỗi tháng = P / n, lãi tháng k = dư nợ còn lại · i, với ${i}. Tiền trả giảm dần theo thời gian.`;
 }
 
-export function loanCompare(input: z.infer<typeof loanCompareBody>, locale: ToolLocale = "vi") {
+export function loanCompare(input: z.infer<typeof loanCompareBody>) {
   const results = input.loans.map((l) => {
     const r = loanSchedule(
       parseVnd(l.principalVnd),
@@ -167,13 +153,9 @@ export function loanCompare(input: z.infer<typeof loanCompareBody>, locale: Tool
   const spread = dearest._total - cheapest._total;
 
   const note =
-    locale === "en"
-      ? spread > 0n
-        ? `"${cheapest.name}" is cheapest by total amount paid, saving ${vndToString(spread)} VND versus "${dearest.name}". A longer term can mean a lighter monthly payment but more total interest.`
-        : "These loans cost the same in total; also compare early-repayment fees and penalties."
-      : spread > 0n
-        ? `"${cheapest.name}" rẻ nhất theo tổng số tiền phải trả, tiết kiệm ${vndToString(spread)} đ so với "${dearest.name}". Kỳ hạn dài hơn có thể trả góp nhẹ hơn mỗi tháng nhưng tổng lãi cao hơn.`
-        : "Các khoản vay có tổng chi phí bằng nhau; hãy so sánh thêm phí trả trước hạn và điều kiện phạt.";
+    spread > 0n
+      ? `"${cheapest.name}" rẻ nhất theo tổng số tiền phải trả, tiết kiệm ${vndToString(spread)} đ so với "${dearest.name}". Kỳ hạn dài hơn có thể trả góp nhẹ hơn mỗi tháng nhưng tổng lãi cao hơn.`
+      : "Các khoản vay có tổng chi phí bằng nhau; hãy so sánh thêm phí trả trước hạn và điều kiện phạt.";
 
   return {
     data: {
@@ -186,20 +168,13 @@ export function loanCompare(input: z.infer<typeof loanCompareBody>, locale: Tool
     },
     meta: {
       formula:
-        locale === "en"
-          ? "Each loan gets its own amortization schedule (equal installments or declining balance), " +
-            "then we compare by total amount paid over the full term, not by the monthly payment."
-          : "Mỗi khoản vay được lập bảng trả nợ riêng (trả góp đều hoặc dư nợ giảm dần), " +
-            "rồi so sánh bằng tổng số tiền phải trả trong toàn kỳ hạn, không so sánh bằng tiền trả hằng tháng.",
+        "Mỗi khoản vay được lập bảng trả nợ riêng (trả góp đều hoặc dư nợ giảm dần), " +
+        "rồi so sánh bằng tổng số tiền phải trả trong toàn kỳ hạn, không so sánh bằng tiền trả hằng tháng.",
     },
   };
 }
 
-export function savingsGoal(
-  input: z.infer<typeof savingsGoalBody>,
-  now: Date,
-  locale: ToolLocale = "vi",
-) {
+export function savingsGoal(input: z.infer<typeof savingsGoalBody>, now: Date) {
   const months = savingsGoalMonths(
     parseVnd(input.goalVnd),
     parseVnd(input.currentVnd),
@@ -215,16 +190,13 @@ export function savingsGoal(
     data: { monthsNeeded: months, achievedDate: vnDate(achieved) },
     meta: {
       formula:
-        locale === "en"
-          ? `Each month: balance = balance · (1 + ${pct(input.annualRateBps)}%/12) + contribution. ` +
-            `Count months until the balance reaches the goal.`
-          : `Mỗi tháng: số dư = số dư · (1 + ${pct(input.annualRateBps)}%/12) + khoản góp. ` +
-            `Đếm số tháng cho tới khi số dư đạt mục tiêu.`,
+        `Mỗi tháng: số dư = số dư · (1 + ${pct(input.annualRateBps)}%/12) + khoản góp. ` +
+        `Đếm số tháng cho tới khi số dư đạt mục tiêu.`,
     },
   };
 }
 
-export function inflation(input: z.infer<typeof inflationBody>, locale: ToolLocale = "vi") {
+export function inflation(input: z.infer<typeof inflationBody>) {
   const r = inflationImpact(parseVnd(input.amountVnd), input.annualInflationBps, input.years);
   return {
     data: {
@@ -233,16 +205,13 @@ export function inflation(input: z.infer<typeof inflationBody>, locale: ToolLoca
     },
     meta: {
       formula:
-        locale === "en"
-          ? `Purchasing power = amount ÷ (1 + ${pct(input.annualInflationBps)}%)^${input.years}. ` +
-            `Cash keeps the same number but buys fewer goods.`
-          : `Sức mua = số tiền ÷ (1 + ${pct(input.annualInflationBps)}%)^${input.years}. ` +
-            `Tiền mặt giữ nguyên con số nhưng mua được ít hàng hóa hơn.`,
+        `Sức mua = số tiền ÷ (1 + ${pct(input.annualInflationBps)}%)^${input.years}. ` +
+        `Tiền mặt giữ nguyên con số nhưng mua được ít hàng hóa hơn.`,
     },
   };
 }
 
-export function budgetSplit(input: z.infer<typeof budget503020Body>, locale: ToolLocale = "vi") {
+export function budgetSplit(input: z.infer<typeof budget503020Body>) {
   const r = budget503020(parseVnd(input.monthlyIncomeVnd));
   return {
     data: {
@@ -252,11 +221,8 @@ export function budgetSplit(input: z.infer<typeof budget503020Body>, locale: Too
     },
     meta: {
       formula:
-        locale === "en"
-          ? "50/30/20 rule: 50% for needs, 30% for wants, 20% for savings and debt repayment. " +
-            "Rounding leftovers go to savings."
-          : "Quy tắc 50/30/20: 50% cho nhu cầu thiết yếu, 30% cho mong muốn, 20% cho tiết kiệm và trả nợ. " +
-            "Phần lẻ khi làm tròn được dồn vào tiết kiệm.",
+        "Quy tắc 50/30/20: 50% cho nhu cầu thiết yếu, 30% cho mong muốn, 20% cho tiết kiệm và trả nợ. " +
+        "Phần lẻ khi làm tròn được dồn vào tiết kiệm.",
     },
   };
 }

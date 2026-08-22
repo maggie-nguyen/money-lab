@@ -147,12 +147,6 @@ export const QUEST_TITLES_VI: Record<string, string> = {
   q_sim_turns_3: "Làm 3 lượt mô phỏng",
 };
 
-export const QUEST_TITLES_EN: Record<string, string> = {
-  q_complete_lesson: "Complete 1 lesson",
-  q_earn_xp_50: "Earn 50 XP",
-  q_sim_turns_3: "Take 3 simulation turns",
-};
-
 export async function ensureDailyQuests(tx: Tx, userId: string, now: Date): Promise<void> {
   const questDate = vnDate(now);
   await tx.dailyQuest.createMany({
@@ -249,9 +243,9 @@ export function serializeQuest(
     xpReward: number;
     coinReward: number;
   },
-  locale: Locale = "vi",
+  _locale: Locale = "vi",
 ) {
-  const titles = locale === "en" ? QUEST_TITLES_EN : QUEST_TITLES_VI;
+  const titles = QUEST_TITLES_VI;
   return {
     id: q.id,
     code: q.code,

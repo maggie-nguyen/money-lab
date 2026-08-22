@@ -1,6 +1,8 @@
 import { NextRequest } from "next/server";
 import { beforeAll, describe, expect, it } from "vitest";
 import { signAccessToken } from "@/server/auth/jwt";
+import { prisma } from "@/server/db";
+import { resetFlagCache } from "@/server/lib/flags";
 import { createThread } from "@/server/services/tutorService";
 import { GET as listThreadsRoute } from "@/app/api/v1/tutor/threads/route";
 import { makeLearner, runClock } from "../factories";
@@ -18,6 +20,12 @@ let userId = "";
 
 beforeAll(async () => {
   process.env.RATE_LIMIT_DISABLED = "true";
+  await prisma.featureFlag.upsert({
+    where: { key: "ai_tutor_enabled" },
+    create: { key: "ai_tutor_enabled", enabled: true },
+    update: { enabled: true },
+  });
+  resetFlagCache();
   const learner = await makeLearner(() => NOW);
   userId = learner.user.id;
   token = await signAccessToken({ sub: userId, role: "LEARNER" }, NOW);

@@ -1,22 +1,11 @@
-import { cookies, headers } from "next/headers";
-import type { Locale } from "@/lib/types";
-import {
-  DEFAULT_LOCALE,
-  LOCALE_COOKIE,
-  parseLocale,
-  resolveGuestLocale,
-} from "@/lib/locale";
+import type { Locale } from "@/lib/locale";
+import { DEFAULT_LOCALE } from "@/lib/locale";
 
-/** Resolve locale for Server Components (library, landing, metadata). */
+/** App is Vietnamese-only. */
 export async function getRequestLocale(): Promise<Locale> {
-  const cookieStore = await cookies();
-  const hdrs = await headers();
-  return resolveGuestLocale({
-    cookie: cookieStore.get(LOCALE_COOKIE)?.value ?? null,
-    acceptLanguage: hdrs.get("accept-language"),
-  }) ?? DEFAULT_LOCALE;
+  return DEFAULT_LOCALE;
 }
 
-export function localeFromCookieValue(value: string | undefined): Locale {
-  return parseLocale(value) ?? DEFAULT_LOCALE;
+export function localeFromCookieValue(_value: string | undefined): Locale {
+  return DEFAULT_LOCALE;
 }

@@ -2,7 +2,7 @@ import { z } from "zod";
 
 // Content authoring schemas - doc 05. Shared by importer and admin CMS.
 
-export const localeSchema = z.enum(["vi", "en"]);
+export const localeSchema = z.literal("vi");
 export const slugSchema = z
   .string()
   .regex(/^[a-z0-9]+(-[a-z0-9]+)*$/, "slug must be kebab-case")

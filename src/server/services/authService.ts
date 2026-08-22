@@ -90,7 +90,7 @@ export async function signup(
     displayName: string;
     birthYear?: number;
     province?: string;
-    localePref?: "vi" | "en";
+    localePref?: "vi";
   },
   now: Clock,
   meta: { userAgent?: string; ip?: string },
@@ -135,13 +135,13 @@ export async function login(
 const googleJwks = () => createRemoteJWKSet(new URL(env().GOOGLE_JWKS_URL));
 
 export async function googleLogin(
-  input: { idToken: string; localePref?: "vi" | "en" },
+  input: { idToken: string },
   now: Clock,
   meta: { userAgent?: string; ip?: string },
 ) {
   const clientId = env().GOOGLE_CLIENT_ID;
   if (!clientId) throw new AppError("NOT_IMPLEMENTED", "Google login is not configured");
-  const localePref = input.localePref === "en" ? "en" : "vi";
+  const localePref = "vi" as const;
   let payload: { sub?: string; email?: string; email_verified?: boolean; name?: string };
   try {
     const res = await jwtVerify(input.idToken, googleJwks(), {
@@ -179,15 +179,13 @@ export async function googleLogin(
     });
     if (taken) {
       throw conflict(
-        localePref === "en"
-          ? "This email already has an account. Sign in with your password, because Google has not verified this email."
-          : "Email này đã có tài khoản. Hãy đăng nhập bằng mật khẩu, vì Google chưa xác minh email của bạn.",
+        "Email này đã có tài khoản. Hãy đăng nhập bằng mật khẩu, vì Google chưa xác minh email của bạn.",
       );
     }
   }
   if (!user) {
     isNewUser = true;
-    const fallbackName = localePref === "en" ? "Learner" : "Học sinh";
+    const fallbackName = "Học sinh";
     user = await prisma.user.create({
       data: {
         id: uuidv7(),

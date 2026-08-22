@@ -9,10 +9,18 @@
  * Usage: pnpm exec tsx --tsconfig tsconfig.json scripts/smoke-ui.ts [outDir]
  */
 import { mkdirSync } from "node:fs";
+import { platform } from "node:os";
 import puppeteer, { type Browser, type Page } from "puppeteer-core";
 
 const BASE = process.env.SMOKE_BASE_URL ?? "http://localhost:3000";
-const CHROME = process.env.CHROME_PATH ?? "/usr/bin/google-chrome";
+function defaultChromePath(): string {
+  if (process.env.CHROME_PATH) return process.env.CHROME_PATH;
+  if (platform() === "darwin") {
+    return "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
+  }
+  return "/usr/bin/google-chrome";
+}
+const CHROME = defaultChromePath();
 // Checked in so the review record travels with the repo. Pass a path to override.
 const OUT = process.argv[2] ?? "docs/screenshots";
 const ADMIN_EMAIL = process.env.SEED_ADMIN_EMAIL ?? "admin@moneylab.local";
@@ -119,6 +127,15 @@ async function visit(page: Page, name: string, path: string): Promise<void> {
   console.log(`  ${name.padEnd(22)} ${path}`);
 }
 
+/** Map tiles and price pins need a beat after networkidle. */
+async function visitMap(page: Page, name: string, path: string): Promise<void> {
+  current = name;
+  await page.goto(`${BASE}${path}`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+  await new Promise((r) => setTimeout(r, 6_000));
+  await page.screenshot({ path: `${OUT}/${name}.png` as `${string}.png`, fullPage: true });
+  console.log(`  ${name.padEnd(22)} ${path}`);
+}
+
 async function main(): Promise<void> {
   mkdirSync(OUT, { recursive: true });
   const browser: Browser = await puppeteer.launch({
@@ -131,6 +148,8 @@ async function main(): Promise<void> {
   watch(page);
 
   await visit(page, "landing", "/");
+  await visitMap(page, "ban-do", "/ban-do");
+
   await visit(page, "login", "/login");
   await visit(page, "signup", "/signup");
 
@@ -160,6 +179,13 @@ async function main(): Promise<void> {
     LEARNER_PASSWORD,
   );
   if (res !== 200 && res !== 201) throw new Error(`learner login failed: ${res}`);
+
+  await visit(page, "vi-cua-toi", "/vi-cua-toi");
+  await visit(page, "vi-cua-toi-hieu-minh", "/vi-cua-toi/hieu-minh");
+  await visit(page, "vi-cua-toi-chia-vi", "/vi-cua-toi/chia-vi");
+  await visit(page, "vi-cua-toi-cuoc-song", "/vi-cua-toi/cuoc-song");
+  await visit(page, "vi-cua-toi-thu-thach", "/vi-cua-toi/thu-thach");
+  await visitMap(page, "ban-do-signed-in", "/ban-do");
 
   await visit(page, "learn", "/learn");
   await visit(page, "sims", "/sims");
@@ -274,6 +300,7 @@ async function main(): Promise<void> {
   await page.evaluate(() => localStorage.setItem("ml-theme", "light"));
   await page.setViewport({ width: 420, height: 860 });
   await visit(page, "mobile-landing", "/");
+  await visitMap(page, "mobile-ban-do", "/ban-do");
   await visit(page, "mobile-login", "/login");
   await visit(page, "mobile-learn", "/learn");
   await visit(page, "mobile-library", "/library");

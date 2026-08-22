@@ -7,11 +7,14 @@ import { prisma } from "@/server/db";
 const FLAG_TTL_MS = 10_000;
 
 export const FLAG_DEFAULTS: Record<string, boolean> = {
-  ai_tutor_enabled: true,
-  sim_invest_enabled: true,
-  shop_enabled: true,
-  leaderboard_enabled: true,
+  ai_tutor_enabled: false,
+  sim_invest_enabled: false,
+  shop_enabled: false,
+  leaderboard_enabled: false,
   survey_prompt_enabled: false,
+  map_reviews_enabled: true,
+  spending_jars_enabled: true,
+  savings_challenges_enabled: true,
 };
 
 let cache: { at: number; values: Record<string, boolean> } | null = null;

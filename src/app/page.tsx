@@ -1,9 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Button, Card, CardBody, LedgerLabel } from "@/components/ui";
+import { Button, Card, CardBody, CardNavFooter, LedgerLabel } from "@/components/ui";
 import { LedgerScene } from "@/components/auth/LedgerScene";
-import { TopicGlyph, type TopicKind } from "@/components/art/TopicGlyph";
-import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { WalletGlyph, type WalletGlyphKind } from "@/components/art/WalletGlyph";
 import { createT } from "@/lib/i18n";
 import { getRequestLocale } from "@/lib/requestLocale";
 
@@ -13,13 +12,41 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("landing.metaTitle") };
 }
 
-const TOPIC_KINDS: Array<{ kind: TopicKind; titleKey: string; descKey: string }> = [
-  { kind: "budget", titleKey: "landing.topic.budget", descKey: "landing.topic.budgetDesc" },
-  { kind: "credit", titleKey: "landing.topic.credit", descKey: "landing.topic.creditDesc" },
-  { kind: "tax", titleKey: "landing.topic.tax", descKey: "landing.topic.taxDesc" },
-  { kind: "scam", titleKey: "landing.topic.scam", descKey: "landing.topic.scamDesc" },
-  { kind: "invest", titleKey: "landing.topic.invest", descKey: "landing.topic.investDesc" },
-  { kind: "business", titleKey: "landing.topic.business", descKey: "landing.topic.businessDesc" },
+const PILLARS: Array<{
+  href: string;
+  titleKey: string;
+  descKey: string;
+  tagKey: string;
+  glyph: WalletGlyphKind;
+}> = [
+  {
+    href: "/ban-do",
+    titleKey: "landing.pillar.map",
+    descKey: "landing.pillar.mapDesc",
+    tagKey: "nav.map",
+    glyph: "map",
+  },
+  {
+    href: "/vi-cua-toi/hieu-minh",
+    titleKey: "landing.pillar.mind",
+    descKey: "landing.pillar.mindDesc",
+    tagKey: "wallet.mind.tag",
+    glyph: "mind",
+  },
+  {
+    href: "/vi-cua-toi/chia-vi",
+    titleKey: "landing.pillar.wallet",
+    descKey: "landing.pillar.walletDesc",
+    tagKey: "wallet.manage.tag",
+    glyph: "manage",
+  },
+  {
+    href: "/vi-cua-toi/thu-thach",
+    titleKey: "landing.pillar.habits",
+    descKey: "landing.pillar.habitsDesc",
+    tagKey: "wallet.habits.tag",
+    glyph: "habits",
+  },
 ];
 
 export default async function LandingPage() {
@@ -32,7 +59,6 @@ export default async function LandingPage() {
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
           <span className="font-display text-xl font-semibold tracking-tight">MoneyLab</span>
           <nav className="flex items-center gap-4 text-sm">
-            <LanguageSwitcher />
             <Link href="/login" className="text-ink-soft hover:text-ink">
               {t("landing.signIn")}
             </Link>
@@ -51,12 +77,12 @@ export default async function LandingPage() {
               <h1 className="mt-3 text-4xl sm:text-5xl">{t("landing.heroTitle")}</h1>
               <p className="mt-5 max-w-xl text-base text-ink-soft">{t("landing.heroBody")}</p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Link href="/signup">
-                  <Button size="lg">{t("landing.startFree")}</Button>
+                <Link href="/ban-do">
+                  <Button size="lg">{t("landing.exploreMap")}</Button>
                 </Link>
-                <Link href="/library">
+                <Link href="/signup">
                   <Button size="lg" variant="secondary">
-                    {t("landing.readArticles")}
+                    {t("landing.startFree")}
                   </Button>
                 </Link>
               </div>
@@ -91,17 +117,25 @@ export default async function LandingPage() {
 
         <section className="border-y border-rule bg-paper-sunken">
           <div className="mx-auto max-w-5xl px-4 py-14">
-            <h2 className="text-2xl">{t("landing.topicsTitle")}</h2>
-            <p className="mt-2 max-w-2xl text-sm text-ink-soft">{t("landing.topicsBody")}</p>
-            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {TOPIC_KINDS.map((item) => (
-                <Card key={item.kind}>
-                  <CardBody>
-                    <TopicGlyph kind={item.kind} className="h-10 w-10 text-moss-600" />
-                    <h3 className="mt-3 text-base">{t(item.titleKey)}</h3>
-                    <p className="mt-1.5 text-sm text-ink-soft">{t(item.descKey)}</p>
-                  </CardBody>
-                </Card>
+            <h2 className="font-display text-2xl">{t("landing.topicsTitle")}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">{t("landing.topicsBody")}</p>
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+              {PILLARS.map((item) => (
+                <Link key={item.href} href={item.href} className="group block h-full">
+                  <Card className="flex h-full flex-col transition-colors hover:border-moss-200 hover:bg-paper-raised">
+                    <CardBody className="flex flex-1 flex-col">
+                      <WalletGlyph kind={item.glyph} className="h-10 w-10 text-moss-600" />
+                      <LedgerLabel className="mt-4">{t(item.tagKey)}</LedgerLabel>
+                      <h3 className="mt-2 font-display text-base font-semibold group-hover:text-moss-600">
+                        {t(item.titleKey)}
+                      </h3>
+                      <p className="mt-1.5 line-clamp-3 flex-1 text-sm leading-relaxed text-ink-soft">
+                        {t(item.descKey)}
+                      </p>
+                      <CardNavFooter label={t("wallet.explore")} />
+                    </CardBody>
+                  </Card>
+                </Link>
               ))}
             </div>
           </div>
@@ -111,8 +145,8 @@ export default async function LandingPage() {
           <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
             <div>
               <LedgerLabel>{t("landing.simLabel")}</LedgerLabel>
-              <h2 className="mt-2 text-2xl">{t("landing.simTitle")}</h2>
-              <p className="mt-3 text-sm text-ink-soft">{t("landing.simBody")}</p>
+              <h2 className="mt-2 font-display text-2xl">{t("landing.simTitle")}</h2>
+              <p className="mt-3 text-sm leading-relaxed text-ink-soft">{t("landing.simBody")}</p>
               <p className="mt-3 text-xs text-ink-faint">{t("landing.simNote")}</p>
             </div>
             <Card tone="ink">
@@ -143,21 +177,21 @@ export default async function LandingPage() {
           <LedgerScene uid="ml-cta" viewBox="0 1010 900 190" className="absolute inset-0 h-full w-full" />
           <div className="absolute inset-0 bg-[#0b2a1e]/75" />
           <div className="relative mx-auto max-w-5xl px-4 py-20 text-center">
-            <h2 className="text-2xl text-[#f0ead9]">{t("landing.ctaTitle")}</h2>
+            <h2 className="font-display text-2xl text-[#f0ead9]">{t("landing.ctaTitle")}</h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-[#f0ead9]/85">{t("landing.ctaBody")}</p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Link href="/signup">
+              <Link href="/ban-do">
                 <Button size="lg" className="!bg-[#f0ead9] !text-[#16211c] hover:!bg-white">
-                  {t("landing.startFree")}
+                  {t("landing.exploreMap")}
                 </Button>
               </Link>
-              <Link href="/library">
+              <Link href="/signup">
                 <Button
                   size="lg"
                   variant="secondary"
                   className="!border-[#f0ead9]/60 !text-[#f0ead9] hover:!bg-[#f0ead9]/10"
                 >
-                  {t("landing.readArticles")}
+                  {t("landing.startFree")}
                 </Button>
               </Link>
             </div>

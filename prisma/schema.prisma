@@ -1,11 +1,17 @@
-// MoneyLab schema - mirrors docs/02-DATA-MODEL.md
+// MoneyLab schema — mirrors docs/02-DATA-MODEL.md
+//
+// DOMAIN A (platform): User, auth tokens, FeatureFlag, Event, AuditLog
+// DOMAIN B (v2 product): Food*, SpendingJarPlan, SavingsChallenge*, Article*
+// DOMAIN C (legacy LMS, frozen): Track, Course, Lesson, Quiz, Sim*, Tutor*, Shop*
+// See docs/09-BACKEND-PLATFORM.md §4.2
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
 // ── Enums ────────────────────────────────────────────────────────────────────
@@ -96,6 +102,7 @@ enum LedgerReason {
   STREAK_FREEZE_USE
   ADMIN_ADJUST
   REFERRAL
+  CHALLENGE_COMPLETE
 }
 
 enum BadgeKind {
@@ -182,6 +189,9 @@ model User {
   surveyResponses SurveyResponse[]
   certificates    Certificate[]
   leaderboard     LeaderboardResult[]
+  spendingJar     SpendingJarPlan?
+  foodReviews     FoodReview[]
+  userChallenges  UserChallenge[]
 
   @@index([lastActiveAt])
   @@index([role])
@@ -964,4 +974,132 @@ model CronRun {
 
   @@index([name, ranAt])
   @@map("cron_run")
+}
+
+// ── Spending management (hũ chi tiêu) ────────────────────────────────────────
+
+model SpendingJarPlan {
+  userId         String   @id
+  totalBudgetVnd BigInt
+  categories     Json     @default("[]")
+  updatedAt      DateTime @updatedAt
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("spending_jar_plan")
+}
+
+// ── Cheap food map ───────────────────────────────────────────────────────────
+
+model FoodCluster {
+  id           String                   @id
+  slug         String                   @unique
+  city         String
+  order        Int                      @default(0)
+  lat          Float?
+  lng          Float?
+  createdAt    DateTime                 @default(now())
+  updatedAt    DateTime                 @updatedAt
+  translations FoodClusterTranslation[]
+  spots        FoodSpot[]
+
+  @@map("food_cluster")
+}
+
+model FoodClusterTranslation {
+  clusterId   String
+  locale      Locale
+  name        String
+  description String @default("")
+  cluster     FoodCluster @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+
+  @@id([clusterId, locale])
+  @@map("food_cluster_translation")
+}
+
+model FoodSpot {
+  id            String       @id
+  clusterId     String
+  name          String
+  address       String       @default("")
+  lat           Float?
+  lng           Float?
+  avgPriceVnd   BigInt?
+  tags          Json         @default("[]")
+  note          String       @default("")
+  order         Int          @default(0)
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+  cluster       FoodCluster  @relation(fields: [clusterId], references: [id], onDelete: Cascade)
+  reviews       FoodReview[]
+
+  @@index([clusterId, order])
+  @@index([lat, lng])
+  @@map("food_spot")
+}
+
+model FoodReview {
+  id        String   @id
+  spotId    String
+  userId    String
+  rating    Int
+  body      String
+  priceVnd  BigInt?
+  createdAt DateTime @default(now())
+  spot      FoodSpot @relation(fields: [spotId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([spotId, createdAt])
+  @@map("food_review")
+}
+
+// ── Savings challenges ───────────────────────────────────────────────────────
+
+enum ChallengeStatus {
+  ACTIVE
+  COMPLETED
+  ABANDONED
+}
+
+model SavingsChallenge {
+  id           String                        @id
+  code         String                        @unique
+  slug         String                        @unique
+  durationDays Int
+  iconKey      String                        @default("challenge")
+  badgeCode    String?
+  order        Int                           @default(0)
+  status       ContentStatus                 @default(PUBLISHED)
+  createdAt    DateTime                      @default(now())
+  updatedAt    DateTime                      @updatedAt
+  translations SavingsChallengeTranslation[]
+  participations UserChallenge[]
+
+  @@map("savings_challenge")
+}
+
+model SavingsChallengeTranslation {
+  challengeId  String
+  locale       Locale
+  title        String
+  description  String @default("")
+  savingsHint  String @default("")
+  challenge    SavingsChallenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@id([challengeId, locale])
+  @@map("savings_challenge_translation")
+}
+
+model UserChallenge {
+  id          String          @id
+  userId      String
+  challengeId String
+  status      ChallengeStatus @default(ACTIVE)
+  startedAt   DateTime        @default(now())
+  completedAt DateTime?
+  tickDates   Json            @default("[]")
+  user        User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  challenge   SavingsChallenge @relation(fields: [challengeId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@map("user_challenge")
 }

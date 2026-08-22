@@ -4,33 +4,27 @@ import { parseLocale, resolveGuestLocale } from "@/lib/locale";
 import { formatRelative, formatVndApprox, formatMinutes } from "@/lib/format";
 
 describe("createT", () => {
-  it("returns Vietnamese by default catalog", () => {
+  it("returns Vietnamese strings", () => {
     expect(createT("vi")("nav.settings")).toBe("Cài đặt");
   });
 
-  it("returns English strings and interpolates", () => {
-    expect(createT("en")("stats.level", { level: 3 })).toBe("Level 3");
+  it("interpolates variables", () => {
+    expect(createT("vi")("stats.level", { level: 3 })).toBe("Cấp 3");
   });
 
-  it("falls back to Vietnamese when a key is missing in en", () => {
-    const t = createT("en");
-    // unknown key echoes itself
-    expect(t("does.not.exist")).toBe("does.not.exist");
+  it("echoes unknown keys", () => {
+    expect(createT("vi")("does.not.exist")).toBe("does.not.exist");
   });
 
   it("has localized API error codes and rule codes", () => {
-    expect(createT("en")("error.code.UNAUTHENTICATED")).toBe("Please sign in to continue.");
     expect(createT("vi")("error.rule.INSUFFICIENT_COINS")).toBe("Bạn không đủ xu.");
-    expect(createT("en")("error.rule.UNREACHABLE")).not.toBe("error.rule.UNREACHABLE");
+    expect(createT("vi")("error.code.UNAUTHENTICATED")).toBe("Bạn cần đăng nhập để tiếp tục.");
   });
 });
 
 describe("quest title maps", () => {
-  it("keeps VI/EN quest codes aligned", async () => {
-    const { QUEST_TITLES_VI, QUEST_TITLES_EN, serializeQuest } = await import(
-      "@/server/services/gamificationService"
-    );
-    expect(Object.keys(QUEST_TITLES_EN).sort()).toEqual(Object.keys(QUEST_TITLES_VI).sort());
+  it("serializes quests with Vietnamese titles", async () => {
+    const { QUEST_TITLES_VI, serializeQuest } = await import("@/server/services/gamificationService");
     const sample = serializeQuest(
       {
         id: "q1",
@@ -42,41 +36,33 @@ describe("quest title maps", () => {
         xpReward: 15,
         coinReward: 5,
       },
-      "en",
+      "vi",
     );
-    expect(sample.title).toBe(QUEST_TITLES_EN.q_complete_lesson);
+    expect(sample.title).toBe(QUEST_TITLES_VI.q_complete_lesson);
   });
 });
 
 describe("locale helpers", () => {
-  it("parses only vi|en", () => {
-    expect(parseLocale("en")).toBe("en");
-    expect(parseLocale("fr")).toBeNull();
-  });
-
-  it("prefers cookie over Accept-Language", () => {
-    expect(resolveGuestLocale({ cookie: "vi", acceptLanguage: "en-US,en;q=0.9" })).toBe("vi");
-    expect(resolveGuestLocale({ cookie: null, acceptLanguage: "en-US,en;q=0.9" })).toBe("en");
+  it("always resolves to vi", () => {
+    expect(parseLocale("en")).toBe("vi");
+    expect(parseLocale("fr")).toBe("vi");
+    expect(resolveGuestLocale({ cookie: null, acceptLanguage: "en-US,en;q=0.9" })).toBe("vi");
   });
 });
 
 describe("format locale variants", () => {
-  it("glosses approx money in English", () => {
-    expect(formatVndApprox("100133641", "en")).toBe("about 100.1 million");
-    expect(formatVndApprox("70000000", "en")).toBe("70 million");
-  });
-
-  it("keeps Vietnamese approx defaults", () => {
+  it("glosses approx money in Vietnamese", () => {
     expect(formatVndApprox("100133641")).toBe("khoảng 100,1 triệu");
+    expect(formatVndApprox("70000000")).toBe("70 triệu");
   });
 
-  it("formats relative time in English", () => {
+  it("formats relative time in Vietnamese", () => {
     const now = new Date("2026-08-16T12:00:00.000Z");
     const then = new Date("2026-08-16T11:30:00.000Z").toISOString();
-    expect(formatRelative(then, now, "en")).toBe("30 min ago");
+    expect(formatRelative(then, now)).toBe("30 phút trước");
   });
 
-  it("formats minutes in English", () => {
-    expect(formatMinutes(90, "en")).toBe("1 h 30 min");
+  it("formats minutes in Vietnamese", () => {
+    expect(formatMinutes(90)).toBe("1 giờ 30 phút");
   });
 });

@@ -3,7 +3,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import * as React from "react";
 import { api, ApiError } from "@/lib/api";
-import { BOOTSTRAP_KEY, useLocale, useMe, useT } from "@/components/Providers";
+import { BOOTSTRAP_KEY, useMe, useT } from "@/components/Providers";
 import { signOut } from "@/lib/signOut";
 import {
   Button,
@@ -16,7 +16,7 @@ import {
   Alert,
   Dialog,
 } from "@/components/ui";
-import type { Me, Locale } from "@/lib/types";
+import type { Me } from "@/lib/types";
 import { useProvinces } from "../../useProvinces";
 
 type Theme = "light" | "dark";
@@ -57,10 +57,8 @@ function ProfileSection({ me }: { me: Me }) {
   const qc = useQueryClient();
   const provinces = useProvinces();
   const t = useT();
-  const { setLocale } = useLocale();
   const [displayName, setDisplayName] = React.useState(me.displayName);
   const [province, setProvince] = React.useState(me.province ?? "");
-  const [localePref, setLocalePref] = React.useState<Locale>(me.localePref);
   const [fieldErrors, setFieldErrors] = React.useState<Record<string, string>>({});
 
   const save = useMutation({
@@ -68,11 +66,9 @@ function ProfileSection({ me }: { me: Me }) {
       api.patch<Me>("/me", {
         displayName,
         province: province || null,
-        localePref,
       }),
     onSuccess: () => {
       setFieldErrors({});
-      setLocale(localePref);
       void qc.invalidateQueries({ queryKey: BOOTSTRAP_KEY });
     },
     onError: (err) => {
@@ -112,12 +108,6 @@ function ProfileSection({ me }: { me: Me }) {
                   {p.label}
                 </option>
               ))}
-            </Select>
-          </Field>
-          <Field label={t("settings.language")} htmlFor="localePref" error={fieldErrors.localePref}>
-            <Select id="localePref" value={localePref} onChange={(e) => setLocalePref(e.target.value as Locale)}>
-              <option value="vi">{t("settings.langVi")}</option>
-              <option value="en">{t("settings.langEn")}</option>
             </Select>
           </Field>
           <Button type="submit" loading={save.isPending}>

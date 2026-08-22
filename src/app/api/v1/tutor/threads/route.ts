@@ -10,7 +10,7 @@ const body = z.object({
 const q = z.object({
   cursor: z.string().optional(),
   limit: z.coerce.number().int().min(1).max(50).default(20),
-  locale: z.enum(["vi", "en"]).default("vi"),
+  locale: z.literal("vi").default("vi"),
 });
 
 // POST /tutor/threads - doc 03 §9.1

@@ -19,7 +19,6 @@ export const signupSchema = z.object({
     .max(50)
     .refine(isProvinceKey, "Tỉnh/thành không hợp lệ") // enum, not free text (doc 01 §9.1)
     .optional(),
-  localePref: z.enum(["vi", "en"]).optional(),
 });
 
 export const loginSchema = z.object({
@@ -29,7 +28,6 @@ export const loginSchema = z.object({
 
 export const googleSchema = z.object({
   idToken: z.string().min(10).max(4096),
-  localePref: z.enum(["vi", "en"]).optional(),
 });
 
 export const refreshSchema = z.object({ refreshToken: z.string().min(10).max(512) });
