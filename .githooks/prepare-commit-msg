@@ -1,0 +1,6 @@
+#!/bin/sh
+# Strip Cursor co-author trailers injected by the IDE agent.
+# Enable: git config core.hooksPath .githooks
+MSG_FILE="$1"
+sed -i '' '/^Co-authored-by: Cursor <cursoragent@cursor.com>$/d' "$MSG_FILE" 2>/dev/null \
+  || sed -i '/^Co-authored-by: Cursor <cursoragent@cursor.com>$/d' "$MSG_FILE"

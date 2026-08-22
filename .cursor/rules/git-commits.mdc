@@ -1,0 +1,10 @@
+---
+description: Git commits must not include Cursor co-author attribution
+alwaysApply: true
+---
+
+# Git commits
+
+- Never add `Co-authored-by: Cursor` or any Cursor/agent attribution to commit messages.
+- When committing, use plain messages with the user's authorship only.
+- Do not commit `.cursor/` agent metadata unless the user explicitly asks for project rules or hooks.
