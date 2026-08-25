@@ -19,14 +19,12 @@ const day = (n: number) => new Date(NOW.getTime() - n * 86_400_000);
 
 let publishedId = "";
 let draftSlug = "";
-let courseId = "";
 
 async function makeArticle(opts: {
   slug: string;
   status: "DRAFT" | "PUBLISHED";
   category?: "GUIDE" | "EXPLAINER" | "NEWS" | "STORY";
   publishedAt?: Date | null;
-  relatedCourseId?: string | null;
   blocks?: unknown[];
 }) {
   const article = await prisma.article.create({
@@ -36,7 +34,6 @@ async function makeArticle(opts: {
       status: opts.status,
       category: opts.category ?? "GUIDE",
       publishedAt: opts.status === "PUBLISHED" ? (opts.publishedAt ?? NOW) : null,
-      relatedCourseId: opts.relatedCourseId ?? null,
       translations: {
         create: {
           locale: "vi",
@@ -51,34 +48,10 @@ async function makeArticle(opts: {
 }
 
 beforeAll(async () => {
-  // A course to hang a related link on. Kept DRAFT on purpose: the published
-  // article must not advertise it.
-  const track = await prisma.track.create({
-    data: {
-      id: uuidv7(),
-      slug: `lib-track-${Date.now()}`,
-      order: 99,
-      translations: { create: { locale: "vi", title: "Chủ đề thử" } },
-    },
-  });
-  const course = await prisma.course.create({
-    data: {
-      id: uuidv7(),
-      trackId: track.id,
-      slug: `lib-course-${Date.now()}`,
-      status: "DRAFT",
-      order: 99,
-      level: 1,
-      translations: { create: { locale: "vi", title: "Khóa học nháp" } },
-    },
-  });
-  courseId = course.id;
-
   const published = await makeArticle({
     slug: `lib-pub-${Date.now()}`,
     status: "PUBLISHED",
     publishedAt: day(1),
-    relatedCourseId: course.id,
     blocks: [
       { type: "PARAGRAPH", text: "Đoạn mở đầu" },
       {
@@ -157,18 +130,6 @@ describe("getArticle", () => {
     const types = (article.blocks as Array<{ type: string }>).map((b) => b.type);
     expect(types).toEqual(["PARAGRAPH", "PARAGRAPH"]);
     expect(JSON.stringify(article.blocks)).not.toContain("answerKey");
-  });
-
-  it("hides a related course that is not published", async () => {
-    const article = await getArticle(publishedId, "vi");
-    expect(article.relatedCourse).toBeNull();
-  });
-
-  it("shows the related course once it is published", async () => {
-    await prisma.course.update({ where: { id: courseId }, data: { status: "PUBLISHED" } });
-    const article = await getArticle(publishedId, "vi");
-    expect(article.relatedCourse).toMatchObject({ title: "Khóa học nháp" });
-    await prisma.course.update({ where: { id: courseId }, data: { status: "DRAFT" } });
   });
 
   it("falls back to the title and summary for SEO fields", async () => {

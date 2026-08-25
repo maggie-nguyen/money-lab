@@ -17,7 +17,7 @@ import {
 } from "@/components/ui";
 import { MapAreaLinks, MapSpotList } from "@/components/map/MapChrome";
 import { PricePinMarkers } from "@/components/map/PricePinMarkers";
-import { SchoolPinMarkers } from "@/components/map/SchoolPinMarkers";
+
 import { SpotMapOverlay } from "@/components/map/SpotPreviewCard";
 import {
   MAP_DEFAULTS,
@@ -31,7 +31,6 @@ import {
   type MapBounds,
   type MapCenter,
   type PriceFilter,
-  type SchoolPin,
   matchesPriceFilter,
 } from "@/lib/map";
 
@@ -110,7 +109,7 @@ export function FoodMapView() {
   const [selected, setSelected] = React.useState<FoodSpotPin | null>(null);
   const [priceFilter, setPriceFilter] = React.useState<PriceFilter>("all");
   const [tagFilter, setTagFilter] = React.useState<FoodTagId | null>(null);
-  const [maxPriceK, setMaxPriceK] = React.useState(35);
+  const [maxPriceK, setMaxPriceK] = React.useState(60);
   const [jumpTarget, setJumpTarget] = React.useState<MapCenter | null>(null);
   const [locationNotice, setLocationNotice] = React.useState<string | null>(null);
 
@@ -133,21 +132,6 @@ export function FoodMapView() {
     staleTime: 60_000,
   });
 
-  const schoolsQuery = useQuery({
-    queryKey: ["food", "schools", boundsKey],
-    queryFn: () => {
-      const b = bounds!;
-      return api.get<SchoolPin[]>("/food/schools", {
-        swLat: b.swLat,
-        swLng: b.swLng,
-        neLat: b.neLat,
-        neLng: b.neLng,
-      });
-    },
-    enabled: bounds != null,
-    staleTime: 120_000,
-  });
-
   const filters: FilterChip[] = [
     { kind: "price", id: "all", label: t("map.filter.all") },
     { kind: "price", id: "under25", label: t("map.filter.under25") },
@@ -160,7 +144,6 @@ export function FoodMapView() {
   ];
 
   const allPins = spotsQuery.data ?? [];
-  const schoolPins = schoolsQuery.data ?? [];
   const pins = allPins.filter((p) => {
     if (!matchesPriceFilter(p, priceFilter)) return false;
     if (tagFilter && !p.tags.includes(tagFilter)) return false;
@@ -268,7 +251,7 @@ export function FoodMapView() {
                   id="price-slider"
                   type="range"
                   min={15}
-                  max={50}
+                  max={60}
                   step={5}
                   value={maxPriceK}
                   onChange={(e) => setMaxPriceK(Number(e.target.value))}
@@ -312,27 +295,10 @@ export function FoodMapView() {
               <p className="text-xs text-ink-faint">
                 {spotsQuery.isLoading ? t("map.loading") : t("map.spotCount", { count: pins.length })}
               </p>
-              <p className="text-xs text-ink-faint">
-                {schoolsQuery.isLoading
-                  ? t("map.loadingSchools")
-                  : t("map.schoolCount", { count: schoolPins.length })}
-              </p>
             </CardBody>
           </Card>
 
-          <Card className="lg:hidden">
-            <CardBody>
-              <SectionTitle>{t("map.spotListLabel")}</SectionTitle>
-              <MapSpotList
-                pins={pins}
-                selectedId={selected?.id ?? null}
-                onSelect={handleSelectPin}
-                onFocus={setJumpTarget}
-              />
-            </CardBody>
-          </Card>
-
-          <Card className="hidden lg:block">
+          <Card>
             <CardBody>
               <SectionTitle>{t("map.spotListLabel")}</SectionTitle>
               <MapSpotList
@@ -368,7 +334,7 @@ export function FoodMapView() {
                     selectedId={selected?.id ?? null}
                     onSelect={handleSelectPin}
                   />
-                  <SchoolPinMarkers schools={schoolPins} />
+
                 </Map>
               </APIProvider>
 

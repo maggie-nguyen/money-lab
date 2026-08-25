@@ -7,10 +7,6 @@ import { prisma } from "@/server/db";
 const FLAG_TTL_MS = 10_000;
 
 export const FLAG_DEFAULTS: Record<string, boolean> = {
-  ai_tutor_enabled: false,
-  sim_invest_enabled: false,
-  shop_enabled: false,
-  leaderboard_enabled: false,
   survey_prompt_enabled: false,
   map_reviews_enabled: true,
   spending_jars_enabled: true,

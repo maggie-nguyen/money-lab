@@ -103,22 +103,6 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
           <LessonBlocks blocks={article.blocks as Block[]} />
         </div>
 
-        {article.relatedCourse && (
-          <div className="mt-12">
-            <Card tone="ink">
-              <CardBody className="flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <LedgerLabel className="text-paper/70">{t("nav.courses")}</LedgerLabel>
-                  <p className="mt-1 font-display text-lg text-paper">{article.relatedCourse.title}</p>
-                </div>
-                <Link href={`/course/${article.relatedCourse.slug}`}>
-                  <Button variant="secondary">{t("nav.courses")}</Button>
-                </Link>
-              </CardBody>
-            </Card>
-          </div>
-        )}
-
         {article.related.length > 0 && (
           <div className="mt-14 border-t border-rule pt-8">
             <LedgerLabel>{t("library.label")}</LedgerLabel>

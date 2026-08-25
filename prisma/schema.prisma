@@ -44,15 +44,6 @@ enum ArticleCategory {
 // enum would have to be migrated in lockstep with every new block type, and it
 // could not describe a block's fields anyway.
 
-enum QuestionType {
-  SINGLE_CHOICE
-  MULTI_CHOICE
-  TRUE_FALSE
-  NUMERIC
-  ORDERING
-  MATCHING
-  SCENARIO_CHOICE
-}
 
 enum QuizKind {
   LESSON_CHECK
@@ -72,20 +63,7 @@ enum ProgressStatus {
   COMPLETED
 }
 
-enum SimType {
-  BUDGET
-  LOANS
-  SCAM
-  BUSINESS
-  INVEST
-}
 
-enum SimStatus {
-  ACTIVE
-  COMPLETED
-  ABANDONED
-  FAILED
-}
 
 enum LedgerReason {
   LESSON_COMPLETE
@@ -134,17 +112,6 @@ enum CertStatus {
   REVOKED
 }
 
-enum TutorContextType {
-  GENERAL
-  LESSON
-  SIM_SESSION
-}
-
-enum TutorMsgRole {
-  USER
-  ASSISTANT
-}
-
 enum EmailTokenPurpose {
   verify
   reset
@@ -173,22 +140,13 @@ model User {
   oauthAccounts   OauthAccount[]
   refreshTokens   RefreshToken[]
   emailTokens     EmailToken[]
-  enrollments     Enrollment[]
-  lessonProgress  LessonProgress[]
-  quizAttempts    QuizAttempt[]
   xpLedger        XpLedger[]
   coinLedger      CoinLedger[]
   stats           UserStats?
   badges          UserBadge[]
   dailyQuests     DailyQuest[]
-  purchases       UserPurchase[]
-  simSessions     SimSession[]
-  tutorThreads    TutorThread[]
-  tutorUsage      TutorUsage[]
   feedback        Feedback[]
   surveyResponses SurveyResponse[]
-  certificates    Certificate[]
-  leaderboard     LeaderboardResult[]
   spendingJar     SpendingJarPlan?
   foodReviews     FoodReview[]
   userChallenges  UserChallenge[]
@@ -267,129 +225,13 @@ model RateLimit {
 
 // ── Content catalog ──────────────────────────────────────────────────────────
 
-model Track {
-  id           String             @id
-  slug         String             @unique
-  order        Int
-  status       ContentStatus      @default(DRAFT)
-  iconKey      String?
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-  translations TrackTranslation[]
-  courses      Course[]
 
-  @@map("track")
-}
 
-model TrackTranslation {
-  trackId     String
-  locale      Locale
-  title       String
-  subtitle    String @default("")
-  description String @default("")
-  track       Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
 
-  @@id([trackId, locale])
-  @@map("track_translation")
-}
 
-model Course {
-  id               String              @id
-  trackId          String
-  slug             String              @unique
-  order            Int
-  status           ContentStatus       @default(DRAFT)
-  level            Int                 @default(1)
-  estimatedMinutes Int                 @default(30)
-  coverImageUrl    String?
-  xpReward         Int                 @default(50)
-  finalQuizId      String?             @unique
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt
-  track            Track               @relation(fields: [trackId], references: [id], onDelete: Restrict)
-  finalQuiz        Quiz?               @relation("courseFinalQuiz", fields: [finalQuizId], references: [id])
-  translations     CourseTranslation[]
-  modules          Module[]
-  lessons          Lesson[]
-  enrollments      Enrollment[]
-  certificates     Certificate[]
-  articles         Article[]
 
-  @@map("course")
-}
 
-model CourseTranslation {
-  courseId           String
-  locale             Locale
-  title              String
-  subtitle           String @default("")
-  description        String @default("")
-  learningObjectives Json   @default("[]")
-  course             Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  @@id([courseId, locale])
-  @@map("course_translation")
-}
-
-model Module {
-  id           String              @id
-  courseId     String
-  slug         String
-  order        Int
-  createdAt    DateTime            @default(now())
-  updatedAt    DateTime            @updatedAt
-  course       Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  translations ModuleTranslation[]
-  lessons      Lesson[]
-
-  @@unique([courseId, slug])
-  @@map("module")
-}
-
-model ModuleTranslation {
-  moduleId String
-  locale   Locale
-  title    String
-  module   Module @relation(fields: [moduleId], references: [id], onDelete: Cascade)
-
-  @@id([moduleId, locale])
-  @@map("module_translation")
-}
-
-model Lesson {
-  id               String              @id
-  courseId         String
-  moduleId         String?
-  slug             String
-  order            Int
-  status           ContentStatus       @default(DRAFT)
-  estimatedMinutes Int                 @default(6)
-  xpReward         Int                 @default(20)
-  contentVersion   Int                 @default(1)
-  checkQuizId      String?             @unique
-  createdAt        DateTime            @default(now())
-  updatedAt        DateTime            @updatedAt
-  course           Course              @relation(fields: [courseId], references: [id], onDelete: Cascade)
-  module           Module?             @relation(fields: [moduleId], references: [id], onDelete: SetNull)
-  checkQuiz        Quiz?               @relation("lessonCheckQuiz", fields: [checkQuizId], references: [id])
-  translations     LessonTranslation[]
-  progress         LessonProgress[]
-
-  @@unique([courseId, slug])
-  @@map("lesson")
-}
-
-model LessonTranslation {
-  lessonId String
-  locale   Locale
-  title    String
-  summary  String @default("")
-  blocks   Json   @default("[]")
-  lesson   Lesson @relation(fields: [lessonId], references: [id], onDelete: Cascade)
-
-  @@id([lessonId, locale])
-  @@map("lesson_translation")
-}
 
 /// A standalone article: a lesson without progress, XP or a quiz. It reuses the
 /// same block union as LessonTranslation, so one renderer covers both.
@@ -402,11 +244,9 @@ model Article {
   readMinutes     Int                  @default(4)
   publishedAt     DateTime?
   authorName      String               @default("MoneyLab")
-  relatedCourseId String?
   contentVersion  Int                  @default(1)
   createdAt       DateTime             @default(now())
   updatedAt       DateTime             @updatedAt
-  relatedCourse   Course?              @relation(fields: [relatedCourseId], references: [id], onDelete: SetNull)
   translations    ArticleTranslation[]
 
   @@index([status, publishedAt])
@@ -428,53 +268,8 @@ model ArticleTranslation {
   @@map("article_translation")
 }
 
-model Quiz {
-  id               String        @id
-  kind             QuizKind
-  status           ContentStatus @default(DRAFT)
-  passThresholdPct Int           @default(70)
-  maxAttempts      Int?
-  timeLimitSec     Int?
-  shuffleQuestions Boolean       @default(true)
-  contentVersion   Int           @default(1)
-  createdAt        DateTime      @default(now())
-  updatedAt        DateTime      @updatedAt
-  questions        Question[]
-  attempts         QuizAttempt[]
-  lessonCheckOf    Lesson?       @relation("lessonCheckQuiz")
-  courseFinalOf    Course?       @relation("courseFinalQuiz")
 
-  @@map("quiz")
-}
 
-model Question {
-  id           String                @id
-  quizId       String
-  order        Int
-  type         QuestionType
-  points       Int                   @default(1)
-  payload      Json                  @default("{}")
-  answerKey    Json                  @default("{}")
-  createdAt    DateTime              @default(now())
-  updatedAt    DateTime              @updatedAt
-  quiz         Quiz                  @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  translations QuestionTranslation[]
-  answers      QuizAnswer[]
-
-  @@map("question")
-}
-
-model QuestionTranslation {
-  questionId  String
-  locale      Locale
-  prompt      String
-  explanation String   @default("")
-  payloadText Json     @default("{}")
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
-
-  @@id([questionId, locale])
-  @@map("question_translation")
-}
 
 model MediaAsset {
   id         String   @id
@@ -505,74 +300,9 @@ model ContentRevision {
 
 // ── Progress ─────────────────────────────────────────────────────────────────
 
-model Enrollment {
-  id          String    @id
-  userId      String
-  courseId    String
-  startedAt   DateTime  @default(now())
-  completedAt DateTime?
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course      Course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, courseId])
-  @@map("enrollment")
-}
 
-model LessonProgress {
-  id                 String         @id
-  userId             String
-  lessonId           String
-  status             ProgressStatus @default(IN_PROGRESS)
-  lastBlockIndex     Int            @default(0)
-  contentVersionSeen Int            @default(1)
-  startedAt          DateTime       @default(now())
-  completedAt        DateTime?
-  secondsSpent       Int            @default(0)
-  user               User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  lesson             Lesson         @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, lessonId])
-  @@map("lesson_progress")
-}
-
-model QuizAttempt {
-  id                 String        @id
-  userId             String
-  quizId             String
-  attemptNumber      Int
-  status             AttemptStatus @default(IN_PROGRESS)
-  questionOrder      Json          @default("[]")
-  startedAt          DateTime      @default(now())
-  submittedAt        DateTime?
-  expiresAt          DateTime?
-  scorePoints        Int?
-  maxPoints          Int?
-  scorePct           Int?
-  passed             Boolean?
-  contentVersionSeen Int           @default(1)
-  user               User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  quiz               Quiz          @relation(fields: [quizId], references: [id], onDelete: Cascade)
-  answers            QuizAnswer[]
-
-  @@unique([userId, quizId, attemptNumber])
-  @@index([userId, quizId, status])
-  @@map("quiz_attempt")
-}
-
-model QuizAnswer {
-  id            String      @id
-  attemptId     String
-  questionId    String
-  response      Json
-  isCorrect     Boolean?
-  pointsAwarded Int?
-  answeredAt    DateTime    @default(now())
-  attempt       QuizAttempt @relation(fields: [attemptId], references: [id], onDelete: Cascade)
-  question      Question    @relation(fields: [questionId], references: [id], onDelete: Cascade)
-
-  @@unique([attemptId, questionId])
-  @@map("quiz_answer")
-}
 
 // ── Gamification ─────────────────────────────────────────────────────────────
 
@@ -676,164 +406,15 @@ model DailyQuest {
   @@map("daily_quest")
 }
 
-model LeaderboardResult {
-  id        String @id
-  weekStart String
-  userId    String
-  rank      Int
-  xpEarned  Int
-  user      User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@unique([weekStart, userId])
-  @@map("leaderboard_result")
-}
 
-model ShopItem {
-  id           String                @id
-  code         String                @unique
-  kind         String
-  priceCoins   Int
-  status       ContentStatus         @default(PUBLISHED)
-  translations ShopItemTranslation[]
-  purchases    UserPurchase[]
 
-  @@map("shop_item")
-}
-
-model ShopItemTranslation {
-  itemId String
-  locale Locale
-  title  String
-  item   ShopItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
-
-  @@id([itemId, locale])
-  @@map("shop_item_translation")
-}
-
-model UserPurchase {
-  id        String   @id
-  userId    String
-  itemId    String
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  item      ShopItem @relation(fields: [itemId], references: [id], onDelete: Cascade)
-
-  @@index([userId, itemId])
-  @@map("user_purchase")
-}
 
 // ── Simulations ──────────────────────────────────────────────────────────────
 
-model SimDefinition {
-  id               String                     @id
-  slug             String                     @unique
-  type             SimType
-  status           ContentStatus              @default(DRAFT)
-  order            Int                        @default(0)
-  configVersion    Int                        @default(1)
-  config           Json                       @default("{}")
-  estimatedMinutes Int                        @default(10)
-  xpRewardComplete Int                        @default(100)
-  unlockRule       Json?
-  createdAt        DateTime                   @default(now())
-  updatedAt        DateTime                   @updatedAt
-  translations     SimDefinitionTranslation[]
-  sessions         SimSession[]
 
-  @@map("sim_definition")
-}
 
-model SimDefinitionTranslation {
-  simId       String
-  locale      Locale
-  title       String
-  subtitle    String        @default("")
-  description String        @default("")
-  textBundle  Json          @default("{}")
-  sim         SimDefinition @relation(fields: [simId], references: [id], onDelete: Cascade)
 
-  @@id([simId, locale])
-  @@map("sim_definition_translation")
-}
-
-model SimSession {
-  id                String         @id
-  userId            String
-  simId             String
-  status            SimStatus      @default(ACTIVE)
-  configVersionUsed Int
-  seed              Int
-  turnNumber        Int            @default(0)
-  stateVersion      Int            @default(0)
-  state             Json           @default("{}")
-  summary           Json?
-  startedAt         DateTime       @default(now())
-  endedAt           DateTime?
-  user              User           @relation(fields: [userId], references: [id], onDelete: Cascade)
-  sim               SimDefinition  @relation(fields: [simId], references: [id], onDelete: Restrict)
-  actions           SimActionLog[]
-
-  @@index([userId, simId, status])
-  @@map("sim_session")
-}
-
-model SimActionLog {
-  id          String     @id
-  sessionId   String
-  turnNumber  Int
-  actionIndex Int
-  actionType  String
-  payload     Json       @default("{}")
-  resultDelta Json       @default("{}")
-  createdAt   DateTime   @default(now())
-  session     SimSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
-
-  @@unique([sessionId, turnNumber, actionIndex])
-  @@map("sim_action_log")
-}
-
-// ── AI Tutor ─────────────────────────────────────────────────────────────────
-
-model TutorThread {
-  id            String           @id
-  userId        String
-  contextType   TutorContextType
-  contextId     String?
-  title         String?
-  messageCount  Int              @default(0)
-  lastMessageAt DateTime         @default(now())
-  createdAt     DateTime         @default(now())
-  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-  messages      TutorMessage[]
-
-  @@index([userId, lastMessageAt])
-  @@map("tutor_thread")
-}
-
-model TutorMessage {
-  id           String       @id
-  threadId     String
-  role         TutorMsgRole
-  content      String
-  inputTokens  Int?
-  outputTokens Int?
-  model        String?
-  createdAt    DateTime     @default(now())
-  thread       TutorThread  @relation(fields: [threadId], references: [id], onDelete: Cascade)
-
-  @@index([threadId, createdAt])
-  @@map("tutor_message")
-}
-
-model TutorUsage {
-  userId       String
-  usageDate    String
-  messageCount Int    @default(0)
-  user         User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@id([userId, usageDate])
-  @@map("tutor_usage")
-}
 
 // ── Feedback & research ──────────────────────────────────────────────────────
 
@@ -924,21 +505,6 @@ model DailyStat {
 
 // ── Certificates, audit, ops ─────────────────────────────────────────────────
 
-model Certificate {
-  id        String     @id
-  code      String     @unique
-  userId    String
-  courseId  String
-  status    CertStatus @default(ACTIVE)
-  issuedAt  DateTime   @default(now())
-  revokedAt DateTime?
-  snapshot  Json
-  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  course    Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
-  @@unique([userId, courseId])
-  @@map("certificate")
-}
 
 model AuditLog {
   id         String   @id
@@ -1003,6 +569,7 @@ enum FoodSpotSource {
   hcmc_opendata
   moet
   wikidata
+  foody
 }
 
 model FoodCluster {
@@ -1047,6 +614,8 @@ model FoodSpot {
   osmType       String?
   osmId         String?
   sourceRef     String             @default("")
+  googlePlaceId String?
+  gallery       Json               @default("[]")
   verified      Boolean            @default(false)
   createdAt     DateTime           @default(now())
   updatedAt     DateTime           @updatedAt

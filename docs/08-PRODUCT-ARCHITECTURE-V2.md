@@ -145,7 +145,7 @@ FoodCluster (city preset: Sài Gòn | Hà Nội)
 
 **Production backend design (scaling, mobile clients, schema domains):** `09-BACKEND-PLATFORM.md`.
 
-**Removed from active product (frozen, not deleted):** sims engines, LMS catalog, shop, leaderboard, tutor — high maintenance and/or API cost, off-pillar for v2. Legacy tables remain; v2 seed does not populate them.
+**Removed from the product (deleted, not frozen):** the LMS (courses/tracks/lessons/quizzes), sims engines, shop, leaderboard, tools/calculators, and the AI tutor were **deleted outright** to keep the system lean and zero-cost — their schema tables were dropped by migration `pillars_only_cleanup`, the seed no longer references them, and their routes return 404/redirect to `/vi-cua-toi`. The product ships the 4 pillars only.
 
 ---
 

@@ -75,13 +75,15 @@ export function MapSpotList({
   }
 
   const sorted = [...pins].sort((a, b) => a.name.localeCompare(b.name, "vi"));
+  const visible = sorted.slice(0, 80);
+  const hidden = sorted.length - visible.length;
 
   return (
     <ul
       data-testid="map-spot-list"
       className="max-h-64 divide-y divide-rule overflow-y-auto border border-rule rounded-[var(--radius-control)]"
     >
-      {sorted.map((pin) => {
+      {visible.map((pin) => {
         const active = pin.id === selectedId;
         return (
           <li key={pin.id}>
@@ -105,10 +107,15 @@ export function MapSpotList({
                   <span className="mt-0.5 block truncate text-xs text-ink-faint">{pin.address}</span>
                 )}
               </span>
-            </button>
-          </li>
-        );
+          </button>
+        </li>
+      );
       })}
+      {hidden > 0 && (
+        <li className="bg-paper-sunken px-3 py-2 text-xs text-ink-faint">
+          {t("map.listMore", { count: hidden })}
+        </li>
+      )}
     </ul>
   );
 }

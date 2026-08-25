@@ -8,8 +8,10 @@ node_modules/
 public/uploads/
 coverage/
 prisma/data/osm/*.json
+prisma/data/foody/*.json
 prisma/data/hcmc-thpt.csv
 prisma/data/*.pdf
 prisma/data/*.xlsx
 prisma/data/*.json
 !prisma/data/osm/.gitkeep
+prisma/data/foody/

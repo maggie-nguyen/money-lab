@@ -11,9 +11,7 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
-import { Alert, Button, Card, CardBody, LedgerLabel, LedgerTable, cx } from "@/components/ui";
-import { api } from "@/lib/api";
+import { Alert, Card, CardBody, LedgerLabel, LedgerTable } from "@/components/ui";
 import type { Block } from "@/lib/types";
 import { useT } from "@/components/Providers";
 
@@ -37,46 +35,6 @@ function youtubeEmbedUrl(url: string): string {
   return url;
 }
 
-const TOOL_SLUGS = new Set([
-  "compound-interest",
-  "loan-payment",
-  "loan-compare",
-  "savings-goal",
-  "inflation",
-  "budget-503020",
-]);
-
-function CalculatorBlock({ block }: { block: Extract<Block, { type: "CALCULATOR" }> }) {
-  const t = useT();
-  // Presets ride along as query parameters, which the tool page reads for its
-  // initial field values, so the learner lands on the numbers from the lesson
-  // instead of the generic defaults.
-  const qs = new URLSearchParams();
-  for (const [k, v] of Object.entries(block.presets ?? {})) qs.set(k, String(v));
-  const query = qs.toString();
-  const toolTitle = TOOL_SLUGS.has(block.tool) ? t(`tools.${block.tool}.title`) : null;
-  return (
-    <Card>
-      <CardBody className="flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <LedgerLabel>{t("blocks.calculatorLabel")}</LedgerLabel>
-          <p className="mt-1 text-sm">
-            {toolTitle
-              ? t("blocks.openToolNamed", { name: toolTitle })
-              : t("blocks.openToolGeneric")}
-          </p>
-        </div>
-        <Link
-          href={`/tools/${encodeURIComponent(block.tool)}${query ? `?${query}` : ""}`}
-          className="text-sm font-medium text-moss-600 underline underline-offset-2"
-        >
-          {t("blocks.openTool")}
-        </Link>
-      </CardBody>
-    </Card>
-  );
-}
-
 function CalloutBlock({ block }: { block: Extract<Block, { type: "CALLOUT" }> }) {
   const tone = block.variant === "WARNING" ? "warning" : block.variant === "TIP" ? "positive" : "info";
   return (
@@ -86,139 +44,7 @@ function CalloutBlock({ block }: { block: Extract<Block, { type: "CALLOUT" }> })
   );
 }
 
-interface CheckResult {
-  questionId: string;
-  isCorrect: boolean;
-  correctResponse: Record<string, unknown>;
-  explanation: string | null;
-}
-
-/**
- * Formative check inside a lesson. The answer key stays on the server, so the
- * response is graded by POST /catalog/lessons/:slug/check/:questionId. Nothing
- * is stored and the learner may try again as often as they like.
- */
-function CheckQuestionBlock({
-  block,
-  lessonSlug,
-}: {
-  block: Extract<Block, { type: "CHECK_QUESTION" }>;
-  lessonSlug?: string;
-}) {
-  const t = useT();
-  const q = block.question;
-  // TRUE_FALSE carries no options, so the renderer supplies the two it implies.
-  const options: Array<{ key: string; text: string }> =
-    q.type === "TRUE_FALSE"
-      ? [
-          { key: "true", text: t("quiz.true") },
-          { key: "false", text: t("quiz.false") },
-        ]
-      : (q.options ?? []);
-
-  const [choice, setChoice] = React.useState<string | null>(null);
-  const [result, setResult] = React.useState<CheckResult | null>(null);
-  const [pending, setPending] = React.useState(false);
-  const [failed, setFailed] = React.useState(false);
-
-  const answerable = Boolean(lessonSlug) && options.length > 0;
-
-  async function submit() {
-    if (!lessonSlug || !choice) return;
-    setPending(true);
-    setFailed(false);
-    try {
-      const res = await api.post<CheckResult>(
-        `/catalog/lessons/${lessonSlug}/check/${q.id}`,
-        { response: buildResponse(q.type, choice) },
-      );
-      setResult(res);
-    } catch {
-      setFailed(true);
-    } finally {
-      setPending(false);
-    }
-  }
-
-  return (
-    <Card tone="flat">
-      <CardBody className="space-y-3">
-        <LedgerLabel>{t("blocks.checkLabel")}</LedgerLabel>
-        <p className="font-medium">{q.prompt}</p>
-
-        {options.length > 0 && (
-          <ul className="space-y-1.5 text-sm">
-            {options.map((opt) => {
-              const key = opt.key;
-              const picked = choice === key;
-              const correct = result?.correctResponse.correct;
-              const isAnswer =
-                result !== null &&
-                (correct === key ||
-                  // TRUE_FALSE answer keys are booleans, the option keys are strings.
-                  String(correct) === key ||
-                  (Array.isArray(correct) && (correct as string[]).includes(key)));
-              return (
-                <li key={key}>
-                  <button
-                    type="button"
-                    disabled={!answerable || pending}
-                    onClick={() => {
-                      setChoice(key);
-                      setResult(null);
-                    }}
-                    aria-pressed={picked}
-                    className={cx(
-                      "w-full rounded-[var(--radius-control)] border px-3 py-2 text-left",
-                      isAnswer
-                        ? "border-positive bg-positive-soft"
-                        : picked
-                          ? "border-moss-400 bg-moss-50"
-                          : "border-rule",
-                      answerable ? "hover:border-moss-400" : "cursor-default",
-                    )}
-                  >
-                    {opt.text}
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        )}
-
-        {answerable && (
-          <div className="flex items-center gap-3">
-            <Button size="sm" variant="secondary" onClick={submit} disabled={!choice} loading={pending}>
-              {t("blocks.check")}
-            </Button>
-            {result && (
-              <span className={cx("text-sm font-medium", result.isCorrect ? "text-positive" : "text-critical")}>
-                {result.isCorrect ? t("blocks.correct") : t("blocks.incorrect")}
-              </span>
-            )}
-          </div>
-        )}
-
-        {result?.explanation && <p className="text-sm text-ink-soft">{result.explanation}</p>}
-
-        {failed && <p className="text-xs text-critical">{t("blocks.checkFailed")}</p>}
-
-        {!answerable && (
-          <p className="text-xs text-ink-faint">{t("blocks.selfReview")}</p>
-        )}
-      </CardBody>
-    </Card>
-  );
-}
-
-/** Maps a single picked option onto the response shape the scorer expects. */
-function buildResponse(type: string, choice: string): Record<string, unknown> {
-  if (type === "TRUE_FALSE") return { value: choice === "true" };
-  if (type === "MULTI_CHOICE") return { choices: [choice] };
-  return { choice };
-}
-
-export function LessonBlock({ block, lessonSlug }: { block: Block; lessonSlug?: string }) {
+export function LessonBlock({ block }: { block: Block }) {
   const t = useT();
   switch (block.type) {
     case "HEADING": {
@@ -295,25 +121,10 @@ export function LessonBlock({ block, lessonSlug }: { block: Block; lessonSlug?: 
         </Card>
       );
     case "CHECK_QUESTION":
-      return <CheckQuestionBlock block={block} lessonSlug={lessonSlug} />;
     case "CALCULATOR":
-      return <CalculatorBlock block={block} />;
     case "SIM_LINK":
-      return (
-        <Card tone="ink">
-          <CardBody className="flex flex-wrap items-center justify-between gap-3">
-            <p className="text-sm">{block.label ?? t("blocks.simDefault")}</p>
-            <Link
-              // The sim screens live under /sims/<type>/<sessionId>, so the hub
-              // is what opens a sim by slug and creates the session.
-              href={`/sims?start=${encodeURIComponent(block.simSlug)}`}
-              className="rounded-[var(--radius-control)] border border-paper/40 px-3 py-1.5 text-sm font-medium"
-            >
-              {t("blocks.enterSim")}
-            </Link>
-          </CardBody>
-        </Card>
-      );
+      // Dead block types from removed features (lessons/tools/sims) — never render.
+      return null;
     case "DIVIDER":
       return <hr className="border-rule" />;
     default:
@@ -321,11 +132,11 @@ export function LessonBlock({ block, lessonSlug }: { block: Block; lessonSlug?: 
   }
 }
 
-export function LessonBlocks({ blocks, lessonSlug }: { blocks: Block[]; lessonSlug?: string }) {
+export function LessonBlocks({ blocks }: { blocks: Block[] }) {
   return (
     <div className="space-y-5">
       {blocks.map((block, i) => (
-        <LessonBlock key={i} block={block} lessonSlug={lessonSlug} />
+        <LessonBlock key={i} block={block} />
       ))}
     </div>
   );

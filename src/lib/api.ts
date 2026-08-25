@@ -70,19 +70,11 @@ const BASE = "/api/v1";
 
 /** Paths that accept ?locale=vi (doc 03). */
 const LOCALE_QUERY_PREFIXES = [
-  "/catalog/",
   "/library/",
-  "/sims",
-  "/shop/",
   "/me/badges",
-  "/me/enrollments",
-  "/me/certificates",
   "/me/quests",
   "/food/",
   "/challenges",
-  "/quizzes/",
-  "/tutor/",
-  "/tools/",
 ];
 
 function wantsLocaleQuery(path: string): boolean {

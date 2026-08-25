@@ -28,6 +28,8 @@ export interface FoodSpotPin {
   avgRating: number | null;
   source?: string;
   verified?: boolean;
+  googlePlaceId?: string | null;
+  gallery?: string[];
 }
 
 export interface SchoolPin {
@@ -75,13 +77,22 @@ export function formatFoodTag(tag: string, t: (key: string) => string): string {
   return label === key ? tag : label;
 }
 
-export function pinPriceTier(priceVnd: string | null): "cheap" | "mid" | "unknown" {
+export type PriceTier = "cheap" | "mid" | "upper" | "unknown";
+
+export function pinPriceTier(priceVnd: string | null): PriceTier {
   if (!priceVnd) return "unknown";
   const n = Number(priceVnd);
+  if (Number.isNaN(n)) return "unknown";
   if (n <= 25000) return "cheap";
-  if (n <= 35000) return "mid";
+  if (n <= 40000) return "mid";
+  if (n <= 60000) return "upper";
   return "unknown";
 }
+
+/** Zoom level at which school pins start rendering (below this, food clusters only). */
+
+/** Zoom level at which individual price labels replace cluster bubbles. */
+export const PRICE_LABELS_ZOOM_MIN = 15;
 
 export function matchesPriceFilter(pin: FoodSpotPin, filter: PriceFilter): boolean {
   if (filter === "all") return true;
@@ -177,9 +188,24 @@ export function markerColor(tier: ReturnType<typeof pinPriceTier>): string {
       return "#2d6a4f";
     case "mid":
       return "#b08900";
+    case "upper":
+      return "#c2410c";
     default:
       return "#6b7280";
   }
+}
+
+/** Count-bubble icon for marker clusters (Geoji-style zoomed-out view). */
+export function clusterIconUrl(count: number): string {
+  const size = count >= 100 ? 44 : count >= 20 ? 38 : 32;
+  const fontSize = count >= 1000 ? 12 : 13;
+  const label = count >= 1000 ? `${Math.round(count / 100) / 10}k` : String(count);
+  const svg =
+    `<svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">` +
+    `<circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - 2}" fill="#1f513d" fill-opacity="0.92" stroke="#fff" stroke-width="2"/>` +
+    `<text x="${size / 2}" y="${size / 2}" text-anchor="middle" dominant-baseline="central" fill="#fff" font-size="${fontSize}" font-weight="700" font-family="system-ui,sans-serif">${label}</text>` +
+    `</svg>`;
+  return `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(svg)}`;
 }
 
 /** Blue (THPT) or purple (university) school pin for classic markers. */

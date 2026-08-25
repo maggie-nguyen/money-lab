@@ -8,7 +8,6 @@ import type { Locale } from "@/lib/locale";
 export type { Locale };
 export type Role = "LEARNER" | "ADMIN";
 export type ProgressStatus = "NOT_STARTED" | "IN_PROGRESS" | "COMPLETED";
-export type SimType = "BUDGET" | "LOANS" | "SCAM" | "BUSINESS" | "INVEST";
 
 export interface UserPublic {
   id: string;
@@ -68,13 +67,6 @@ export interface Bootstrap {
   stats: Stats;
   featureFlags: Record<string, boolean>;
   dailyQuests: DailyQuest[];
-  activeSimSessions: Array<{ sessionId: string; simSlug: string; simType: SimType; turnNumber: number }>;
-  continueLearning: {
-    lessonId: string;
-    lessonSlug: string;
-    courseSlug: string;
-    lastBlockIndex: number;
-  } | null;
   unreadBadges: Array<{ code: string; title: string }>;
 }
 
@@ -243,47 +235,6 @@ export interface AttemptState {
   };
 }
 
-export interface SimDefinitionSummary {
-  id: string;
-  slug: string;
-  type: SimType;
-  title: string;
-  subtitle: string | null;
-  estimatedMinutes: number;
-  xpRewardComplete: number;
-  order: number;
-  locked: boolean;
-  lockReason: string | null;
-  activeSessionId: string | null;
-}
-
-export interface SimDefinitionDetail extends SimDefinitionSummary {
-  description: string | null;
-  howToPlay: string[];
-}
-
-export interface ActionDescriptor {
-  type: string;
-  schema: Record<string, unknown>;
-}
-
-export interface SimSessionView<V = Record<string, unknown>> {
-  id: string;
-  simId: string;
-  simType: SimType;
-  status: "ACTIVE" | "COMPLETED" | "FAILED" | "ABANDONED";
-  turnNumber: number;
-  stateVersion: number;
-  startedAt: string;
-  endedAt: string | null;
-  view: V;
-  availableActions: ActionDescriptor[];
-  summary?: Record<string, unknown>;
-  turnReport?: Record<string, unknown>;
-  meta: { disclaimer: "simulated" };
-  awards?: Awards;
-}
-
 export interface Awards {
   xp: number;
   coins: number;
@@ -341,30 +292,6 @@ export interface CertificateView {
   issuedAt: string;
   status: string;
   shareUrl: string;
-}
-
-export interface TutorThreadView {
-  id: string;
-  contextType: "GENERAL" | "LESSON" | "SIM_SESSION";
-  contextId: string | null;
-  contextTitle: string | null;
-  title: string | null;
-  messageCount: number;
-  lastMessageAt: string | null;
-  createdAt: string;
-}
-
-export interface TutorMessageView {
-  id: string;
-  role: "USER" | "ASSISTANT";
-  content: string;
-  createdAt: string;
-}
-
-export interface TutorUsage {
-  usedToday: number;
-  limitPerDay: number;
-  remainingToday: number;
 }
 
 export interface Paginated<T> {

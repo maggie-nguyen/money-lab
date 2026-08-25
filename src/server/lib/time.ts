@@ -26,7 +26,7 @@ export function vnDateStartUtc(dateStr: string): Date {
   return new Date(new Date(`${dateStr}T00:00:00.000Z`).getTime() - VN_OFFSET_MS);
 }
 
-/** Seconds until next VN midnight (used for tutor Retry-After). */
+/** Seconds until next VN midnight (UTC+7). */
 export function secondsUntilVnMidnight(at: Date): number {
   const today = vnDate(at);
   const next = new Date(vnDateStartUtc(today).getTime() + 24 * 3600 * 1000);

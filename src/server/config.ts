@@ -1,7 +1,8 @@
 import { z } from "zod";
 
 // Boot-time env validation (doc 08 §2). Crash loudly on missing/malformed values.
-const envSchema = z.object({
+const envSchema = z
+  .object({
   DATABASE_URL: z.string().url().startsWith("postgres"),
   AUTH_SECRET: z.string().min(32, "AUTH_SECRET must be at least 32 chars"),
   APP_ORIGIN: z.string().url(),
@@ -28,13 +29,19 @@ const envSchema = z.object({
   SEED_ADMIN_PASSWORD: z.string().min(8).optional(),
   SEED_LEARNER_EMAIL: z.string().email().optional(),
   SEED_LEARNER_PASSWORD: z.string().min(8).optional(),
-  ANTHROPIC_API_KEY: z.string().optional().default(""),
-  // Overridable so tests can point the tutor at a local stub server (doc 08 §3).
-  ANTHROPIC_BASE_URL: z.string().url().optional().default("https://api.anthropic.com"),
-  AI_TUTOR_MODEL: z.string().optional().default("claude-haiku-4-5"),
-  AI_TUTOR_DAILY_MSG_LIMIT: z.coerce.number().int().positive().optional().default(50),
   NODE_ENV: z.enum(["development", "test", "production"]).optional().default("development"),
-});
+})
+  .superRefine((env, ctx) => {
+    // A production system must never ship with rate limiting disabled — it
+    // leaves every write endpoint open to spam/abuse. Crash loudly instead.
+    if (env.NODE_ENV === "production" && env.RATE_LIMIT_DISABLED) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ["RATE_LIMIT_DISABLED"],
+        message: "RATE_LIMIT_DISABLED must not be true in production",
+      });
+    }
+  });
 
 export type Env = z.infer<typeof envSchema>;
 

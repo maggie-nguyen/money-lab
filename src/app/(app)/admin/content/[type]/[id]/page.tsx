@@ -75,7 +75,6 @@ interface AdminRecord {
   category?: string;
   readMinutes?: number;
   authorName?: string;
-  relatedCourseId?: string | null;
   i18n: Record<
     string,
     {
@@ -125,7 +124,6 @@ export default function AdminContentEditorPage() {
     category: string;
     readMinutes: string;
     authorName: string;
-    relatedCourseId: string;
     seoTitle: string;
     seoDescription: string;
   } | null>(null);
@@ -163,7 +161,6 @@ export default function AdminContentEditorPage() {
       category: query.data.category ?? "GUIDE",
       readMinutes: String(query.data.readMinutes ?? 4),
       authorName: query.data.authorName ?? "MoneyLab",
-      relatedCourseId: query.data.relatedCourseId ?? "",
       seoTitle: vi.seoTitle ?? "",
       seoDescription: vi.seoDescription ?? "",
     });
@@ -193,7 +190,6 @@ export default function AdminContentEditorPage() {
         category: "GUIDE",
         readMinutes: "4",
         authorName: "MoneyLab",
-        relatedCourseId: "",
         seoTitle: "",
         seoDescription: "",
       });
@@ -238,7 +234,6 @@ export default function AdminContentEditorPage() {
       body.readMinutes = Number(form.readMinutes) || 4;
       body.authorName = form.authorName || "MoneyLab";
       body.coverImageUrl = form.coverImageUrl || null;
-      body.relatedCourseId = form.relatedCourseId || null;
       i18nVi.seoTitle = form.seoTitle;
       i18nVi.seoDescription = form.seoDescription;
     }
@@ -488,16 +483,6 @@ export default function AdminContentEditorPage() {
               </Field>
               <Field label="Ảnh bìa (URL)" error={fieldErrors.coverImageUrl}>
                 <Input value={form.coverImageUrl} onChange={(e) => setForm({ ...form, coverImageUrl: e.target.value })} />
-              </Field>
-              <Field
-                label="ID khóa học liên quan"
-                hint="Để trống nếu bài viết đứng độc lập"
-                error={fieldErrors.relatedCourseId}
-              >
-                <Input
-                  value={form.relatedCourseId}
-                  onChange={(e) => setForm({ ...form, relatedCourseId: e.target.value })}
-                />
               </Field>
               <Field label="SEO title" hint="Tối đa 70 ký tự" error={fieldErrors["i18n.vi.seoTitle"]}>
                 <Input value={form.seoTitle} onChange={(e) => setForm({ ...form, seoTitle: e.target.value })} />

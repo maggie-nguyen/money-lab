@@ -1,8 +1,22 @@
 import { z } from "zod";
 import { prisma } from "@/server/db";
 import { notFound } from "@/server/lib/errors";
-import { stripBlocks } from "@/server/services/catalogService";
 import type { ArticleCategory, Locale, Prisma } from "@prisma/client";
+
+/** Strip CHECK_QUESTION answers before they ever reach a reader (answers stay server-side). */
+export function stripBlocks(blocks: unknown): unknown[] {
+  if (!Array.isArray(blocks)) return [];
+  return blocks.map((b) => {
+    if (b && typeof b === "object" && (b as { type?: string }).type === "CHECK_QUESTION") {
+      const block = b as { type: string; question?: Record<string, unknown> };
+      if (block.question) {
+        const { answerKey: _answerKey, explanation: _explanation, ...publicQ } = block.question;
+        return { ...block, question: publicQ };
+      }
+    }
+    return b;
+  }) as unknown[];
+}
 
 /**
  * The article library - standalone reading that needs no account.
@@ -32,7 +46,7 @@ type TranslationRow = {
   blocks: Prisma.JsonValue;
 };
 
-/** Requested locale, else vi, else whatever exists. Mirrors catalogService. */
+/** Requested locale, else vi, else whatever exists. */
 function pickTr(trs: TranslationRow[], locale: Locale): { tr: TranslationRow; resolvedLocale: Locale } {
   const exact = trs.find((t) => t.locale === locale);
   if (exact) return { tr: exact, resolvedLocale: locale };
@@ -57,7 +71,6 @@ const summarySelect = {
   readMinutes: true,
   publishedAt: true,
   authorName: true,
-  relatedCourseId: true,
   translations: {
     select: {
       locale: true,
@@ -127,7 +140,6 @@ export async function listArticles(q: ArticleListQuery, locale: Locale) {
       status: "PUBLISHED",
       publishedAt: { not: null },
       ...(q.category ? { category: q.category } : {}),
-      ...(q.courseId ? { relatedCourseId: q.courseId } : {}),
       ...(after
         ? {
             OR: [
@@ -154,7 +166,6 @@ export interface ArticleDetail extends ArticleSummary {
   seoTitle: string;
   seoDescription: string;
   blocks: unknown[];
-  relatedCourse: { slug: string; title: string } | null;
   related: ArticleSummary[];
 }
 
@@ -168,12 +179,7 @@ export async function getArticle(
       publishedAt: { not: null },
       OR: [{ id: idOrSlug }, { slug: idOrSlug }],
     },
-    select: {
-      ...summarySelect,
-      relatedCourse: {
-        select: { slug: true, status: true, translations: { select: { locale: true, title: true } } },
-      },
-    },
+    select: summarySelect,
   });
   if (!article) throw notFound("Article");
 
@@ -207,19 +213,11 @@ export async function getArticle(
     relatedRows = [...relatedRows, ...fill];
   }
 
-  // A draft course must not be advertised from a published article.
-  const course = article.relatedCourse;
-  const courseTitle =
-    course && course.status === "PUBLISHED"
-      ? (course.translations.find((t) => t.locale === locale) ?? course.translations[0])?.title
-      : undefined;
-
   return {
     ...base,
     seoTitle: tr.seoTitle || tr.title,
     seoDescription: tr.seoDescription || tr.summary,
     blocks: readableBlocks(tr.blocks),
-    relatedCourse: course && courseTitle ? { slug: course.slug, title: courseTitle } : null,
     related: relatedRows.map((r) => summaryDto(r, locale)),
   };
 }

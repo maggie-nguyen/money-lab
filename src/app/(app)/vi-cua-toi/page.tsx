@@ -67,7 +67,6 @@ function WalletSidebar() {
           items={[
             { label: t("wallet.sidebar.streak"), value: stats.streakCurrent, hint: t("common.dayUnit") },
             { label: t("stats.coinsTitle"), value: stats.coins },
-            { label: t("learn.lessonsDone"), value: stats.lessonsCompleted },
           ]}
         />
       )}

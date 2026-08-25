@@ -456,23 +456,6 @@ export async function listAuditLog(q: z.infer<typeof auditQuery>) {
   };
 }
 
-// ── Certificates ─────────────────────────────────────────────────────────────
-
-const revokeBody = z.object({ reason: z.string().trim().min(1).max(500) }).strict();
-
-export async function revokeCertificate(code: string, body: unknown, actor: AdminActor, now: Date) {
-  const b = parse(revokeBody, body);
-  const cert = await prisma.certificate.findUnique({ where: { code } });
-  if (!cert) throw notFound("Certificate");
-  if (cert.status === "REVOKED") throw ruleViolation("ALREADY_REVOKED", "Certificate already revoked");
-  const updated = await prisma.certificate.update({
-    where: { code },
-    data: { status: "REVOKED", revokedAt: now },
-  });
-  await writeAudit(prisma, actor.id, "revoke", "certificate", cert.id, { status: "ACTIVE" }, { status: "REVOKED", reason: b.reason }, actor.ip, now);
-  return { code: updated.code, status: updated.status, revokedAt: updated.revokedAt?.toISOString() ?? null };
-}
-
 // ── Media (local disk under public/uploads - lean, no S3) ───────────────────
 
 const MEDIA_MAX_BYTES = 512_000;

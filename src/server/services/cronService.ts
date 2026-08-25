@@ -1,20 +1,13 @@
 import { prisma } from "@/server/db";
 import { uuidv7 } from "@/server/lib/ids";
-import { blockSchema } from "@/server/schemas/content";
-import {
-  emptyAwards,
-  grantCoins,
-  awardBadgeByCode,
-  ensureDailyQuests,
-} from "@/server/services/gamificationService";
-import { vnDate, vnWeekStart, vnDateStartUtc, dateDiffDays } from "@/server/lib/time";
+import { ensureDailyQuests } from "@/server/services/gamificationService";
+import { vnDate, vnDateStartUtc, dateDiffDays } from "@/server/lib/time";
 
 // Cron jobs - doc 01 §8. Every job is idempotent (safe to run twice) and writes a `cron_run` row.
 // They are invoked by POST /api/internal/cron/{name} with the X-Cron-Secret header.
 
 export const CRON_NAMES = [
   "daily-rollover",
-  "weekly-leaderboard",
   "analytics-rollup",
   "integrity-check",
 ] as const;
@@ -125,97 +118,6 @@ async function dailyRollover(now: Date): Promise<CronResult> {
   };
 }
 
-// ── weekly-leaderboard (Mon 00:10 VN) ────────────────────────────────────────
-
-const TOP_N = 10;
-/** Coin reward by finishing rank (doc 01 §8: "grant top-10 badges/coins"). */
-function leaderboardCoins(rank: number): number {
-  if (rank === 1) return 100;
-  if (rank <= 3) return 60;
-  return 30;
-}
-
-async function weeklyLeaderboard(now: Date): Promise<CronResult> {
-  // Close the week that just ended.
-  const thisWeek = vnWeekStart(now);
-  const lastWeek = vnDate(new Date(vnDateStartUtc(thisWeek).getTime() - 24 * 3600 * 1000));
-  const weekStart = vnWeekStart(vnDateStartUtc(lastWeek));
-  const from = vnDateStartUtc(weekStart);
-  const to = vnDateStartUtc(thisWeek);
-
-  const grouped = await prisma.xpLedger.groupBy({
-    by: ["userId"],
-    where: { delta: { gt: 0 }, createdAt: { gte: from, lt: to } },
-    _sum: { delta: true },
-    orderBy: { _sum: { delta: "desc" } },
-    take: 500,
-  });
-
-  const userIds = grouped.map((g) => g.userId);
-  const alive = new Set(
-    (
-      await prisma.user.findMany({
-        where: { id: { in: userIds }, deletedAt: null },
-        select: { id: true },
-      })
-    ).map((u) => u.id),
-  );
-
-  let rank = 0;
-  let written = 0;
-  let rewarded = 0;
-  for (const g of grouped) {
-    if (!alive.has(g.userId)) continue;
-    rank++;
-    const xpEarned = g._sum.delta ?? 0;
-    // unique(weekStart, userId) makes the write idempotent across reruns.
-    await prisma.leaderboardResult.upsert({
-      where: { weekStart_userId: { weekStart, userId: g.userId } },
-      create: { id: uuidv7(), weekStart, userId: g.userId, rank, xpEarned },
-      update: { rank, xpEarned },
-    });
-    written++;
-
-    if (rank <= TOP_N) {
-      // Check before granting rather than leaning on the ledger's unique key: a duplicate insert
-      // inside a transaction aborts the whole block in Postgres, taking the badge write with it.
-      const already = await prisma.coinLedger.findFirst({
-        where: {
-          userId: g.userId,
-          reason: "LEADERBOARD_REWARD",
-          refType: "leaderboard",
-          refId: weekStart,
-        },
-        select: { id: true },
-      });
-      await prisma.$transaction(async (tx) => {
-        const acc = emptyAwards();
-        if (!already) {
-          await grantCoins(
-            tx,
-            g.userId,
-            leaderboardCoins(rank),
-            "LEADERBOARD_REWARD",
-            "leaderboard",
-            weekStart,
-            now,
-            acc,
-          );
-          rewarded++;
-        }
-        await awardBadgeByCode(tx, g.userId, "LEADERBOARD_TOP10", now, acc);
-      });
-    }
-  }
-
-  return {
-    name: "weekly-leaderboard",
-    ok: true,
-    note: `weekStart=${weekStart} rows=${written} rewarded=${rewarded}`,
-    details: { weekStart, rowsWritten: written, usersRewarded: rewarded },
-  };
-}
-
 // ── analytics-rollup (01:00 VN) ──────────────────────────────────────────────
 
 async function upsertStat(statDate: string, metric: string, dims: object, value: number) {
@@ -247,45 +149,8 @@ async function analyticsRollup(now: Date): Promise<CronResult> {
   await upsertStat(day, "signups", {}, signups);
   written.push("signups");
 
-  const lessonsCompleted = await prisma.lessonProgress.count({
-    where: { completedAt: { gte: from, lt: to } },
-  });
-  await upsertStat(day, "lessons_completed", {}, lessonsCompleted);
-  written.push("lessons_completed");
 
-  // Per-lesson completion rate for lessons touched that day.
-  const started = await prisma.lessonProgress.groupBy({
-    by: ["lessonId"],
-    where: { startedAt: { gte: from, lt: to } },
-    _count: { _all: true },
-  });
-  for (const s of started) {
-    const done = await prisma.lessonProgress.count({
-      where: { lessonId: s.lessonId, completedAt: { gte: from, lt: to } },
-    });
-    const total = s._count._all;
-    await upsertStat(
-      day,
-      "lesson_completion_rate",
-      { lessonId: s.lessonId },
-      total > 0 ? Math.round((done / total) * 10000) / 10000 : 0,
-    );
-  }
-  written.push("lesson_completion_rate");
 
-  const simStarted = await prisma.simSession.groupBy({
-    by: ["simId"],
-    where: { startedAt: { gte: from, lt: to } },
-    _count: { _all: true },
-  });
-  for (const s of simStarted) {
-    await upsertStat(day, "sim_started", { simId: s.simId }, s._count._all);
-    const completed = await prisma.simSession.count({
-      where: { simId: s.simId, status: "COMPLETED", endedAt: { gte: from, lt: to } },
-    });
-    await upsertStat(day, "sim_completed", { simId: s.simId }, completed);
-  }
-  written.push("sim_started", "sim_completed");
 
   // D1 retention for the cohort that signed up the day before `day`.
   const cohortDay = vnDate(new Date(from.getTime() - 24 * 3600 * 1000));
@@ -314,7 +179,7 @@ async function analyticsRollup(now: Date): Promise<CronResult> {
     name: "analytics-rollup",
     ok: true,
     note: `day=${day} metrics=${written.length}`,
-    details: { day, metrics: written, dau: dau.length, signups, lessonsCompleted },
+    details: { day, metrics: written, dau: dau.length, signups },
   };
 }
 
@@ -362,65 +227,13 @@ async function integrityCheck(now: Date): Promise<CronResult> {
     if (s.coins < 0) violations.push({ check: "coins_negative", detail: `${s.userId}: ${s.coins}` });
   }
 
-  // 3. Submitted attempts must have a sane score.
-  const badAttempts = await prisma.quizAttempt.findMany({
-    where: { status: "SUBMITTED", OR: [{ scorePoints: null }, { scorePct: null }] },
-    select: { id: true },
-    take: 50,
-  });
-  for (const a of badAttempts) {
-    violations.push({ check: "attempt_score_null", detail: a.id });
-  }
-  const overScored = await prisma.$queryRaw<Array<{ id: string }>>`
-    SELECT id FROM quiz_attempt
-    WHERE status = 'SUBMITTED' AND "scorePoints" > "maxPoints" LIMIT 50`;
-  for (const a of overScored) {
-    violations.push({ check: "attempt_score_over_max", detail: a.id });
-  }
-
-  // 4. Auto-abandon sim sessions stuck ACTIVE for more than 30 days.
-  const staleCutoff = new Date(now.getTime() - 30 * 24 * 3600 * 1000);
-  const abandoned = await prisma.simSession.updateMany({
-    where: { status: "ACTIVE", startedAt: { lt: staleCutoff } },
-    data: { status: "ABANDONED", endedAt: now },
-  });
-
-  // 5. Published lesson blocks must still satisfy the current content schema.
-  const published = await prisma.lessonTranslation.findMany({
-    where: { lesson: { status: "PUBLISHED" } },
-    select: { lessonId: true, locale: true, blocks: true },
-    take: 1000,
-  });
-  for (const t of published) {
-    const blocks = Array.isArray(t.blocks) ? t.blocks : null;
-    if (!blocks) {
-      violations.push({ check: "lesson_blocks_shape", detail: `${t.lessonId}/${t.locale}` });
-      continue;
-    }
-    for (const [i, b] of blocks.entries()) {
-      if (!blockSchema.safeParse(b).success) {
-        violations.push({ check: "lesson_block_invalid", detail: `${t.lessonId}/${t.locale}#${i}` });
-        break;
-      }
-    }
-  }
-
-  // 6. Orphans that FKs cannot express.
-  const orphanAnswers = await prisma.$queryRaw<Array<{ n: bigint }>>`
-    SELECT COUNT(*)::bigint AS n FROM quiz_answer a
-    LEFT JOIN quiz_attempt t ON t.id = a."attemptId" WHERE t.id IS NULL`;
-  const orphanCount = Number(orphanAnswers[0]?.n ?? 0n);
-  if (orphanCount > 0) {
-    violations.push({ check: "orphan_answers", detail: String(orphanCount) });
-  }
-
   await upsertStat(vnDate(now), "integrity_violations", {}, violations.length);
 
   return {
     name: "integrity-check",
     ok: violations.length === 0,
-    note: `violations=${violations.length} autoAbandoned=${abandoned.count}`,
-    details: { violations: violations.slice(0, 50), autoAbandoned: abandoned.count },
+    note: `violations=${violations.length}`,
+    details: { violations: violations.slice(0, 50) },
   };
 }
 
@@ -428,7 +241,6 @@ async function integrityCheck(now: Date): Promise<CronResult> {
 
 const JOBS: Record<CronName, (now: Date) => Promise<CronResult>> = {
   "daily-rollover": dailyRollover,
-  "weekly-leaderboard": weeklyLeaderboard,
   "analytics-rollup": analyticsRollup,
   "integrity-check": integrityCheck,
 };

@@ -51,10 +51,6 @@ const V2_BADGES = [
 ] as const;
 
 const V2_FLAGS: Array<{ key: string; enabled: boolean }> = [
-  { key: "ai_tutor_enabled", enabled: false },
-  { key: "sim_invest_enabled", enabled: false },
-  { key: "shop_enabled", enabled: false },
-  { key: "leaderboard_enabled", enabled: false },
   { key: "survey_prompt_enabled", enabled: false },
   { key: "map_reviews_enabled", enabled: true },
   { key: "spending_jars_enabled", enabled: true },
@@ -155,7 +151,6 @@ async function seedArticlesFromJson(): Promise<void> {
       category: article.category,
       readMinutes: article.readMinutes,
       authorName: article.authorName,
-      relatedCourseId: null as string | null,
     };
     const row = await prisma.article.upsert({
       where: { slug: article.slug },

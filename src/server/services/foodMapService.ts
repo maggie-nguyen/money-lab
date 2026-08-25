@@ -1,4 +1,5 @@
-import type { Locale } from "@prisma/client";
+import type { Locale, Prisma } from "@prisma/client";
+import { FoodSpotSource } from "@prisma/client";
 import { z } from "zod";
 import { distanceMeters, walkMinutes } from "@/lib/map";
 import { prisma } from "@/server/db";
@@ -9,6 +10,9 @@ import { parseVnd, vndToString } from "@/server/lib/money";
 const moneyVnd = z
   .string()
   .regex(/^\d{1,15}$/, "Amount must be a non-negative integer in VND (dong).");
+
+/** Hard product ceiling: a student-meal pin is never more than 60k VND. */
+export const MAX_STUDENT_MEAL_VND = 60_000n;
 
 function pickTranslation<T extends { locale: Locale }>(rows: T[], locale: Locale): T | undefined {
   return rows.find((r) => r.locale === locale) ?? rows.find((r) => r.locale === "vi") ?? rows[0];
@@ -45,6 +49,8 @@ export interface FoodSpotView {
   note: string;
   reviewCount: number;
   avgRating: number | null;
+  googlePlaceId?: string | null;
+  gallery?: string[];
 }
 
 /** Lightweight pin payload for the map viewport API. */
@@ -61,6 +67,8 @@ export interface FoodSpotPin {
   avgRating: number | null;
   source?: string;
   verified?: boolean;
+  googlePlaceId?: string | null;
+  gallery?: string[];
 }
 
 export interface SchoolPin {
@@ -84,7 +92,7 @@ export async function listFoodClusters(locale: Locale): Promise<FoodClusterSumma
     orderBy: { order: "asc" },
     include: {
       translations: true,
-      _count: { select: { spots: true } },
+      _count: { select: { spots: { where: mapVisibleSpotWhere } } },
     },
   });
   return clusters.map((c) => {
@@ -105,7 +113,14 @@ export async function listFoodClusters(locale: Locale): Promise<FoodClusterSumma
 export async function listFoodSpots(clusterSlug: string, locale: Locale): Promise<{ cluster: FoodClusterSummary; spots: FoodSpotView[] } | null> {
   const cluster = await prisma.foodCluster.findUnique({
     where: { slug: clusterSlug },
-    include: { translations: true, spots: { orderBy: { order: "asc" }, include: { reviews: true } } },
+    include: {
+      translations: true,
+      spots: {
+        where: mapVisibleSpotWhere,
+        orderBy: { order: "asc" },
+        include: { reviews: true },
+      },
+    },
   });
   if (!cluster) return null;
   const tr = pickTranslation(cluster.translations, locale);
@@ -133,6 +148,8 @@ export async function listFoodSpots(clusterSlug: string, locale: Locale): Promis
       note: s.note,
       reviewCount: s.reviews.length,
       avgRating,
+      googlePlaceId: s.googlePlaceId,
+      gallery: Array.isArray(s.gallery) ? (s.gallery as string[]) : [],
     };
   });
   return { cluster: clusterSummary, spots };
@@ -165,6 +182,8 @@ export async function getFoodSpot(spotId: string, locale: Locale): Promise<FoodS
     note: spot.note,
     reviewCount: spot.reviews.length,
     avgRating,
+    googlePlaceId: spot.googlePlaceId,
+    gallery: Array.isArray(spot.gallery) ? (spot.gallery as string[]) : [],
     clusterSlug: spot.cluster.slug,
     clusterName: tr?.name ?? spot.cluster.slug,
     reviews: spot.reviews.map((r) => ({
@@ -217,9 +236,15 @@ function spotToPin(s: {
   };
 }
 
-/** Spots eligible for map pins: must have a known student price. */
-export const mapVisibleSpotWhere = {
-  avgPriceVnd: { not: null },
+/**
+ * Spots eligible for map pins: must have a known student price AND be a trusted
+ * physical storefront. Curated + OSM sources are manually researched/surveyed;
+ * Foody spots must be marked verified (OSM/Google-confirmed) because Foody lists
+ * virtual/ghost kitchens that have no walk-in location.
+ */
+export const mapVisibleSpotWhere: Prisma.FoodSpotWhereInput = {
+  avgPriceVnd: { not: null, lte: MAX_STUDENT_MEAL_VND },
+  NOT: { source: FoodSpotSource.foody, verified: false },
 };
 
 /** Spots with coordinates inside a map viewport. Caps at 500 pins per request. */
@@ -330,7 +355,9 @@ export const communityFoodSpotBodySchema = z.object({
   address: z.string().trim().min(5).max(200),
   lat: z.number().min(-90).max(90),
   lng: z.number().min(-180).max(180),
-  priceVnd: moneyVnd.refine((v) => parseVnd(v) <= 2_000_000n, "Giá phải từ 1 đến 2.000.000 đồng."),
+  priceVnd: moneyVnd
+    .refine((v) => parseVnd(v) >= 1_000n, "Giá tối thiểu 1.000 đồng.")
+    .refine((v) => parseVnd(v) <= MAX_STUDENT_MEAL_VND, `Giá tối đa ${Number(MAX_STUDENT_MEAL_VND) / 1000}.000 đồng (bữa ăn sinh viên).`),
   clusterSlug: z.enum(["hanoi", "saigon"]),
   note: z.string().trim().max(400).optional(),
 });

@@ -99,7 +99,7 @@ export type QuestionInput = z.infer<typeof questionSchema>;
 
 /**
  * Inline check question. Deliberately narrower than `questionSchema`: this one
- * is graded in the browser round trip by checkQuestionService, which needs a
+ * is graded by the lesson check endpoint, which needs a
  * stable `id` to look the block up by and a flat `explanation`, and the block
  * renderer can only collect answers for the three types below. Graded quizzes
  * keep the full `questionSchema`.
