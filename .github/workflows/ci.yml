@@ -19,12 +19,16 @@ jobs:
     # build reads APP_ORIGIN for metadataBase, and config.ts validates the set
     # at boot.
     env:
+      # RATE_LIMIT_DISABLED is intentionally omitted: the layout here is env-only
+      # plumbing (a fresh Postgres is ephemeral and never has a datastore link to
+      # a real cluster). The test harness manages the rate-limit toggle itself
+      # (tests/global-setup.ts) and config.ts hard-fails the build if it is true
+      # under NODE_ENV=production, so setting it here would break `pnpm build`.
       DATABASE_URL: postgres://moneylab:moneylab@127.0.0.1:5545/moneylab_test
       DIRECT_URL: postgres://moneylab:moneylab@127.0.0.1:5545/moneylab_test
       AUTH_SECRET: ci-secret-0000000000000000000000000000000000000000
       APP_ORIGIN: http://localhost:3000
       CRON_SECRET: ci-cron-secret
-      RATE_LIMIT_DISABLED: "true"
 
     steps:
       - uses: actions/checkout@v4
