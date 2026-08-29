@@ -149,6 +149,22 @@ export function boundsCenter(bounds: MapBounds): { lat: number; lng: number } {
   };
 }
 
+/** Bbox query for map pins — covers all of Vietnam in one request while spot count is modest. */
+export const MAP_SPOT_FETCH_BOUNDS: MapBounds = {
+  swLat: VIETNAM_BOUNDS.south,
+  swLng: VIETNAM_BOUNDS.west,
+  neLat: VIETNAM_BOUNDS.north,
+  neLng: VIETNAM_BOUNDS.east,
+};
+
+export function spotInBounds(pin: { lat: number; lng: number }, bounds: MapBounds): boolean {
+  const minLat = Math.min(bounds.swLat, bounds.neLat);
+  const maxLat = Math.max(bounds.swLat, bounds.neLat);
+  const minLng = Math.min(bounds.swLng, bounds.neLng);
+  const maxLng = Math.max(bounds.swLng, bounds.neLng);
+  return pin.lat >= minLat && pin.lat <= maxLat && pin.lng >= minLng && pin.lng <= maxLng;
+}
+
 export function distanceMeters(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371000;
   const toRad = (d: number) => (d * Math.PI) / 180;

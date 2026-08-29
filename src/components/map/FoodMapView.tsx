@@ -22,10 +22,12 @@ import { SpotMapOverlay } from "@/components/map/SpotPreviewCard";
 import {
   MAP_DEFAULTS,
   MAP_FILTER_TAGS,
+  MAP_SPOT_FETCH_BOUNDS,
   FoodTag,
   boundsCenter,
   boundsFromCenter,
   isInVietnam,
+  spotInBounds,
   type FoodTagId,
   type FoodSpotPin,
   type MapBounds,
@@ -137,24 +139,29 @@ export function FoodMapView({ mapsApiKey }: { mapsApiKey: string }) {
   const [jumpTarget, setJumpTarget] = React.useState<MapCenter | null>(null);
   const [locationNotice, setLocationNotice] = React.useState<string | null>(null);
 
-  const boundsKey = bounds
-    ? `${bounds.swLat.toFixed(3)},${bounds.swLng.toFixed(3)},${bounds.neLat.toFixed(3)},${bounds.neLng.toFixed(3)}`
-    : null;
-
   const spotsQuery = useQuery({
-    queryKey: ["food", "map", boundsKey],
-    queryFn: ({ signal }) => {
-      const b = bounds!;
-      return api.get<FoodSpotPin[]>("/food/spots", {
-        swLat: b.swLat,
-        swLng: b.swLng,
-        neLat: b.neLat,
-        neLng: b.neLng,
-      }, signal);
-    },
-    enabled: bounds != null,
-    staleTime: 60_000,
+    queryKey: ["food", "map", "coverage"],
+    queryFn: ({ signal }) =>
+      api.get<FoodSpotPin[]>(
+        "/food/spots",
+        {
+          swLat: MAP_SPOT_FETCH_BOUNDS.swLat,
+          swLng: MAP_SPOT_FETCH_BOUNDS.swLng,
+          neLat: MAP_SPOT_FETCH_BOUNDS.neLat,
+          neLng: MAP_SPOT_FETCH_BOUNDS.neLng,
+        },
+        signal,
+      ),
+    staleTime: 5 * 60_000,
+    gcTime: 30 * 60_000,
   });
+
+  const cachedPins = spotsQuery.data ?? [];
+  const allPins = React.useMemo(
+    () => (bounds ? cachedPins.filter((p) => spotInBounds(p, bounds)) : cachedPins),
+    [cachedPins, bounds],
+  );
+  const spotsInitialLoad = spotsQuery.isPending && cachedPins.length === 0;
 
   const filters: FilterChip[] = [
     { kind: "price", id: "all", label: t("map.filter.all") },
@@ -167,7 +174,6 @@ export function FoodMapView({ mapsApiKey }: { mapsApiKey: string }) {
     })),
   ];
 
-  const allPins = spotsQuery.data ?? [];
   const pins = allPins.filter((p) => {
     if (!matchesPriceFilter(p, priceFilter)) return false;
     if (tagFilter && !p.tags.includes(tagFilter)) return false;
@@ -226,7 +232,7 @@ export function FoodMapView({ mapsApiKey }: { mapsApiKey: string }) {
 
   /** If the viewport is outside Vietnam (common when abroad), jump to seeded data in Hanoi. */
   React.useEffect(() => {
-    if (didAutoRecenter.current || !bounds || spotsQuery.isLoading) return;
+    if (didAutoRecenter.current || !bounds || spotsInitialLoad) return;
     if (allPins.length > 0) return;
     const center = boundsCenter(bounds);
     if (!isInVietnam(center.lat, center.lng)) {
@@ -234,7 +240,7 @@ export function FoodMapView({ mapsApiKey }: { mapsApiKey: string }) {
       setLocationNotice(t("map.abroadHint"));
       setJumpTarget(MAP_DEFAULTS.hanoi);
     }
-  }, [allPins.length, bounds, spotsQuery.isLoading, t]);
+  }, [allPins.length, bounds, spotsInitialLoad, t]);
 
   /**
    * Google reports key, billing and quota failures through this global callback.
@@ -366,7 +372,7 @@ export function FoodMapView({ mapsApiKey }: { mapsApiKey: string }) {
                 </div>
               )}
 
-              {!spotsQuery.isLoading && !spotsQuery.isError && pins.length === 0 && bounds && (
+              {!spotsQuery.isError && !spotsInitialLoad && pins.length === 0 && bounds && (
                 <div className="rounded-[var(--radius-control)] border border-rule bg-paper-sunken px-3 py-2 text-xs leading-relaxed text-ink-soft">
                   {allPins.length > 0 ? (
                     <p>{t("map.spotListEmpty")}</p>
@@ -392,7 +398,7 @@ export function FoodMapView({ mapsApiKey }: { mapsApiKey: string }) {
               )}
 
               <p className="text-xs text-ink-faint">
-                {spotsQuery.isLoading
+                {spotsInitialLoad
                   ? t("map.loading")
                   : spotsQuery.isError
                     ? t("map.dataUnavailableShort")
@@ -481,7 +487,7 @@ export function FoodMapView({ mapsApiKey }: { mapsApiKey: string }) {
                 <div className="h-full bg-paper-sunken" aria-hidden="true" />
               )}
 
-              {!googleMapUnavailable && (!googleMapReady || spotsQuery.isLoading) && (
+              {!googleMapUnavailable && (!googleMapReady || spotsInitialLoad) && (
                 <div className="pointer-events-none absolute inset-x-0 top-3 flex justify-center">
                   <span className="rounded-[var(--radius-control)] border border-rule bg-paper-raised px-3 py-1 text-xs text-ink-soft">
                     {t("map.loading")}
