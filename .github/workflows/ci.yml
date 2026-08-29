@@ -28,7 +28,6 @@ jobs:
       DIRECT_URL: postgres://moneylab:moneylab@127.0.0.1:5545/moneylab_test
       AUTH_SECRET: ci-secret-0000000000000000000000000000000000000000
       APP_ORIGIN: http://localhost:3000
-      CRON_SECRET: ci-cron-secret
 
     steps:
       - uses: actions/checkout@v4

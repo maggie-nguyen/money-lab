@@ -92,7 +92,7 @@ action.
 ## Specification set
 
 1. [docs/00-OVERVIEW.md](docs/00-OVERVIEW.md) - scope, personas, glossary, hard rules (money/time/locale)
-2. [docs/01-ARCHITECTURE.md](docs/01-ARCHITECTURE.md) - stack, repo layout, API conventions, auth and JWT, rate limits, crons, privacy
+2. [docs/01-ARCHITECTURE.md](docs/01-ARCHITECTURE.md) - stack, repo layout, API conventions, auth and JWT, rate limits, privacy
 3. [docs/02-DATA-MODEL.md](docs/02-DATA-MODEL.md) - every table, indexes, seed requirements
 4. [docs/03-API-SPEC.md](docs/03-API-SPEC.md) - every endpoint: auth, catalog, library, progress, quizzes, gamification, sims, calculators, AI tutor, feedback, certificates, admin
 5. [docs/04-SIMULATIONS-SPEC.md](docs/04-SIMULATIONS-SPEC.md) - the five sim engines with configs, turn rules, scoring, tests

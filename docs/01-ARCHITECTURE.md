@@ -21,7 +21,6 @@ rules per-endpoint; do not deviate from them per-endpoint.
 | Money math | `decimal.js` internally, `bigint` at rest, `string` on the wire | doc 00 §4 |
 | File storage | UploadThing (or Cloudflare R2 with presigned URLs) | images only in MVP |
 | Email | Resend, sender `no-reply@moneylab.vn` | verification + password reset only |
-| Cron | Vercel Cron hitting `/api/internal/cron/*` with `CRON_SECRET` header | §8 |
 | Analytics | first-party events table + PostHog (optional mirror) | doc 02 §9 |
 | Logging | pino to stdout | `LOG_LEVEL`; the platform's collector is the sink |
 | Tests | Vitest (unit: services + engines), Playwright (a few smoke E2E) | engines require golden tests, doc 04 §8 |
@@ -63,7 +62,6 @@ moneylab/
 │  │     │  ├─ events/...
 │  │     │  ├─ certificates/...
 │  │     │  └─ admin/...
-│  │     └─ internal/cron/...
 │  ├─ server/
 │  │  ├─ services/              # authService, catalogService, progressService, gamificationService,
 │  │  │                         # simService, tutorService, feedbackService, adminContentService…
@@ -238,7 +236,6 @@ GOOGLE_CLIENT_ID=                     # id_token flow, no client secret needed
 NEXT_PUBLIC_GOOGLE_CLIENT_ID=         # same value, exposed so the button renders
 GOOGLE_JWKS_URL=                      # override only for tests
 RESEND_API_KEY=
-CRON_SECRET=                          # random 32 bytes; cron requests send X-Cron-Secret
 LOG_LEVEL=info                        # pino level: fatal|error|warn|info|debug|trace|silent
 RATE_LIMIT_DISABLED=false             # true only in local dev
 ANTHROPIC_API_KEY=                    # AI Tutor (server-side only)
@@ -273,23 +270,9 @@ the platform's log collector is the sink.
 | `events` | `POST /events` | 60 / min / user (batched anyway) |
 | `read` | all GETs | 600 / min / user |
 
-Return `429 RATE_LIMITED` + `Retry-After` seconds. A daily cron prunes old windows.
+Return `429 RATE_LIMITED` + `Retry-After` seconds.
 
-## 8. Optional maintenance jobs (`/api/internal/cron/{name}`, manual POST with `X-Cron-Secret`)
-
-| Name | Schedule (VN time) | What it does |
-|---|---|---|
-| `daily-rollover` | 00:05 daily | Break streaks (users with no qualifying activity yesterday and no streak-freeze; consume freeze if owned), generate today's daily quests, expire idempotency keys, prune rate_limit |
-| `weekly-leaderboard` | Mon 00:10 | Snapshot & close last week's leaderboard, write `leaderboard_result` rows, grant top-10 badges/coins |
-| `analytics-rollup` | 01:00 daily | Fill `daily_stat` aggregate table from `event` (doc 02 §9) |
-| `integrity-check` | 02:00 daily | Run data-invariant assertions, auto-abandon stale sims, alert on violations (doc 08 §4.2) |
-
-Every cron writes a `cron_run(name, ranAt, ok, note)` row; `/health` reports `degraded` when
-`daily-rollover` hasn't succeeded in 26 h (doc 08 §7).
-
-Crons must be **idempotent** - safe to run twice.
-
-## 9. Privacy & safety (users are minors)
+## 8. Privacy & safety (users are minors)
 
 1. Data minimization: no phone, no address, no full DOB, no school free-text. Province from enum.
 2. `DELETE /me` performs true deletion (cascade) within 30 days; immediate anonymization of
@@ -307,11 +290,11 @@ Crons must be **idempotent** - safe to run twice.
 8. Admin endpoints require role ADMIN **and** are additionally IP-logged to `audit_log` (doc 02 §10)
    with before/after diffs for content and user mutations.
 
-## 10. Observability
+## 9. Observability
 
 - Structured JSON logs (pino): `{ts, level, requestId, userId, route, status, ms, code}`.
 - Every unhandled error logged at `error` with the requestId, method, path and userId.
-- `GET /api/v1/health` → `{ data: { status: "ok"|"degraded", db: "ok", cron: "ok"|"stale", version: "<git sha>" } }`
+- `GET /api/v1/health` → `{ data: { status: "ok"|"degraded", db: "ok"|"down", version: "<git sha>" } }`
   (no auth, no rate limit) - used by uptime monitor.
 - **Boot-time config validation**: `src/server/config.ts` Zod-parses every env var at startup and
   crashes with a clear message on any missing/malformed value (doc 08 §2).
@@ -319,7 +302,7 @@ Crons must be **idempotent** - safe to run twice.
   security checklist, release gates, monitoring thresholds, load targets) are in **doc 08** and
   are part of the definition of "done" for the system, not optional extras.
 
-## 11. Definition of Done for any endpoint
+## 10. Definition of Done for any endpoint
 
 1. Zod schemas for params/query/body in `src/server/schemas`, exported and reused by tests.
 2. Service function with unit tests covering happy path + every listed error code.

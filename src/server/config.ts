@@ -14,11 +14,6 @@ const envSchema = z
     .optional()
     .default("https://www.googleapis.com/oauth2/v3/certs"),
   RESEND_API_KEY: z.string().optional().default(""),
-  // Optional: when unset, the dormant manual maintenance endpoint is disabled.
-  CRON_SECRET: z
-    .union([z.literal(""), z.string().min(8)])
-    .optional()
-    .default(""),
   // Log level for the pino logger. Anything the platform captures from stdout.
   LOG_LEVEL: z
     .enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"])

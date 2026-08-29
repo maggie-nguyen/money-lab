@@ -33,7 +33,6 @@ export async function setup(): Promise<void> {
   process.env.DIRECT_URL = URL;
   process.env.AUTH_SECRET = "test-secret-0000000000000000000000000000000000000000";
   process.env.APP_ORIGIN = "http://localhost:3000";
-  process.env.CRON_SECRET = "test-cron-secret";
   process.env.RATE_LIMIT_DISABLED = "true"; // withApi tests opt back in per-case
   (process.env as Record<string, string>).NODE_ENV = "test"; // typed read-only in @types/node
 
