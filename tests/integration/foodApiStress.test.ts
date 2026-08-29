@@ -1,8 +1,9 @@
 import { NextRequest } from "next/server";
 import { describe, expect, it } from "vitest";
-import { z } from "zod";
 import { withApi as rawWithApi } from "@/server/http";
 import { resetEnvCache } from "@/server/config";
+import { mapBoundsQuerySchema } from "@/server/lib/mapBoundsQuery";
+import { MAP_SPOT_FETCH_BOUNDS } from "@/lib/map";
 import { communityFoodSpotBodySchema } from "@/server/services/foodMapService";
 import { makeLearner } from "../factories";
 
@@ -26,33 +27,24 @@ function req(method: string, path: string, opts: { token?: string; body?: unknow
   });
 }
 
-// Mirror of the real route's query schema (bounds validation).
-const boundsQ = z
-  .object({
-    swLat: z.coerce.number().min(-90).max(90),
-    swLng: z.coerce.number().min(-180).max(180),
-    neLat: z.coerce.number().min(-90).max(90),
-    neLng: z.coerce.number().min(-180).max(180),
-  })
-  .superRefine((v, ctx) => {
-    if (Math.abs(v.neLat - v.swLat) > 3 || Math.abs(v.neLng - v.swLng) > 4) {
-      ctx.addIssue({ code: z.ZodIssueCode.custom, message: "Map area is too large", path: [] });
-    }
-  });
-
 describe("food bounds validation", () => {
-  it("rejects a too-large area", async () => {
-    const parsed = boundsQ.safeParse({ swLat: "0", swLng: "100", neLat: "30", neLng: "112" });
+  it("rejects a continent-scale area", async () => {
+    const parsed = mapBoundsQuerySchema.safeParse({ swLat: "0", swLng: "100", neLat: "30", neLng: "112" });
     expect(parsed.success).toBe(false);
   });
 
   it("accepts a normal city viewport", async () => {
-    const parsed = boundsQ.safeParse({ swLat: "10.7", swLng: "106.5", neLat: "10.9", neLng: "106.9" });
+    const parsed = mapBoundsQuerySchema.safeParse({ swLat: "10.7", swLng: "106.5", neLat: "10.9", neLng: "106.9" });
+    expect(parsed.success).toBe(true);
+  });
+
+  it("accepts the Vietnam-wide coverage bbox", async () => {
+    const parsed = mapBoundsQuerySchema.safeParse(MAP_SPOT_FETCH_BOUNDS);
     expect(parsed.success).toBe(true);
   });
 
   it("rejects out-of-range latitudes", async () => {
-    const parsed = boundsQ.safeParse({ swLat: "-91", swLng: "100", neLat: "30", neLng: "112" });
+    const parsed = mapBoundsQuerySchema.safeParse({ swLat: "-91", swLng: "100", neLat: "30", neLng: "112" });
     expect(parsed.success).toBe(false);
   });
 });
