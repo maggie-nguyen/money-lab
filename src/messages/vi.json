@@ -427,7 +427,7 @@
   "map.noApiKeyTitle": "Chưa cấu hình Google Maps",
   "map.noApiKeyDescription": "Thêm GOOGLE_MAPS_API_KEY vào file .env (Maps JavaScript API, giới hạn theo domain).",
   "map.googleUnavailableTitle": "Bản đồ đang tạm nghỉ",
-  "map.googleUnavailableDescription": "Google Maps đã đạt giới hạn hoặc không tải được. Bạn vẫn có thể xem và chọn quán trong danh sách bên cạnh.",
+  "map.googleUnavailableDescription": "Trình duyệt hoặc tiện ích chặn quảng cáo có thể đang chặn Google Maps — thử cửa sổ ẩn danh hoặc tắt ad blocker rồi tải lại. Nếu vẫn lỗi, kiểm tra GOOGLE_MAPS_API_KEY và giới hạn referrer trên Google Cloud. Bạn vẫn có thể xem quán trong danh sách bên cạnh.",
   "map.retryMap": "Thử tải lại bản đồ",
   "map.offlineNotice": "Bạn đang ngoại tuyến. Danh sách quán sẽ hoạt động lại khi có mạng.",
   "map.dataUnavailableTitle": "Chưa tải được danh sách quán",
