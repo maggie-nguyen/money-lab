@@ -131,7 +131,7 @@ function WalletSidebar() {
               {t("wallet.habits.title")}
             </Link>
             <Link
-              href="/tools/budget-503020"
+              href="/vi-cua-toi/chia-vi"
               className="block py-2.5 text-sm text-ink-soft transition-colors hover:text-moss-600"
             >
               {t("tools.budget-503020.title")}
