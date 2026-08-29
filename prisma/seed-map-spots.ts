@@ -1,9 +1,15 @@
+/**
+ * Production-safe map seed — clusters + priced food spots only.
+ *
+ * Idempotent upserts; never touches users, reviews, wallet, or articles.
+ * Run against production:
+ *   vercel env run -e production -- pnpm content:seed:map
+ */
 import { prisma } from "../src/server/db";
 import { uuidv7 } from "../src/server/lib/ids";
 import { FOOD_CLUSTERS, FOOD_SPOTS } from "./food-spots-data";
 
-/** Idempotent seed for map pins + sample community reviews. */
-export async function seedFoodMap(learnerEmail = "learner@moneylab.local"): Promise<void> {
+async function main(): Promise<void> {
   for (const c of FOOD_CLUSTERS) {
     await prisma.foodCluster.upsert({
       where: { slug: c.slug },
@@ -37,20 +43,17 @@ export async function seedFoodMap(learnerEmail = "learner@moneylab.local"): Prom
     ),
   );
 
-  const seedUsers: { id: string; displayName: string }[] = [];
-  const learner = await prisma.user.findUnique({ where: { email: learnerEmail } });
-  if (learner) seedUsers.push({ id: learner.id, displayName: learner.displayName });
+  let created = 0;
+  let updated = 0;
 
   for (const s of FOOD_SPOTS) {
     const clusterId = clusterBySlug[s.clusterSlug];
     if (!clusterId) continue;
 
     const existing = await prisma.foodSpot.findFirst({ where: { clusterId, name: s.name } });
-    let spotId: string;
     if (existing) {
-      spotId = existing.id;
       await prisma.foodSpot.update({
-        where: { id: spotId },
+        where: { id: existing.id },
         data: {
           address: s.address,
           lat: s.lat,
@@ -61,11 +64,11 @@ export async function seedFoodMap(learnerEmail = "learner@moneylab.local"): Prom
           order: s.order,
         },
       });
+      updated++;
     } else {
-      spotId = uuidv7();
       await prisma.foodSpot.create({
         data: {
-          id: spotId,
+          id: uuidv7(),
           clusterId,
           name: s.name,
           address: s.address,
@@ -77,27 +80,29 @@ export async function seedFoodMap(learnerEmail = "learner@moneylab.local"): Prom
           order: s.order,
         },
       });
-    }
-
-    if (!s.reviews?.length || !seedUsers.length) continue;
-    for (const r of s.reviews) {
-      const user = seedUsers[0]!;
-      const dup = await prisma.foodReview.findFirst({
-        where: { spotId, body: r.body },
-      });
-      if (dup) continue;
-      await prisma.foodReview.create({
-        data: {
-          id: uuidv7(),
-          spotId,
-          userId: user.id,
-          rating: r.rating,
-          body: r.body,
-          priceVnd: r.priceVnd ?? null,
-        },
-      });
+      created++;
     }
   }
 
-  console.log(`✔ food map seeded (${FOOD_SPOTS.length} spots)`);
+  const priced = await prisma.foodSpot.count({ where: { avgPriceVnd: { not: null } } });
+  console.log(
+    JSON.stringify(
+      {
+        clusters: FOOD_CLUSTERS.length,
+        spotsUpserted: FOOD_SPOTS.length,
+        created,
+        updated,
+        pricedSpotsTotal: priced,
+      },
+      null,
+      2,
+    ),
+  );
 }
+
+main()
+  .catch((error) => {
+    console.error(error);
+    process.exitCode = 1;
+  })
+  .finally(() => prisma.$disconnect());

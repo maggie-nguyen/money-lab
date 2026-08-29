@@ -17,6 +17,7 @@
     "smoke:auth": "tsx --tsconfig tsconfig.json scripts/check-auth-flows.ts",
     "content:verify": "tsx scripts/verify-videos.ts",
     "content:seed:articles": "tsx prisma/seed-articles.ts",
+    "content:seed:map": "tsx prisma/seed-map-spots.ts",
     "content:links": "tsx --tsconfig tsconfig.json scripts/check-lesson-links.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
