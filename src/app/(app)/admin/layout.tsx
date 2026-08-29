@@ -14,7 +14,6 @@ import { Alert, cx } from "@/components/ui";
 
 const NAV = [
   { href: "/admin/content", label: "Nội dung" },
-  { href: "/admin/sims", label: "Mô phỏng" },
   { href: "/admin/users", label: "Người dùng" },
   { href: "/admin/feedback", label: "Phản hồi" },
   { href: "/admin/flags", label: "Cờ tính năng" },

@@ -24,7 +24,7 @@ function FeaturedMapCard() {
   const t = useT();
 
   return (
-    <Link href="/ban-do" className="group block">
+    <Link href="/food" className="group block">
       <div
         className="relative flex min-h-[12rem] items-end overflow-hidden rounded-[var(--radius-card)] sm:min-h-[14rem]"
         style={coverStyle("wallet-food-map")}
@@ -76,7 +76,7 @@ function WalletSidebar() {
           <CardBody className="space-y-3">
             <LedgerLabel>{t("wallet.manage.label")}</LedgerLabel>
             {jarQuery.isLoading ? (
-              <p className="text-sm text-ink-faint">{t("map.loading")}</p>
+              <p className="text-sm text-ink-faint">{t("common.loading")}</p>
             ) : jarQuery.data && Number(jarQuery.data.totalBudgetVnd) > 0 ? (
               <>
                 <MoneyReadout
@@ -94,7 +94,7 @@ function WalletSidebar() {
                   max={100}
                   label={t("wallet.manage.totalSpent")}
                 />
-                <Link href="/vi-cua-toi/chia-vi">
+                <Link href="/wallet/budget">
                   <Button size="sm" variant="secondary" className="w-full">
                     {t("wallet.sidebar.editJar")}
                   </Button>
@@ -103,7 +103,7 @@ function WalletSidebar() {
             ) : (
               <>
                 <p className="text-sm text-ink-soft">{t("wallet.sidebar.jarEmpty")}</p>
-                <Link href="/vi-cua-toi/chia-vi">
+                <Link href="/wallet/budget">
                   <Button size="sm" className="w-full">
                     {t("wallet.sidebar.setupJar")}
                   </Button>
@@ -119,22 +119,28 @@ function WalletSidebar() {
           <LedgerLabel>{t("wallet.sidebar.quickLinks")}</LedgerLabel>
           <div className="mt-2 divide-y divide-rule border-y border-rule">
             <Link
-              href="/ban-do"
+              href="/library"
+              className="block py-2.5 text-sm text-ink-soft transition-colors hover:text-moss-600"
+            >
+              {t("library.label")}
+            </Link>
+            <Link
+              href="/food"
               className="block py-2.5 text-sm text-ink-soft transition-colors hover:text-moss-600"
             >
               {t("map.metaTitle")}
             </Link>
             <Link
-              href="/vi-cua-toi/thu-thach"
+              href="/wallet/challenges"
               className="block py-2.5 text-sm text-ink-soft transition-colors hover:text-moss-600"
             >
               {t("wallet.habits.title")}
             </Link>
             <Link
-              href="/vi-cua-toi/chia-vi"
+              href="/wallet/budget"
               className="block py-2.5 text-sm text-ink-soft transition-colors hover:text-moss-600"
             >
-              {t("tools.budget-503020.title")}
+              {t("wallet.manage.title")}
             </Link>
           </div>
         </CardBody>
@@ -144,13 +150,13 @@ function WalletSidebar() {
 }
 
 const PILLARS = [
-  { href: "/vi-cua-toi/hieu-minh", key: "mind", coverSlug: "wallet-mind", glyph: "mind" as const },
-  { href: "/vi-cua-toi/chia-vi", key: "manage", coverSlug: "wallet-manage", glyph: "manage" as const },
-  { href: "/vi-cua-toi/cuoc-song", key: "life", coverSlug: "wallet-life", glyph: "life" as const },
-  { href: "/vi-cua-toi/thu-thach", key: "habits", coverSlug: "wallet-habits", glyph: "habits" as const },
+  { href: "/wallet/mind", key: "mind", coverSlug: "wallet-mind", glyph: "mind" as const },
+  { href: "/wallet/budget", key: "manage", coverSlug: "wallet-manage", glyph: "manage" as const },
+  { href: "/wallet/life", key: "life", coverSlug: "wallet-life", glyph: "life" as const },
+  { href: "/wallet/challenges", key: "habits", coverSlug: "wallet-habits", glyph: "habits" as const },
 ] as const;
 
-export default function ViCuaToiHubPage() {
+export default function WalletHubPage() {
   const t = useT();
   const moments = t("wallet.moments").split("|");
 

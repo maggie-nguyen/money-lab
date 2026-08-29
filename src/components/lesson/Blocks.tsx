@@ -48,11 +48,22 @@ export function LessonBlock({ block }: { block: Block }) {
   const t = useT();
   switch (block.type) {
     case "HEADING": {
-      const Tag = block.level === 3 ? "h3" : "h2";
-      return <Tag>{block.text}</Tag>;
+      const isH3 = block.level === 3;
+      const Tag = isH3 ? "h3" : "h2";
+      return (
+        <Tag
+          className={
+            isH3
+              ? "font-display text-lg font-semibold leading-snug tracking-tight text-ink"
+              : "font-display text-xl font-semibold leading-snug tracking-tight text-ink sm:text-2xl"
+          }
+        >
+          {block.text}
+        </Tag>
+      );
     }
     case "PARAGRAPH":
-      return <p className="leading-relaxed text-ink">{block.text}</p>;
+      return <p className="leading-relaxed text-ink-soft">{block.text}</p>;
     case "LIST": {
       const Tag = block.ordered ? "ol" : "ul";
       return (

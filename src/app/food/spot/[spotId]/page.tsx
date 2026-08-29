@@ -150,7 +150,7 @@ export default function BanDoSpotPage() {
           <Card className="mt-3">
             <CardBody className="space-y-3">
               <p className="text-sm text-ink-soft">{t("map.loginToReview")}</p>
-              <Link href={loginHref(`/ban-do/spot/${params.spotId}#review`)}>
+              <Link href={loginHref(`/food/spot/${params.spotId}#review`)}>
                 <Button size="sm">{t("nav.signIn")}</Button>
               </Link>
             </CardBody>

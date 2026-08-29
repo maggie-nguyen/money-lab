@@ -12,6 +12,6 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default function BanDoPage() {
+export default function FoodPage() {
   return <FoodMapView mapsApiKey={process.env.GOOGLE_MAPS_API_KEY ?? ""} />;
 }

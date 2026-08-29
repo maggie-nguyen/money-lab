@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { useSession, useT } from "@/components/Providers";
 import { signOut } from "@/lib/signOut";
 import { Button, Chip, cx } from "@/components/ui";
+import { isMainNavActive, mainNavItems, WALLET_HREF } from "@/lib/mainNav";
 
 function ThemeToggle() {
   const t = useT();
@@ -39,7 +40,7 @@ function ThemeToggle() {
 
 function Wordmark() {
   return (
-    <Link href="/ban-do" className="flex items-baseline gap-2">
+    <Link href={WALLET_HREF} className="flex items-baseline gap-2">
       <span className="font-display text-xl font-semibold tracking-tight">Money&amp;Me</span>
     </Link>
   );
@@ -93,9 +94,6 @@ function AccountMenu() {
   const name = bootstrap.user.displayName;
   const menu = [
     { href: "/profile", label: t("nav.profile") },
-    { href: "/quests", label: t("nav.quests") },
-    { href: "/leaderboard", label: t("nav.leaderboard") },
-    { href: "/shop", label: t("nav.shop") },
     { href: "/settings", label: t("nav.settings") },
   ];
 
@@ -149,12 +147,7 @@ function AccountMenu() {
 export function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const t = useT();
-  const nav = [
-    { href: "/ban-do", label: t("nav.map") },
-    { href: "/vi-cua-toi", label: t("nav.wallet") },
-    { href: "/vi-cua-toi/thu-thach", label: t("nav.challenges") },
-    { href: "/profile", label: t("nav.account") },
-  ] as const;
+  const nav = [...mainNavItems(t), { href: "/profile", label: t("nav.account") }] as const;
 
   return (
     <div className="flex min-h-dvh flex-col">
@@ -163,7 +156,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           <Wordmark />
           <nav className="hidden items-center gap-1 md:flex" aria-label={t("nav.main")}>
             {nav.map((item) => {
-              const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+              const active = isMainNavActive(pathname, item.href);
               return (
                 <Link
                   key={item.href}
@@ -195,11 +188,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </main>
 
       <nav
-        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-4 border-t border-rule bg-paper-raised md:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 border-t border-rule bg-paper-raised md:hidden"
         aria-label={t("nav.main")}
       >
         {nav.map((item) => {
-          const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+          const active = isMainNavActive(pathname, item.href);
           return (
             <Link
               key={item.href}
@@ -214,9 +207,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </nav>
 
       <footer className="hidden border-t border-rule px-4 py-6 text-xs text-ink-faint md:block">
-        <div className="mx-auto flex max-w-6xl flex-wrap justify-between gap-2">
+        <div className="mx-auto max-w-6xl">
           <span>{t("footer.disclaimer")}</span>
-          <span>{t("footer.simDisclaimer")}</span>
         </div>
       </footer>
     </div>

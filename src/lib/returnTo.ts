@@ -3,7 +3,7 @@
  *
  * Without this the app forgets what the user was trying to reach. A shared link
  * to a lesson, or an access token that expired halfway through one, both end on
- * the login screen and then dump the learner on /learn.
+ * the login screen and then dump the learner on the wallet hub.
  *
  * The destination travels in ?next= on the login link, so it is attacker
  * controllable and is never used before safeReturnTo has checked it. A value is
@@ -13,7 +13,7 @@
  * too, since returning to them would loop.
  */
 export const RETURN_PARAM = "next";
-export const DEFAULT_AFTER_LOGIN = "/learn";
+export const DEFAULT_AFTER_LOGIN = "/wallet";
 
 const AUTH_PATHS = ["/login", "/signup", "/welcome"];
 

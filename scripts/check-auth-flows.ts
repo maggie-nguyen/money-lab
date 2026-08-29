@@ -85,24 +85,24 @@ async function main(): Promise<void> {
 
     /* ---- The auth screens are closed to someone already signed in -------- */
     console.log("auth screens while signed in");
-    check("/login redirects away", await goto(page, "/login"), "/learn");
-    check("/signup redirects away", await goto(page, "/signup"), "/learn");
+    check("/login redirects away", await goto(page, "/login"), "/wallet");
+    check("/signup redirects away", await goto(page, "/signup"), "/wallet");
     check(
       "an off origin next is refused rather than followed",
       await goto(page, "/login?next=https%3A%2F%2Fevil.example%2Fsteal"),
-      "/learn",
+      "/wallet",
     );
     check(
       "a protocol relative next is refused rather than followed",
       await goto(page, "/login?next=%2F%2Fevil.example%2Fsteal"),
-      "/learn",
+      "/wallet",
     );
 
     /* ---- A reload keeps the session ------------------------------------- */
     console.log("reload while signed in");
-    await goto(page, "/learn");
+    await goto(page, "/wallet");
     await page.reload({ waitUntil: "networkidle2" });
-    check("reloading a signed in page stays put", await settledPath(page), "/learn");
+    check("reloading a signed in page stays put", await settledPath(page), "/wallet");
 
     /* ---- Sign out lands on the home page, not the login screen ----------- */
     console.log("sign out from the account menu");
@@ -138,7 +138,7 @@ async function main(): Promise<void> {
     check("log out all devices clears this device too", String(await hasSessionCookie(page)), "false");
     check(
       "and the session does not come back on the next visit",
-      await goto(page, "/learn"),
+      await goto(page, "/wallet"),
       "/login",
     );
     await ctx.close();

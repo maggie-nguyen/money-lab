@@ -51,7 +51,7 @@ async function visitMapSelected(page: Page, name: string, path: string): Promise
 }
 
 async function visitMapSpotDetail(page: Page, name: string): Promise<void> {
-  await page.goto(`${BASE}/ban-do`, { waitUntil: "domcontentloaded", timeout: 30_000 });
+  await page.goto(`${BASE}/food`, { waitUntil: "domcontentloaded", timeout: 30_000 });
   await new Promise((r) => setTimeout(r, 6_000));
   await selectFirstMapSpot(page);
   const detailHref = await page.$eval('[data-testid="map-spot-detail-link"]', (el) =>
@@ -77,13 +77,13 @@ async function main(): Promise<void> {
   console.log(`Base URL: ${BASE}\n`);
 
   await page.setViewport({ width: 1280, height: 900 });
-  await visitMap(page, "ban-do", "/ban-do");
-  await visitMapSelected(page, "ban-do-selected", "/ban-do");
-  await visitMapSpotDetail(page, "ban-do-spot");
+  await visitMap(page, "food", "/food");
+  await visitMapSelected(page, "food-selected", "/food");
+  await visitMapSpotDetail(page, "food-spot");
 
   await page.setViewport({ width: 420, height: 860 });
-  await visitMap(page, "mobile-ban-do", "/ban-do");
-  await visitMapSelected(page, "mobile-ban-do-selected", "/ban-do");
+  await visitMap(page, "mobile-food", "/food");
+  await visitMapSelected(page, "mobile-food-selected", "/food");
 
   await browser.close();
   console.log("\nDone.");

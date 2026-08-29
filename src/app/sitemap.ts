@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { env } from "@/server/config";
+import { ROUTES } from "@/lib/routes";
 import { publishedArticleSitemapEntries } from "@/server/services/libraryService";
 
 /** Regenerated on the same cadence as the library pages themselves. */
@@ -10,7 +11,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const staticEntries: MetadataRoute.Sitemap = [
     { url: `${origin}/`, changeFrequency: "weekly", priority: 1 },
-    { url: `${origin}/library`, changeFrequency: "daily", priority: 0.8 },
+    { url: `${origin}${ROUTES.food}`, changeFrequency: "daily", priority: 0.9 },
+    { url: `${origin}${ROUTES.library}`, changeFrequency: "daily", priority: 0.8 },
     { url: `${origin}/login`, changeFrequency: "yearly", priority: 0.3 },
     { url: `${origin}/signup`, changeFrequency: "yearly", priority: 0.3 },
   ];

@@ -382,7 +382,7 @@ export function FoodMapView({ mapsApiKey }: { mapsApiKey: string }) {
                       <p className="mt-1">{t("map.noPricedSpotsHint")}</p>
                       <p className="mt-1 font-medium text-moss-700">{t("map.noPricedSpotsCta")}</p>
                       <Link
-                        href="/ban-do/them-quan"
+                        href="/food/add"
                         className="mt-2 inline-block text-xs font-semibold text-moss-700 underline"
                       >
                         {t("map.addSpotCta")}

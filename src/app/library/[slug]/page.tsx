@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import { PublicChrome } from "@/components/PublicChrome";
 import { LessonBlocks } from "@/components/lesson/Blocks";
 import { Button, Card, CardBody, Chip, LedgerLabel, PageBackLink } from "@/components/ui";
 import { coverStyle } from "@/lib/cover";
@@ -73,8 +72,7 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
   if (!article) notFound();
 
   return (
-    <PublicChrome>
-      <article className="mx-auto max-w-3xl px-4 py-12">
+    <article className="mx-auto max-w-3xl px-4 py-12">
         <PageBackLink href="/library">{t("nav.library")}</PageBackLink>
 
         <div className="flex flex-wrap items-center gap-2 text-xs text-ink-faint">
@@ -126,13 +124,17 @@ export default async function ArticlePage({ params }: { params: Promise<{ slug: 
         <div className="mt-14 rounded-[var(--radius-card)] border border-rule px-6 py-8 text-center">
           <h2 className="text-2xl">{t("landing.ctaTitle")}</h2>
           <p className="mx-auto mt-2 max-w-md text-sm text-ink-soft">{t("landing.ctaBody")}</p>
-          <div className="mt-5">
+          <div className="mt-5 flex flex-wrap items-center justify-center gap-3">
+            <Link href="/food">
+              <Button size="lg" variant="secondary">
+                {t("landing.exploreMap")}
+              </Button>
+            </Link>
             <Link href="/signup">
               <Button size="lg">{t("landing.startFree")}</Button>
             </Link>
           </div>
         </div>
       </article>
-    </PublicChrome>
   );
 }

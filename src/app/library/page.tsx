@@ -1,6 +1,5 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { PublicChrome } from "@/components/PublicChrome";
 import { Card, CardBody, Chip, EmptyState, LedgerLabel } from "@/components/ui";
 import { coverStyle } from "@/lib/cover";
 import { CoverArt } from "@/components/art/CoverArt";
@@ -83,8 +82,7 @@ export default async function LibraryPage() {
   const [lead, ...rest] = data;
 
   return (
-    <PublicChrome>
-      <section className="mx-auto max-w-5xl px-4 py-12">
+    <section className="mx-auto max-w-5xl px-4 py-12">
         <LedgerLabel>{t("library.label")}</LedgerLabel>
         <h1 className="mt-3 max-w-3xl text-4xl">{t("library.title")}</h1>
         <p className="mt-4 max-w-2xl text-base text-ink-soft">{t("library.subtitle")}</p>
@@ -110,6 +108,24 @@ export default async function LibraryPage() {
             )}
 
             <div className="mt-14 border-t border-rule pt-6">
+              <LedgerLabel>{t("library.exploreTitle")}</LedgerLabel>
+              <div className="mt-3 flex flex-wrap gap-3 text-sm">
+                <Link
+                  href="/food"
+                  className="rounded-full border border-rule px-4 py-2 text-ink-soft transition-colors hover:border-moss-200 hover:text-moss-600"
+                >
+                  {t("library.exploreMap")}
+                </Link>
+                <Link
+                  href="/wallet"
+                  className="rounded-full border border-rule px-4 py-2 text-ink-soft transition-colors hover:border-moss-200 hover:text-moss-600"
+                >
+                  {t("library.exploreWallet")}
+                </Link>
+              </div>
+            </div>
+
+            <div className="mt-10 border-t border-rule pt-6">
               <LedgerLabel>{t("library.topics")}</LedgerLabel>
               <div className="mt-3 flex flex-wrap gap-2 text-sm">
                 {CATEGORY_ORDER.filter((c) => data.some((a) => a.category === c)).map((c) => (
@@ -122,6 +138,5 @@ export default async function LibraryPage() {
           </>
         )}
       </section>
-    </PublicChrome>
   );
 }

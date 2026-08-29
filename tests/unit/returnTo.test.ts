@@ -40,14 +40,14 @@ describe("loginHref", () => {
   });
 
   it("stays bare when the destination is the default", () => {
-    expect(loginHref("/learn")).toBe("/login");
+    expect(loginHref("/wallet")).toBe("/login");
     expect(loginHref("//evil.example")).toBe("/login");
   });
 });
 
 describe("welcomeHref", () => {
   it("passes the destination through onboarding", () => {
-    expect(welcomeHref("/sims")).toBe("/welcome?next=%2Fsims");
-    expect(welcomeHref("/learn")).toBe("/welcome");
+    expect(welcomeHref("/food")).toBe("/welcome?next=%2Ffood");
+    expect(welcomeHref("/wallet")).toBe("/welcome");
   });
 });

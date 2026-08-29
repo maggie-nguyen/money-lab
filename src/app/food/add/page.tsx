@@ -66,7 +66,7 @@ export default function BanDoThemQuanPage() {
         note: note.trim() || undefined,
       }),
     onSuccess: (pin) => {
-      router.push(`/ban-do/spot/${pin.id}`);
+      router.push(`/food/spot/${pin.id}`);
     },
   });
 
@@ -75,7 +75,7 @@ export default function BanDoThemQuanPage() {
       <Card>
         <CardBody className="space-y-3">
           <p className="text-sm text-ink-soft">{t("map.loginToContribute")}</p>
-          <Link href={loginHref("/ban-do/them-quan")}>
+          <Link href={loginHref("/food/add")}>
             <Button size="sm">{t("nav.signIn")}</Button>
           </Link>
         </CardBody>
@@ -146,7 +146,7 @@ export default function BanDoThemQuanPage() {
         </CardBody>
       </Card>
 
-      <Link href="/ban-do" className="text-sm text-moss-700 hover:underline">
+      <Link href="/food" className="text-sm text-moss-700 hover:underline">
         {t("map.backToMap")}
       </Link>
     </div>

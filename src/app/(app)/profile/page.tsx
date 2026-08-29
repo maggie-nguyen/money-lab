@@ -89,8 +89,8 @@ function CertificateList({ certificates }: { certificates: CertificateView[] }) 
         title={t("profile.certsEmptyTitle")}
         description={t("profile.certsEmptyDescription")}
         action={
-          <Link href="/learn" className="text-sm font-medium text-moss-400 underline underline-offset-2">
-            {t("profile.certsBrowseCourses")}
+          <Link href="/library" className="text-sm font-medium text-moss-400 underline underline-offset-2">
+            {t("profile.certsBrowseLibrary")}
           </Link>
         }
       />

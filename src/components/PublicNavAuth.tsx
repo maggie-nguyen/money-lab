@@ -7,12 +7,8 @@ import { useT } from "@/components/Providers";
 import { Button } from "@/components/ui";
 
 /**
- * The auth corner of the public header.
- *
- * The library is statically rendered, so the server cannot know who is reading
- * it without making every request dynamic. This resolves after hydration from
- * the readable `ml_session` hint instead, which holds no credential: the worst
- * case is a signed-in reader seeing the signed-out links for one frame.
+ * Auth corner for the public header (landing + library for guests).
+ * Signed-in users use the main nav tabs instead of a separate "Vào học" shortcut.
  */
 export function PublicNavAuth() {
   const t = useT();
@@ -25,8 +21,8 @@ export function PublicNavAuth() {
 
   if (signedIn) {
     return (
-      <Link href="/learn">
-        <Button size="sm">{t("nav.enterLearn")}</Button>
+      <Link href="/profile" className="text-sm font-medium text-ink-soft hover:text-ink">
+        {t("nav.account")}
       </Link>
     );
   }

@@ -187,7 +187,7 @@ export default function HuChiTieuPage() {
 
   return (
     <div className="space-y-5">
-      <PageBackLink href="/vi-cua-toi">{t("wallet.back")}</PageBackLink>
+      <PageBackLink href="/wallet">{t("wallet.back")}</PageBackLink>
 
       <header className="space-y-2">
         <LedgerLabel>{t("wallet.manage.label")}</LedgerLabel>
@@ -253,7 +253,7 @@ export default function HuChiTieuPage() {
       )}
 
       <SectionContinueLink
-        href="/vi-cua-toi/cuoc-song"
+        href="/wallet/life"
         hint={t("wallet.life.label")}
         label={t("wallet.manage.nextLife")}
       />

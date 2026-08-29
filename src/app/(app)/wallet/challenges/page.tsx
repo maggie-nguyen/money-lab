@@ -144,8 +144,9 @@ function HabitsSidebar({ activeCount, totalCount }: { activeCount: number; total
         <CardBody className="space-y-1">
           <LedgerLabel>{t("wallet.sidebar.quickLinks")}</LedgerLabel>
           <div className="mt-2 space-y-0.5">
-            <RelatedNavLink href="/vi-cua-toi/chia-vi">{t("wallet.manage.title")}</RelatedNavLink>
-            <RelatedNavLink href="/ban-do">{t("map.metaTitle")}</RelatedNavLink>
+            <RelatedNavLink href="/library">{t("library.label")}</RelatedNavLink>
+            <RelatedNavLink href="/wallet/budget">{t("wallet.manage.title")}</RelatedNavLink>
+            <RelatedNavLink href="/food">{t("map.metaTitle")}</RelatedNavLink>
           </div>
         </CardBody>
       </Card>
@@ -153,7 +154,7 @@ function HabitsSidebar({ activeCount, totalCount }: { activeCount: number; total
   );
 }
 
-export default function ThuThachPage() {
+export default function ChallengesPage() {
   const t = useT();
   const qc = useQueryClient();
   const [awardMsg, setAwardMsg] = React.useState<string | null>(null);
@@ -231,7 +232,7 @@ export default function ThuThachPage() {
   return (
     <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-10">
       <div className="space-y-6">
-        <PageBackLink href="/vi-cua-toi">{t("wallet.back")}</PageBackLink>
+        <PageBackLink href="/wallet">{t("wallet.back")}</PageBackLink>
 
         <header className="space-y-2">
           <LedgerLabel>{t("wallet.habits.label")}</LedgerLabel>

@@ -14,7 +14,7 @@ export const POST = withApi({ auth: "none", rateLimit: "auth" }, async (ctx) => 
     ip: ctx.ip,
   });
   // isNewUser travels back so the page can send a fresh account to /welcome
-  // and a returning one straight to /learn.
+  // and a returning one straight to the wallet hub.
   return withCookies(
     { data: { user: result.user, isNewUser: result.isNewUser } },
     200,

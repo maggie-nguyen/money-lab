@@ -13,7 +13,7 @@ import {
 } from "@/components/ui";
 
 const LIFE_SECTIONS = [
-  { href: "/ban-do", key: "food", live: true },
+  { href: "/food", key: "food", live: true },
   { href: null, key: "transport", live: false },
   { href: null, key: "fun", live: false },
   { href: null, key: "shopping", live: false },
@@ -25,7 +25,7 @@ export default function CuocSongPage() {
 
   return (
     <div className="space-y-6">
-      <PageBackLink href="/vi-cua-toi">{t("wallet.back")}</PageBackLink>
+      <PageBackLink href="/wallet">{t("wallet.back")}</PageBackLink>
 
       <header className="space-y-2">
         <LedgerLabel>{t("wallet.life.label")}</LedgerLabel>
@@ -74,7 +74,7 @@ export default function CuocSongPage() {
       </div>
 
       <SectionContinueLink
-        href="/vi-cua-toi/thu-thach"
+        href="/wallet/challenges"
         hint={t("wallet.habits.label")}
         label={t("wallet.life.nextHabits")}
       />

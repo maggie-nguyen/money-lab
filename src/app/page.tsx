@@ -1,8 +1,12 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { Button, Card, CardBody, CardNavFooter, LedgerLabel } from "@/components/ui";
+import { SiteHeader } from "@/components/SiteHeader";
+import { Button, Card, CardBody, CardNavFooter, Chip, LedgerLabel } from "@/components/ui";
 import { LedgerScene } from "@/components/auth/LedgerScene";
 import { WalletGlyph, type WalletGlyphKind } from "@/components/art/WalletGlyph";
+import { CoverArt } from "@/components/art/CoverArt";
+import { coverStyle } from "@/lib/cover";
+import { listArticles } from "@/server/services/libraryService";
 import { createT } from "@/lib/i18n";
 import { getRequestLocale } from "@/lib/requestLocale";
 
@@ -20,28 +24,28 @@ const PILLARS: Array<{
   glyph: WalletGlyphKind;
 }> = [
   {
-    href: "/ban-do",
+    href: "/food",
     titleKey: "landing.pillar.map",
     descKey: "landing.pillar.mapDesc",
     tagKey: "nav.map",
     glyph: "map",
   },
   {
-    href: "/vi-cua-toi/hieu-minh",
+    href: "/library",
     titleKey: "landing.pillar.mind",
     descKey: "landing.pillar.mindDesc",
     tagKey: "wallet.mind.tag",
     glyph: "mind",
   },
   {
-    href: "/vi-cua-toi/chia-vi",
+    href: "/wallet/budget",
     titleKey: "landing.pillar.wallet",
     descKey: "landing.pillar.walletDesc",
     tagKey: "wallet.manage.tag",
     glyph: "manage",
   },
   {
-    href: "/vi-cua-toi/thu-thach",
+    href: "/wallet/challenges",
     titleKey: "landing.pillar.habits",
     descKey: "landing.pillar.habitsDesc",
     tagKey: "wallet.habits.tag",
@@ -52,22 +56,11 @@ const PILLARS: Array<{
 export default async function LandingPage() {
   const locale = await getRequestLocale();
   const t = createT(locale);
+  const { data: featuredArticles } = await listArticles({ limit: 3 }, locale);
 
   return (
     <div className="min-h-dvh bg-paper">
-      <header className="border-b border-rule">
-        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <span className="font-display text-xl font-semibold tracking-tight">Money&amp;Me</span>
-          <nav className="flex items-center gap-4 text-sm">
-            <Link href="/login" className="text-ink-soft hover:text-ink">
-              {t("landing.signIn")}
-            </Link>
-            <Link href="/signup">
-              <Button size="sm">{t("landing.startFree")}</Button>
-            </Link>
-          </nav>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main id="main">
         <section className="border-b border-rule">
@@ -77,12 +70,12 @@ export default async function LandingPage() {
               <h1 className="mt-3 text-4xl sm:text-5xl">{t("landing.heroTitle")}</h1>
               <p className="mt-5 max-w-xl text-base text-ink-soft">{t("landing.heroBody")}</p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
-                <Link href="/ban-do">
+                <Link href="/food">
                   <Button size="lg">{t("landing.exploreMap")}</Button>
                 </Link>
-                <Link href="/signup">
+                <Link href="/library">
                   <Button size="lg" variant="secondary">
-                    {t("landing.startFree")}
+                    {t("landing.readArticles")}
                   </Button>
                 </Link>
               </div>
@@ -90,6 +83,10 @@ export default async function LandingPage() {
                 {t("landing.hasAccount")}{" "}
                 <Link href="/login" className="text-moss-400 underline hover:text-moss-600">
                   {t("landing.signIn")}
+                </Link>
+                {" · "}
+                <Link href="/signup" className="text-moss-400 underline hover:text-moss-600">
+                  {t("landing.startFree")}
                 </Link>
               </p>
             </div>
@@ -141,37 +138,41 @@ export default async function LandingPage() {
           </div>
         </section>
 
-        <section className="mx-auto max-w-5xl px-4 py-16">
-          <div className="grid grid-cols-1 items-center gap-8 lg:grid-cols-2">
-            <div>
-              <LedgerLabel>{t("landing.simLabel")}</LedgerLabel>
-              <h2 className="mt-2 font-display text-2xl">{t("landing.simTitle")}</h2>
-              <p className="mt-3 text-sm leading-relaxed text-ink-soft">{t("landing.simBody")}</p>
-              <p className="mt-3 text-xs text-ink-faint">{t("landing.simNote")}</p>
+        {featuredArticles.length > 0 && (
+          <section className="mx-auto max-w-5xl px-4 py-16">
+            <LedgerLabel>{t("library.label")}</LedgerLabel>
+            <h2 className="mt-2 font-display text-2xl">{t("landing.libraryTitle")}</h2>
+            <p className="mt-2 max-w-2xl text-sm leading-relaxed text-ink-soft">{t("landing.libraryBody")}</p>
+            <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {featuredArticles.map((article) => (
+                <Link key={article.id} href={`/library/${article.slug}`} className="group block">
+                  <Card className="h-full overflow-hidden transition-shadow hover:shadow-md">
+                    <div className="h-32 w-full" style={article.coverImageUrl ? undefined : coverStyle(article.slug)}>
+                      {article.coverImageUrl ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={article.coverImageUrl} alt="" className="h-full w-full object-cover" />
+                      ) : (
+                        <CoverArt slug={article.slug} className="h-full w-full" />
+                      )}
+                    </div>
+                    <CardBody>
+                      <Chip>{t(`library.category.${article.category}`)}</Chip>
+                      <h3 className="mt-2 line-clamp-2 text-base group-hover:underline">{article.title}</h3>
+                      {article.summary && (
+                        <p className="mt-1.5 line-clamp-2 text-sm text-ink-soft">{article.summary}</p>
+                      )}
+                    </CardBody>
+                  </Card>
+                </Link>
+              ))}
             </div>
-            <Card tone="ink">
-              <CardBody>
-                <LedgerLabel className="text-paper/70">{t("landing.simCardLabel")}</LedgerLabel>
-                <div className="figure mt-2 text-3xl font-semibold">8.500.000 ₫</div>
-                <p className="mt-1 text-sm text-paper/80">{t("landing.simIncome")}</p>
-                <div className="mt-5 space-y-2 text-sm text-paper/90">
-                  <div className="flex justify-between border-b border-paper/20 pb-2">
-                    <span>{t("landing.simNeeds")}</span>
-                    <span className="figure">4.250.000 ₫</span>
-                  </div>
-                  <div className="flex justify-between border-b border-paper/20 pb-2">
-                    <span>{t("landing.simWants")}</span>
-                    <span className="figure">2.550.000 ₫</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>{t("landing.simSave")}</span>
-                    <span className="figure">1.700.000 ₫</span>
-                  </div>
-                </div>
-              </CardBody>
-            </Card>
-          </div>
-        </section>
+            <div className="mt-8">
+              <Link href="/library">
+                <Button variant="secondary">{t("landing.libraryBrowse")}</Button>
+              </Link>
+            </div>
+          </section>
+        )}
 
         <section className="relative border-t border-rule">
           <LedgerScene uid="ml-cta" viewBox="0 1010 900 190" className="absolute inset-0 h-full w-full" />
@@ -180,9 +181,18 @@ export default async function LandingPage() {
             <h2 className="font-display text-2xl text-[#f0ead9]">{t("landing.ctaTitle")}</h2>
             <p className="mx-auto mt-2 max-w-md text-sm text-[#f0ead9]/85">{t("landing.ctaBody")}</p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Link href="/ban-do">
+              <Link href="/food">
                 <Button size="lg" className="!bg-[#f0ead9] !text-[#16211c] hover:!bg-white">
                   {t("landing.exploreMap")}
+                </Button>
+              </Link>
+              <Link href="/library">
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  className="!border-[#f0ead9]/60 !text-[#f0ead9] hover:!bg-[#f0ead9]/10"
+                >
+                  {t("landing.readArticles")}
                 </Button>
               </Link>
               <Link href="/signup">

@@ -24,7 +24,7 @@ export function SpotDetailHero({
 
   return (
     <div className="space-y-5">
-      <PageBackLink href="/ban-do">{t("map.backToMap")}</PageBackLink>
+      <PageBackLink href="/food">{t("map.backToMap")}</PageBackLink>
 
       <div className="max-w-2xl">
         <LedgerLabel>{t("map.spotLabel")}</LedgerLabel>

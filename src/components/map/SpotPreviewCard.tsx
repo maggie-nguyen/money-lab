@@ -80,10 +80,10 @@ export function SpotMapOverlay({
             </button>
           </div>
           <div className="flex flex-wrap gap-2 border-t border-rule pt-3">
-            <Link href={`/ban-do/spot/${pin.id}`} data-testid="map-spot-detail-link">
+            <Link href={`/food/spot/${pin.id}`} data-testid="map-spot-detail-link">
               <Button size="sm">{t("map.viewSpot")}</Button>
             </Link>
-            <Link href={`/ban-do/spot/${pin.id}#review`}>
+            <Link href={`/food/spot/${pin.id}#review`}>
               <Button size="sm" variant="secondary">
                 {t("map.addReview")}
               </Button>
@@ -120,10 +120,10 @@ export function SpotPreviewCard({ pin, onClose }: { pin: FoodSpotPin; onClose: (
         <SpotPreviewBody pin={pin} />
 
         <div className="flex flex-wrap gap-2 border-t border-rule pt-3">
-          <Link href={`/ban-do/spot/${pin.id}`}>
+          <Link href={`/food/spot/${pin.id}`}>
             <Button size="sm">{t("map.viewSpot")}</Button>
           </Link>
-          <Link href={`/ban-do/spot/${pin.id}#review`}>
+          <Link href={`/food/spot/${pin.id}#review`}>
             <Button size="sm" variant="secondary">
               {t("map.addReview")}
             </Button>

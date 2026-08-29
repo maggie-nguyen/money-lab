@@ -39,7 +39,7 @@ export default function HieuMinhPage() {
 
   return (
     <div className="space-y-6">
-      <PageBackLink href="/vi-cua-toi">{t("wallet.back")}</PageBackLink>
+      <PageBackLink href="/wallet">{t("wallet.back")}</PageBackLink>
 
       <header className="space-y-2">
         <LedgerLabel>{t("wallet.mind.label")}</LedgerLabel>
@@ -89,7 +89,7 @@ export default function HieuMinhPage() {
       </div>
 
       <SectionContinueLink
-        href="/vi-cua-toi/chia-vi"
+        href="/wallet/budget"
         hint={t("wallet.mind.label")}
         label={t("wallet.mind.nextManage")}
       />

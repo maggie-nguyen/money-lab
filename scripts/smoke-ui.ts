@@ -192,14 +192,13 @@ async function main(): Promise<void> {
   watch(page);
 
   await visit(page, "landing", "/");
-  await visitMap(page, "ban-do", "/ban-do");
-  await visitMapSelected(page, "ban-do-selected", "/ban-do");
-  await visitMapSpotDetail(page, "ban-do-spot", "/ban-do");
+  await visitMap(page, "food", "/food");
+  await visitMapSelected(page, "food-selected", "/food");
+  await visitMapSpotDetail(page, "food-spot", "/food");
 
   await visit(page, "login", "/login");
   await visit(page, "signup", "/signup");
 
-  // The library is readable signed out, so it is walked before the login.
   await visit(page, "library", "/library");
   const articleSlug = await page.evaluate(() => {
     const link = document.querySelector<HTMLAnchorElement>('a[href^="/library/"]');
@@ -208,7 +207,6 @@ async function main(): Promise<void> {
   if (!articleSlug) throw new Error("no article linked from /library");
   await visit(page, "library-article", `/library/${articleSlug}`);
 
-  // Sign in as the seeded learner, so the rest of the walk runs authenticated.
   current = "learner-session";
   const res = await page.evaluate(
     async (base, email, password) => {
@@ -226,86 +224,15 @@ async function main(): Promise<void> {
   );
   if (res !== 200 && res !== 201) throw new Error(`learner login failed: ${res}`);
 
-  await visit(page, "vi-cua-toi", "/vi-cua-toi");
-  await visit(page, "vi-cua-toi-hieu-minh", "/vi-cua-toi/hieu-minh");
-  await visit(page, "vi-cua-toi-chia-vi", "/vi-cua-toi/chia-vi");
-  await visit(page, "vi-cua-toi-cuoc-song", "/vi-cua-toi/cuoc-song");
-  await visit(page, "vi-cua-toi-thu-thach", "/vi-cua-toi/thu-thach");
-  await visitMap(page, "ban-do-signed-in", "/ban-do");
-
-  await visit(page, "learn", "/learn");
-  await visit(page, "sims", "/sims");
-  await visit(page, "tools", "/tools");
-  await visit(page, "tools-loan", "/tools/loan-payment");
-  await visit(page, "quests", "/quests");
-  await visit(page, "leaderboard", "/leaderboard");
-  await visit(page, "shop", "/shop");
+  await visit(page, "wallet", "/wallet");
+  await visit(page, "wallet-mind", "/wallet/mind");
+  await visit(page, "wallet-budget", "/wallet/budget");
+  await visit(page, "wallet-life", "/wallet/life");
+  await visit(page, "wallet-challenges", "/wallet/challenges");
+  await visitMap(page, "food-signed-in", "/food");
   await visit(page, "profile", "/profile");
-  await visit(page, "tutor", "/tutor");
   await visit(page, "settings", "/settings");
 
-  // Walk into the seeded course and its first lesson.
-  current = "course";
-  const courseSlug = await page.evaluate(async (base) => {
-    const tracks = await fetch(`${base}/api/v1/catalog/tracks`, { credentials: "same-origin" });
-    const tj = (await tracks.json()) as { data?: Array<{ slug: string }> };
-    const trackSlug = tj.data?.[0]?.slug;
-    if (!trackSlug) return null;
-    const r = await fetch(`${base}/api/v1/catalog/tracks/${trackSlug}`, { credentials: "same-origin" });
-    const j = (await r.json()) as { data?: { courses?: Array<{ slug: string }> } };
-    return j.data?.courses?.[0]?.slug ?? null;
-  }, BASE);
-  if (courseSlug) {
-    await visit(page, "course", `/course/${courseSlug}`);
-    const lessonSlug = await page.evaluate(
-      async (base, slug) => {
-        const r = await fetch(`${base}/api/v1/catalog/courses/${slug}`, { credentials: "same-origin" });
-        const j = (await r.json()) as {
-          data?: {
-            modules?: Array<{ lessons?: Array<{ slug: string }> }>;
-            unmoduledLessons?: Array<{ slug: string }>;
-          };
-        };
-        return (
-          j.data?.modules?.[0]?.lessons?.[0]?.slug ?? j.data?.unmoduledLessons?.[0]?.slug ?? null
-        );
-      },
-      BASE,
-      courseSlug,
-    );
-    if (lessonSlug) await visit(page, "lesson", `/lesson/${lessonSlug}`);
-  }
-
-  // Start one session per simulation and screenshot the live board.
-  current = "sim-start";
-  const sims = await page.evaluate(async (base) => {
-    const r = await fetch(`${base}/api/v1/sims`, { credentials: "same-origin" });
-    const j = (await r.json()) as { data?: Array<{ id: string; slug: string; type: string }> };
-    return j.data ?? [];
-  }, BASE);
-
-  for (const sim of sims) {
-    current = `sim-${sim.type.toLowerCase()}`;
-    const sessionId = await page.evaluate(
-      async (base, simId) => {
-        const r = await fetch(`${base}/api/v1/sims/${simId}/sessions`, {
-          method: "POST",
-          headers: { "content-type": "application/json", "idempotency-key": `smoke:${simId}` },
-          body: "{}",
-          credentials: "same-origin",
-        });
-        const j = (await r.json()) as { data?: { id?: string } };
-        return j.data?.id ?? null;
-      },
-      BASE,
-      sim.id,
-    );
-    if (sessionId) {
-      await visit(page, `sim-${sim.type.toLowerCase()}`, `/sims/${sim.type.toLowerCase()}/${sessionId}`);
-    }
-  }
-
-  // Admin console, which needs a real ADMIN login rather than the guest session.
   current = "admin-login";
   const adminStatus = await page.evaluate(
     async (base, email, password) => {
@@ -328,28 +255,26 @@ async function main(): Promise<void> {
     await visit(page, "admin", "/admin");
     await visit(page, "admin-content", "/admin/content");
     await visit(page, "admin-users", "/admin/users");
-    await visit(page, "admin-sims", "/admin/sims");
     await visit(page, "admin-feedback", "/admin/feedback");
     await visit(page, "admin-flags", "/admin/flags");
     await visit(page, "admin-audit", "/admin/audit");
   }
 
-  // Dark theme, which the boot script applies from localStorage on load.
   current = "dark-setup";
   await page.evaluate(() => localStorage.setItem("ml-theme", "dark"));
-  await visit(page, "dark-learn", "/learn");
-  await visit(page, "dark-tools", "/tools/loan-payment");
+  await visit(page, "dark-wallet", "/wallet");
+  await visit(page, "dark-food", "/food");
+  await visit(page, "dark-library", "/library");
   await visit(page, "dark-admin", "/admin/content");
 
-  // Narrow viewport, where the auth panel drops to a banner and the nav collapses.
   current = "mobile-setup";
   await page.evaluate(() => localStorage.setItem("ml-theme", "light"));
   await page.setViewport({ width: 420, height: 860 });
   await visit(page, "mobile-landing", "/");
-  await visitMap(page, "mobile-ban-do", "/ban-do");
-  await visitMapSelected(page, "mobile-ban-do-selected", "/ban-do");
+  await visitMap(page, "mobile-food", "/food");
+  await visitMapSelected(page, "mobile-food-selected", "/food");
   await visit(page, "mobile-login", "/login");
-  await visit(page, "mobile-learn", "/learn");
+  await visit(page, "mobile-wallet", "/wallet");
   await visit(page, "mobile-library", "/library");
 
   await browser.close();
