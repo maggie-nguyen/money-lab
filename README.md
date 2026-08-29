@@ -65,8 +65,8 @@ Required production environment variables:
 | `APP_ORIGIN` | Exact public origin, for example `https://example.com` |
 
 Google sign-in additionally needs matching `GOOGLE_CLIENT_ID` and
-`NEXT_PUBLIC_GOOGLE_CLIENT_ID`. The map needs `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
-and optionally `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID`. Email verification needs
+`NEXT_PUBLIC_GOOGLE_CLIENT_ID`. The map needs `GOOGLE_MAPS_API_KEY`
+(restricted by HTTP referrer in Cloud Console) and optionally `GOOGLE_MAPS_MAP_ID`. Email verification needs
 `RESEND_API_KEY`; without it, account creation works but verification email is
 not delivered.
 

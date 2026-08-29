@@ -425,7 +425,7 @@
   "map.loading": "Đang tải quán…",
   "map.loginToReview": "Đăng nhập để ghi giá bạn vừa trả — giúp quán hiện trên bản đồ.",
   "map.noApiKeyTitle": "Chưa cấu hình Google Maps",
-  "map.noApiKeyDescription": "Thêm NEXT_PUBLIC_GOOGLE_MAPS_API_KEY vào file .env (Maps JavaScript API, giới hạn theo domain).",
+  "map.noApiKeyDescription": "Thêm GOOGLE_MAPS_API_KEY vào file .env (Maps JavaScript API, giới hạn theo domain).",
   "map.googleUnavailableTitle": "Bản đồ đang tạm nghỉ",
   "map.googleUnavailableDescription": "Google Maps đã đạt giới hạn hoặc không tải được. Bạn vẫn có thể xem và chọn quán trong danh sách bên cạnh.",
   "map.retryMap": "Thử tải lại bản đồ",

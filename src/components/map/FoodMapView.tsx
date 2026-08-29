@@ -34,7 +34,6 @@ import {
   matchesPriceFilter,
 } from "@/lib/map";
 
-const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
 const GOOGLE_MAP_LOAD_TIMEOUT_MS = 20_000;
 
 class MapErrorBoundary extends React.Component<
@@ -120,7 +119,7 @@ function MapFilterButton({
   );
 }
 
-export function FoodMapView() {
+export function FoodMapView({ mapsApiKey }: { mapsApiKey: string }) {
   const t = useT();
   const didAutoRecenter = React.useRef(false);
   const [canLoadGoogleMap, setCanLoadGoogleMap] = React.useState(false);
@@ -243,7 +242,7 @@ export function FoodMapView() {
    * list view instead of a blank canvas.
    */
   React.useEffect(() => {
-    if (!MAPS_KEY) return;
+    if (!mapsApiKey) return;
     const mapsWindow = window as typeof window & { gm_authFailure?: () => void };
     const previous = mapsWindow.gm_authFailure;
     const handleAuthFailure = () => {
@@ -263,7 +262,7 @@ export function FoodMapView() {
 
   /** A quota-rejected or stalled map never emits tilesloaded, so fail closed. */
   React.useEffect(() => {
-    if (!MAPS_KEY || !canLoadGoogleMap || googleMapFailed || googleMapReady) return;
+    if (!mapsApiKey || !canLoadGoogleMap || googleMapFailed || googleMapReady) return;
     const timeout = window.setTimeout(() => {
       setGoogleMapFailed(true);
       setGoogleMapReady(false);
@@ -274,13 +273,13 @@ export function FoodMapView() {
   /** Recover automatically when the device reconnects after an initial offline load. */
   React.useEffect(() => {
     const handleOnline = () => {
-      if (googleMapFailed && MAPS_KEY) retryGoogleMap();
+      if (googleMapFailed && mapsApiKey) retryGoogleMap();
     };
     window.addEventListener("online", handleOnline);
     return () => window.removeEventListener("online", handleOnline);
   });
 
-  const googleMapUnavailable = !MAPS_KEY || googleMapFailed;
+  const googleMapUnavailable = !mapsApiKey || googleMapFailed;
 
   return (
     <div className="space-y-6">
@@ -428,7 +427,7 @@ export function FoodMapView() {
                     <p className="text-sm leading-relaxed text-ink-soft">
                       {t("map.googleUnavailableDescription")}
                     </p>
-                    {MAPS_KEY && (
+                    {mapsApiKey && (
                       <Button type="button" variant="secondary" size="sm" onClick={retryGoogleMap}>
                         {t("map.retryMap")}
                       </Button>
@@ -444,7 +443,7 @@ export function FoodMapView() {
                   }}
                 >
                   <APIProvider
-                    apiKey={MAPS_KEY}
+                    apiKey={mapsApiKey}
                     language="vi"
                     region="VN"
                     onError={() => {

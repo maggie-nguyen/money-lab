@@ -100,7 +100,7 @@ Same four links + wordmark → `/ban-do`.
 
 **Expected cost at low traffic:** Google gives **$200/month free credit** ≈ 28k map loads. At hundreds of users, cost stays **$0**.
 
-**Env:** `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` (Maps JavaScript API enabled in Cloud Console).
+**Env:** `GOOGLE_MAPS_API_KEY` (Maps JavaScript API enabled in Cloud Console; restrict by HTTP referrer).
 
 **CSP additions:** `script-src` + `connect-src` + `img-src` for `https://maps.googleapis.com` and `https://maps.gstatic.com`.
 
