@@ -4,6 +4,7 @@ import * as React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useSession, useT } from "@/components/Providers";
+import { BrandLink } from "@/components/BrandLink";
 import { signOut } from "@/lib/signOut";
 import { Button, Chip, cx } from "@/components/ui";
 import { isMainNavActive, mainNavItems, WALLET_HREF } from "@/lib/mainNav";
@@ -39,11 +40,7 @@ function ThemeToggle() {
 }
 
 function Wordmark() {
-  return (
-    <Link href={WALLET_HREF} className="flex items-baseline gap-2">
-      <span className="font-display text-xl font-semibold tracking-tight">Money&amp;Me</span>
-    </Link>
-  );
+  return <BrandLink href={WALLET_HREF} />;
 }
 
 function StreakAndCoins() {

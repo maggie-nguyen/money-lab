@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import { BrandLink } from "@/components/BrandLink";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { api, ApiError } from "@/lib/api";
@@ -33,9 +34,7 @@ export default function VerifyPage() {
 
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-paper px-4 py-10">
-      <Link href="/" className="mb-8 font-display text-xl font-semibold tracking-tight text-ink">
-        Money&amp;Me
-      </Link>
+      <BrandLink href="/" className="mb-8 flex items-center gap-1.5 text-ink" />
       <div className="w-full max-w-md">
         {query.isLoading ? (
           <div className="space-y-3" aria-busy="true">

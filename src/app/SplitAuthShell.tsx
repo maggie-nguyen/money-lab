@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { BrandLink } from "@/components/BrandLink";
 import { LedgerScene } from "@/components/auth/LedgerScene";
 
 /**
@@ -20,9 +21,7 @@ export function SplitAuthShell({
   return (
     <div className="min-h-dvh bg-paper lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
       <div className="flex min-h-dvh flex-col px-6 py-8 lg:min-h-0 lg:px-10">
-        <Link href="/" className="font-display text-xl font-semibold tracking-tight text-ink">
-          Money&amp;Me
-        </Link>
+        <BrandLink href="/" className="flex items-center gap-1.5 text-ink" />
 
         {/* The illustration panel is desktop only, so small screens get a strip of it. */}
         <div

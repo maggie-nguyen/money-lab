@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { BrandLink } from "@/components/BrandLink";
 import { PublicNavAuth } from "@/components/PublicNavAuth";
 import { useT } from "@/components/Providers";
 import { cx } from "@/components/ui";
@@ -19,9 +20,7 @@ export function SiteHeader() {
     <header className="border-b border-rule">
       <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-4 py-4">
         <div className="flex min-w-0 items-center gap-6">
-          <Link href="/" className="shrink-0 font-display text-xl font-semibold tracking-tight">
-            Money&amp;Me
-          </Link>
+          <BrandLink href="/" />
           <nav className="hidden items-center gap-1 md:flex" aria-label={t("nav.main")}>
             {links.map((item) => {
               const active = isMainNavActive(pathname, item.href);
