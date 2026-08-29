@@ -17,7 +17,7 @@ export async function PublicChrome({ children }: { children: React.ReactNode }) 
       <header className="border-b border-rule">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
           <Link href="/" className="font-display text-xl font-semibold tracking-tight">
-            MoneyLab
+            Money&amp;Me
           </Link>
           <nav className="flex items-center gap-4 text-sm">
             <Link href="/library" className="text-ink-soft hover:text-ink">

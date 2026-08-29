@@ -160,7 +160,7 @@ export default function AdminContentEditorPage() {
       blocks: JSON.stringify(vi.blocks ?? [], null, 2),
       category: query.data.category ?? "GUIDE",
       readMinutes: String(query.data.readMinutes ?? 4),
-      authorName: query.data.authorName ?? "MoneyLab",
+      authorName: query.data.authorName ?? "Money&Me",
       seoTitle: vi.seoTitle ?? "",
       seoDescription: vi.seoDescription ?? "",
     });
@@ -189,7 +189,7 @@ export default function AdminContentEditorPage() {
         blocks: "[]",
         category: "GUIDE",
         readMinutes: "4",
-        authorName: "MoneyLab",
+        authorName: "Money&Me",
         seoTitle: "",
         seoDescription: "",
       });
@@ -232,7 +232,7 @@ export default function AdminContentEditorPage() {
     if (type === "articles") {
       body.category = form.category;
       body.readMinutes = Number(form.readMinutes) || 4;
-      body.authorName = form.authorName || "MoneyLab";
+      body.authorName = form.authorName || "Money&Me";
       body.coverImageUrl = form.coverImageUrl || null;
       i18nVi.seoTitle = form.seoTitle;
       i18nVi.seoDescription = form.seoDescription;

@@ -21,7 +21,7 @@ export function SplitAuthShell({
     <div className="min-h-dvh bg-paper lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
       <div className="flex min-h-dvh flex-col px-6 py-8 lg:min-h-0 lg:px-10">
         <Link href="/" className="font-display text-xl font-semibold tracking-tight text-ink">
-          MoneyLab
+          Money&amp;Me
         </Link>
 
         {/* The illustration panel is desktop only, so small screens get a strip of it. */}

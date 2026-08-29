@@ -5,13 +5,14 @@
  * name overlaps the pin name within 300 m; captures placeId + photo refs so the
  * pin carries a Google link and an embedded photo strip (references only).
  *
- * Uses the Maps Demo key in NEXT_PUBLIC_GOOGLE_MAPS_API_KEY. That key is capped
- * (~100 units/day, Text Search ≈ 10×), so expect roughly ~10 confirmed pins per
- * run. Aborts cleanly on quota (429) and is resumable — re-run tomorrow.
+ * This is an explicitly paid maintenance tool. It never falls back to the
+ * browser Maps key: set a separate server-only GOOGLE_PLACES_API_KEY and opt in
+ * with ALLOW_PAID_GOOGLE_PLACES=true before running it. Normal map browsing does
+ * not use Places.
  */
 import { prisma } from "../../src/server/db";
 
-const KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
+const KEY = process.env.GOOGLE_PLACES_API_KEY ?? "";
 const MATCH_RADIUS_M = 300;
 const CONCURRENCY = 2;
 const DELAY_MS = 600;
@@ -71,7 +72,12 @@ async function verifySpot(spot: { id: string; name: string; address: string; lat
 }
 
 async function main(): Promise<void> {
-  if (!KEY) throw new Error("NEXT_PUBLIC_GOOGLE_MAPS_API_KEY missing");
+  if (process.env.ALLOW_PAID_GOOGLE_PLACES !== "true") {
+    throw new Error(
+      "Paid Google Places verification is disabled. Set ALLOW_PAID_GOOGLE_PLACES=true only after approving its cost.",
+    );
+  }
+  if (!KEY) throw new Error("GOOGLE_PLACES_API_KEY missing (use a separate server-only key)");
   const spots = await prisma.foodSpot.findMany({
     where: { source: "foody", verified: false },
     select: { id: true, name: true, address: true, lat: true, lng: true },

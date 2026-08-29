@@ -400,7 +400,7 @@ const articleCreate = z.object({
   category: z.enum(["GUIDE", "EXPLAINER", "NEWS", "STORY"]),
   coverImageUrl: z.string().url().max(500).nullish(),
   readMinutes: z.number().int().min(1).max(60).default(4),
-  authorName: z.string().trim().min(1).max(80).default("MoneyLab"),
+  authorName: z.string().trim().min(1).max(80).default("Money&Me"),
   i18n: i18nOf(articleI18n),
 });
 const articlePatch = articleCreate.partial().extend({ i18n: i18nPartialOf(articleI18n).optional() });

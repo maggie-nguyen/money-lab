@@ -41,7 +41,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     <div className="space-y-6">
       <div>
         <h1 className="text-2xl">Quản trị</h1>
-        <p className="mt-1 text-sm text-ink-soft">Nội dung, người dùng và vận hành MoneyLab.</p>
+        <p className="mt-1 text-sm text-ink-soft">Nội dung, người dùng và vận hành Money&amp;Me.</p>
       </div>
       <nav aria-label="Điều hướng quản trị" className="flex flex-wrap gap-1 border-b border-rule pb-2">
         {NAV.map((item) => {

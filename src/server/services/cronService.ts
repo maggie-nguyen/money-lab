@@ -4,7 +4,8 @@ import { ensureDailyQuests } from "@/server/services/gamificationService";
 import { vnDate, vnDateStartUtc, dateDiffDays } from "@/server/lib/time";
 
 // Cron jobs - doc 01 §8. Every job is idempotent (safe to run twice) and writes a `cron_run` row.
-// They are invoked by POST /api/internal/cron/{name} with the X-Cron-Secret header.
+// Vercel invokes them by GET with a Bearer token; manual schedulers may use
+// POST with the X-Cron-Secret header.
 
 export const CRON_NAMES = [
   "daily-rollover",

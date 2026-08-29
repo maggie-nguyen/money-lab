@@ -35,6 +35,26 @@ import {
 } from "@/lib/map";
 
 const MAPS_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
+const GOOGLE_MAP_LOAD_TIMEOUT_MS = 20_000;
+
+class MapErrorBoundary extends React.Component<
+  { children: React.ReactNode; onError: (error: unknown) => void },
+  { failed: boolean }
+> {
+  state = { failed: false };
+
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: unknown) {
+    this.props.onError(error);
+  }
+
+  render() {
+    return this.state.failed ? null : this.props.children;
+  }
+}
 
 function BoundsWatcher({ onBounds }: { onBounds: (b: MapBounds) => void }) {
   const map = useMap();
@@ -103,6 +123,11 @@ function MapFilterButton({
 export function FoodMapView() {
   const t = useT();
   const didAutoRecenter = React.useRef(false);
+  const [canLoadGoogleMap, setCanLoadGoogleMap] = React.useState(false);
+  const [googleMapFailed, setGoogleMapFailed] = React.useState(false);
+  const [googleMapReady, setGoogleMapReady] = React.useState(false);
+  const [googleMapAttempt, setGoogleMapAttempt] = React.useState(0);
+  const [markerLayerFailed, setMarkerLayerFailed] = React.useState(false);
   const [bounds, setBounds] = React.useState<MapBounds | null>(() =>
     boundsFromCenter(MAP_DEFAULTS.fallback),
   );
@@ -119,14 +144,14 @@ export function FoodMapView() {
 
   const spotsQuery = useQuery({
     queryKey: ["food", "map", boundsKey],
-    queryFn: () => {
+    queryFn: ({ signal }) => {
       const b = bounds!;
       return api.get<FoodSpotPin[]>("/food/spots", {
         swLat: b.swLat,
         swLng: b.swLng,
         neLat: b.neLat,
         neLng: b.neLng,
-      });
+      }, signal);
     },
     enabled: bounds != null,
     staleTime: 60_000,
@@ -161,10 +186,13 @@ export function FoodMapView() {
         const { latitude, longitude } = pos.coords;
         if (isInVietnam(latitude, longitude)) {
           setLocationNotice(null);
-          setJumpTarget({ lat: latitude, lng: longitude, zoom: 16 });
+          const target = { lat: latitude, lng: longitude, zoom: 16 };
+          setJumpTarget(target);
+          setBounds(boundsFromCenter(target));
         } else {
           setLocationNotice(t("map.nearMeOutsideVn"));
           setJumpTarget(MAP_DEFAULTS.hanoi);
+          setBounds(boundsFromCenter(MAP_DEFAULTS.hanoi));
         }
       },
       () => setLocationNotice(t("map.geolocationDenied")),
@@ -175,6 +203,26 @@ export function FoodMapView() {
   function handleSelectPin(pin: FoodSpotPin | null) {
     setSelected(pin);
     if (pin) setJumpTarget({ lat: pin.lat, lng: pin.lng, zoom: 16 });
+  }
+
+  function handleAreaJump(target: MapCenter) {
+    setSelected(null);
+    setJumpTarget(target);
+    // Keep the list useful even when Google is blocked, offline, or over quota.
+    setBounds(boundsFromCenter(target));
+  }
+
+  function retryGoogleMap() {
+    if (!navigator.onLine) {
+      setLocationNotice(t("map.offlineNotice"));
+      return;
+    }
+    setLocationNotice(null);
+    setGoogleMapFailed(false);
+    setGoogleMapReady(false);
+    setMarkerLayerFailed(false);
+    setCanLoadGoogleMap(true);
+    setGoogleMapAttempt((attempt) => attempt + 1);
   }
 
   /** If the viewport is outside Vietnam (common when abroad), jump to seeded data in Hanoi. */
@@ -189,17 +237,50 @@ export function FoodMapView() {
     }
   }, [allPins.length, bounds, spotsQuery.isLoading, t]);
 
-  if (!MAPS_KEY) {
-    return (
-      <div className="space-y-4">
-        <header className="max-w-2xl space-y-2">
-          <LedgerLabel>{t("nav.map")}</LedgerLabel>
-          <h1 className="text-2xl">{t("map.noApiKeyTitle")}</h1>
-          <p className="text-sm text-ink-soft">{t("map.noApiKeyDescription")}</p>
-        </header>
-      </div>
-    );
-  }
+  /**
+   * Google reports key, billing and quota failures through this global callback.
+   * Install it before mounting APIProvider so a rejected map becomes a useful
+   * list view instead of a blank canvas.
+   */
+  React.useEffect(() => {
+    if (!MAPS_KEY) return;
+    const mapsWindow = window as typeof window & { gm_authFailure?: () => void };
+    const previous = mapsWindow.gm_authFailure;
+    const handleAuthFailure = () => {
+      setGoogleMapFailed(true);
+      setGoogleMapReady(false);
+      previous?.();
+    };
+    mapsWindow.gm_authFailure = handleAuthFailure;
+    if (navigator.onLine) setCanLoadGoogleMap(true);
+    else setGoogleMapFailed(true);
+    return () => {
+      if (mapsWindow.gm_authFailure === handleAuthFailure) {
+        mapsWindow.gm_authFailure = previous;
+      }
+    };
+  }, []);
+
+  /** A quota-rejected or stalled map never emits tilesloaded, so fail closed. */
+  React.useEffect(() => {
+    if (!MAPS_KEY || !canLoadGoogleMap || googleMapFailed || googleMapReady) return;
+    const timeout = window.setTimeout(() => {
+      setGoogleMapFailed(true);
+      setGoogleMapReady(false);
+    }, GOOGLE_MAP_LOAD_TIMEOUT_MS);
+    return () => window.clearTimeout(timeout);
+  }, [canLoadGoogleMap, googleMapAttempt, googleMapFailed, googleMapReady]);
+
+  /** Recover automatically when the device reconnects after an initial offline load. */
+  React.useEffect(() => {
+    const handleOnline = () => {
+      if (googleMapFailed && MAPS_KEY) retryGoogleMap();
+    };
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  });
+
+  const googleMapUnavailable = !MAPS_KEY || googleMapFailed;
 
   return (
     <div className="space-y-6">
@@ -216,7 +297,7 @@ export function FoodMapView() {
             <CardBody className="space-y-5">
               <div>
                 <SectionTitle>{t("map.areasLabel")}</SectionTitle>
-                <MapAreaLinks onJump={setJumpTarget} />
+                <MapAreaLinks onJump={handleAreaJump} />
               </div>
 
               <div className="border-t border-rule pt-4">
@@ -267,7 +348,26 @@ export function FoodMapView() {
                 <p className="text-xs leading-relaxed text-caution">{locationNotice}</p>
               )}
 
-              {!spotsQuery.isLoading && pins.length === 0 && bounds && (
+              {spotsQuery.isError && (
+                <div
+                  className="rounded-[var(--radius-control)] border border-critical/30 bg-critical-soft px-3 py-3 text-xs leading-relaxed text-ink"
+                  role="alert"
+                >
+                  <p className="font-semibold">{t("map.dataUnavailableTitle")}</p>
+                  <p className="mt-1 text-ink-soft">{t("map.dataUnavailableDescription")}</p>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    className="mt-3"
+                    onClick={() => spotsQuery.refetch()}
+                  >
+                    {t("common.retry")}
+                  </Button>
+                </div>
+              )}
+
+              {!spotsQuery.isLoading && !spotsQuery.isError && pins.length === 0 && bounds && (
                 <div className="rounded-[var(--radius-control)] border border-rule bg-paper-sunken px-3 py-2 text-xs leading-relaxed text-ink-soft">
                   {allPins.length > 0 ? (
                     <p>{t("map.spotListEmpty")}</p>
@@ -293,7 +393,11 @@ export function FoodMapView() {
               )}
 
               <p className="text-xs text-ink-faint">
-                {spotsQuery.isLoading ? t("map.loading") : t("map.spotCount", { count: pins.length })}
+                {spotsQuery.isLoading
+                  ? t("map.loading")
+                  : spotsQuery.isError
+                    ? t("map.dataUnavailableShort")
+                    : t("map.spotCount", { count: pins.length })}
               </p>
             </CardBody>
           </Card>
@@ -314,34 +418,82 @@ export function FoodMapView() {
         <div>
           <Card className="overflow-hidden">
             <div className="relative h-[min(52vh,24rem)] lg:h-[min(68vh,40rem)]">
-              <APIProvider apiKey={MAPS_KEY} language="vi" region="VN">
-                <Map
-                  defaultCenter={{ lat: MAP_DEFAULTS.fallback.lat, lng: MAP_DEFAULTS.fallback.lng }}
-                  defaultZoom={MAP_DEFAULTS.fallback.zoom}
-                  gestureHandling="greedy"
-                  disableDefaultUI
-                  zoomControl
-                  mapTypeControl={false}
-                  streetViewControl={false}
-                  fullscreenControl={false}
-                  className="h-full w-full"
-                  onClick={() => setSelected(null)}
+              {googleMapUnavailable ? (
+                <div
+                  className="flex h-full items-center justify-center bg-paper-sunken px-6 text-center"
+                  role="status"
                 >
-                  <BoundsWatcher onBounds={setBounds} />
-                  <MapJumpHandler target={jumpTarget} />
-                  <PricePinMarkers
-                    pins={pins}
-                    selectedId={selected?.id ?? null}
-                    onSelect={handleSelectPin}
-                  />
+                  <div className="max-w-md space-y-2">
+                    <p className="font-semibold text-ink">{t("map.googleUnavailableTitle")}</p>
+                    <p className="text-sm leading-relaxed text-ink-soft">
+                      {t("map.googleUnavailableDescription")}
+                    </p>
+                    {MAPS_KEY && (
+                      <Button type="button" variant="secondary" size="sm" onClick={retryGoogleMap}>
+                        {t("map.retryMap")}
+                      </Button>
+                    )}
+                  </div>
+                </div>
+              ) : canLoadGoogleMap ? (
+                <MapErrorBoundary
+                  key={googleMapAttempt}
+                  onError={() => {
+                    setGoogleMapFailed(true);
+                    setGoogleMapReady(false);
+                  }}
+                >
+                  <APIProvider
+                    apiKey={MAPS_KEY}
+                    language="vi"
+                    region="VN"
+                    onError={() => {
+                      setGoogleMapFailed(true);
+                      setGoogleMapReady(false);
+                    }}
+                  >
+                    <Map
+                      defaultCenter={{ lat: MAP_DEFAULTS.fallback.lat, lng: MAP_DEFAULTS.fallback.lng }}
+                      defaultZoom={MAP_DEFAULTS.fallback.zoom}
+                      gestureHandling="greedy"
+                      disableDefaultUI
+                      zoomControl
+                      mapTypeControl={false}
+                      streetViewControl={false}
+                      fullscreenControl={false}
+                      className="h-full w-full"
+                      onClick={() => setSelected(null)}
+                      onTilesLoaded={() => setGoogleMapReady(true)}
+                    >
+                      <BoundsWatcher onBounds={setBounds} />
+                      <MapJumpHandler target={jumpTarget} />
+                      {!markerLayerFailed && (
+                        <PricePinMarkers
+                          pins={pins}
+                          selectedId={selected?.id ?? null}
+                          onSelect={handleSelectPin}
+                          onError={() => setMarkerLayerFailed(true)}
+                        />
+                      )}
+                    </Map>
+                  </APIProvider>
+                </MapErrorBoundary>
+              ) : (
+                <div className="h-full bg-paper-sunken" aria-hidden="true" />
+              )}
 
-                </Map>
-              </APIProvider>
-
-              {spotsQuery.isLoading && (
+              {!googleMapUnavailable && (!googleMapReady || spotsQuery.isLoading) && (
                 <div className="pointer-events-none absolute inset-x-0 top-3 flex justify-center">
                   <span className="rounded-[var(--radius-control)] border border-rule bg-paper-raised px-3 py-1 text-xs text-ink-soft">
                     {t("map.loading")}
+                  </span>
+                </div>
+              )}
+
+              {markerLayerFailed && !googleMapUnavailable && (
+                <div className="pointer-events-none absolute inset-x-0 top-3 flex justify-center">
+                  <span className="rounded-[var(--radius-control)] border border-caution/30 bg-paper-raised px-3 py-1 text-xs text-caution">
+                    {t("map.markerUnavailable")}
                   </span>
                 </div>
               )}

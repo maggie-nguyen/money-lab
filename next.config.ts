@@ -41,6 +41,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // A lockfile exists above this repository on the development machine. Pin
+  // tracing to this project so local and Vercel builds resolve the same root.
+  outputFileTracingRoot: process.cwd(),
   serverExternalPackages: ["@node-rs/argon2", "pino"],
   // Nothing gains from announcing the framework and version to a scanner.
   poweredByHeader: false,

@@ -275,7 +275,7 @@ the platform's log collector is the sink.
 
 Return `429 RATE_LIMITED` + `Retry-After` seconds. A daily cron prunes old windows.
 
-## 8. Cron jobs (`/api/internal/cron/{name}`, POST, header `X-Cron-Secret` must equal env; 403 otherwise)
+## 8. Cron jobs (`/api/internal/cron/{name}`; Vercel GET uses `Authorization: Bearer <CRON_SECRET>`, manual POST uses `X-Cron-Secret`)
 
 | Name | Schedule (VN time) | What it does |
 |---|---|---|

@@ -1,4 +1,4 @@
-# MoneyLab
+# Money&Me
 
 Interactive financial literacy platform for Vietnamese high school students: short video-led
 lessons, a library of standalone articles, six calculators, and five deterministic simulations
@@ -45,6 +45,34 @@ request (`.github/workflows/ci.yml`); the test harness starts its own Postgres, 
 database service.
 
 ## Deploying
+
+Vercel hosts this project as a full-stack Next.js app: pages run on its frontend
+infrastructure and every `src/app/api/**/route.ts` is deployed as a serverless
+backend function. Neon hosts the Postgres database used by those functions.
+
+The checked-in `vercel.json` sets the Build Command to `pnpm vercel-build`. It
+generates the Prisma client, applies committed migrations, safely syncs
+editorial articles, and then runs the production build. The article sync does
+not touch users, reviews, map data, or other user-owned records. The same file
+schedules the three daily maintenance jobs in UTC; Vercel supplies
+`Authorization: Bearer <CRON_SECRET>` automatically.
+
+Required production environment variables:
+
+| Variable | Production value |
+|---|---|
+| `DATABASE_URL` | Neon pooled connection string (`-pooler` host) |
+| `DIRECT_URL` | Neon direct connection string (the value Neon exposes as `DATABASE_URL_UNPOOLED`) |
+| `AUTH_SECRET` | Random secret of at least 32 characters |
+| `APP_ORIGIN` | Exact public origin, for example `https://example.com` |
+| `CRON_SECRET` | Random secret of at least 8 characters |
+| `RATE_LIMIT_DISABLED` | `false` |
+
+Google sign-in additionally needs matching `GOOGLE_CLIENT_ID` and
+`NEXT_PUBLIC_GOOGLE_CLIENT_ID`. The map needs `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
+and optionally `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID`. Email verification needs
+`RESEND_API_KEY`; without it, account creation works but verification email is
+not delivered.
 
 Two things the runtime assumes, both covered in
 [docs/08-PRODUCTION-QA.md](docs/08-PRODUCTION-QA.md) §2:

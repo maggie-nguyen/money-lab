@@ -5,7 +5,6 @@ import { useT } from "@/components/Providers";
 import { Button, Card, CardBody, Chip, SectionTitle, cx } from "@/components/ui";
 import { formatVnd } from "@/lib/format";
 import { formatFoodTag, type FoodSpotPin } from "@/lib/map";
-import { SpotGallery } from "@/components/map/SpotGallery";
 
 function SpotPreviewBody({
   pin,
@@ -35,8 +34,6 @@ function SpotPreviewBody({
       {!compact && pin.note && (
         <p className="text-sm leading-relaxed text-ink-soft">{pin.note}</p>
       )}
-
-      {!compact && <SpotGallery gallery={pin.gallery} />}
 
       <div className="flex flex-wrap gap-2">
         {pin.tags.slice(0, compact ? 2 : 4).map((tag) => (

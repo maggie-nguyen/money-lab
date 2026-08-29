@@ -22,7 +22,7 @@ export async function sendEmail(to: string, subject: string, text: string): Prom
     const res = await fetch("https://api.resend.com/emails", {
       method: "POST",
       headers: { authorization: `Bearer ${key}`, "content-type": "application/json" },
-      body: JSON.stringify({ from: "MoneyLab <no-reply@moneylab.vn>", to: [to], subject, text }),
+      body: JSON.stringify({ from: "Money&Me <no-reply@moneylab.vn>", to: [to], subject, text }),
     });
     if (!res.ok) {
       logger.error({ to, status: res.status }, "email send rejected");

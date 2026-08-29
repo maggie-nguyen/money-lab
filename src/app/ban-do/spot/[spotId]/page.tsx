@@ -7,7 +7,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { useSession, useT, useToast } from "@/components/Providers";
 import { SpotDetailHero } from "@/components/map/SpotDetailHero";
-import { SpotGallery } from "@/components/map/SpotGallery";
 import {
   Button,
   Card,
@@ -111,8 +110,6 @@ export default function BanDoSpotPage() {
         tags={spot.tags}
         note={spot.note}
       />
-
-      <SpotGallery gallery={spot.gallery} className="flex gap-2 overflow-x-auto" />
 
       <section>
         <LedgerLabel>{t("map.communityPrices")}</LedgerLabel>

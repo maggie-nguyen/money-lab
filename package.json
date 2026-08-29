@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "vercel-build": "prisma generate && prisma migrate deploy && pnpm content:seed:articles && next build",
+    "postinstall": "prisma generate",
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
@@ -14,6 +16,7 @@
     "smoke:map-shots": "tsx --tsconfig tsconfig.json scripts/capture-map-screenshots.ts",
     "smoke:auth": "tsx --tsconfig tsconfig.json scripts/check-auth-flows.ts",
     "content:verify": "tsx scripts/verify-videos.ts",
+    "content:seed:articles": "tsx prisma/seed-articles.ts",
     "content:links": "tsx --tsconfig tsconfig.json scripts/check-lesson-links.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
@@ -42,6 +45,8 @@
   },
   "dependencies": {
     "@googlemaps/markerclusterer": "^2.6.2",
+    "@neon/config": "^1.1.0",
+    "@neon/env": "^1.1.6",
     "@node-rs/argon2": "^2.0.2",
     "@prisma/client": "^6.16.2",
     "@tanstack/react-query": "^5.83.0",

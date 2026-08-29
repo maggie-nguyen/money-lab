@@ -2,10 +2,80 @@
   "$schema": "moneylab-articles-v1",
   "articles": [
     {
+      "slug": "goc-nhin-tam-ly-hoc-tai-chinh-ve-chi-tieu",
+      "category": "EXPLAINER",
+      "readMinutes": 6,
+      "authorName": "Money&Me",
+      "publishedDaysAgo": 0,
+      "i18n": {
+        "vi": {
+          "title": "Góc nhìn từ Tâm lý học Tài chính về cách chúng ta chi tiêu hằng ngày",
+          "summary": "Đằng sau mỗi khoản chi không chỉ là những phép tính, mà còn có cảm xúc, tư duy và các lối tắt tâm lý âm thầm tác động đến quyết định của chúng ta.",
+          "seoTitle": "Tâm lý học Tài chính và cách chúng ta chi tiêu",
+          "seoDescription": "Khám phá cách cảm xúc, tư duy và các lối tắt tâm lý ảnh hưởng đến những quyết định chi tiêu hằng ngày của chúng ta.",
+          "blocks": [
+            {
+              "type": "PARAGRAPH",
+              "text": "Bạn đã bao giờ thắc mắc vì sao với cùng một số tiền, có ngày ta cân đo đong đếm từng đồng, nhưng lại có những ngày ta sẵn sàng “mạnh tay” chi cho những cặp vé concert hay những món đồ hàng hiệu sang chảnh chỉ trong một nốt nhạc? Chúng ta thường mặc định rằng quản lý tài chính là việc cộng trừ những phép tính khô khan, là việc liệt kê những con số vào mỗi cuối ngày. Tuy nhiên, đằng sau đó, cảm xúc và tư duy mới là yếu tố âm thầm điều khiển mỗi khoản chi, mỗi lần chuyển khoản của chúng ta."
+            },
+            {
+              "type": "HEADING",
+              "text": "Chúng ta có thật sự tiêu tiền một cách lý trí?",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Kinh tế học truyền thống thường giả định con người là những cá thể luôn lý trí, biết tự chủ đưa ra những quyết định phù hợp nhất với túi tiền của mình. Nhưng sự thật có thật sự màu hồng như vậy?"
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Bắt đầu từ những năm 1970, hai nhà nghiên cứu Daniel Kahneman và Amos Tversky, những người được cho là đã đặt nền móng cho lĩnh vực Kinh tế học hành vi (Behavioral Economics), đã đảo ngược hoàn toàn khái niệm này. Các công trình nghiên cứu của họ đã thể hiện một hiện thực “phũ phàng” hơn rằng: những quyết định trong thực tế của con người hiếm khi dựa trên sự tính toán hoàn hảo. Thay vào đó, chúng ta thường bị tác động bởi lượng thông tin hạn chế, cảm xúc bộc phát tại thời điểm đó, và cả những “lối tắt tư duy” (heuristics), các phản xạ nhanh mà não bộ tự động tạo ra để tiết kiệm năng lượng khi suy nghĩ."
+            },
+            {
+              "type": "HEADING",
+              "text": "Tâm lý học Tài chính là gì?",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Song song với Kinh tế học hành vi, ngành Tâm lý học Tài chính (Financial Psychology) đi sâu vào việc nghiên cứu các yếu tố nhận thức, xã hội và cảm xúc ảnh hưởng trực tiếp đến mối quan hệ giữa một cá nhân và tiền bạc."
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Rút ví hay chuyển khoản không đơn thuần là một giao dịch thương mại, mà bản chất là một phản ứng tâm lý. Những cảm xúc như vui vẻ, căng thẳng, lo âu hay những kỳ vọng cá nhân đều là những “mắt xích” quan trọng trong quá trình “rút ví” và chi tiêu của mỗi chúng ta."
+            },
+            {
+              "type": "HEADING",
+              "text": "Vì sao giới trẻ cần hiểu về tâm lý chi tiêu của chính mình?",
+              "level": 2
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Bước vào độ tuổi tập tự chủ tài chính, chúng ta, những người thường được cho là “bốc đồng trong cảm xúc”, phải đối mặt với vô vàn quyết định tiêu dùng mỗi ngày trong một nền kinh tế đầy biến động. Khi chưa hiểu được cơ chế vận hành của cảm xúc, chúng ta rất dễ rơi vào trạng thái hoang mang không hiểu vì sao tiền trong tài khoản lại “bốc hơi” nhanh đến thế."
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Nhận diện được trạng thái tâm lý đằng sau mỗi lần chi tiêu không phải để bạn tự trách hay gắt gao với bản thân. Mục đích cốt lõi là giúp bạn gọi tên đúng cảm xúc của mình, từ đó từng bước giành lại sự chủ động và kiểm soát dòng tiền một cách bền vững."
+            },
+            {
+              "type": "PARAGRAPH",
+              "text": "Muốn vậy, việc hiểu về tâm lý và những yếu tố cảm xúc tác động đến các quyết định tài chính cá nhân là một điều vô cùng quan trọng. Hãy cùng chúng mình khám phá những “bẫy” tâm lý đang âm thầm tác động đến thói quen chi tiêu của các bạn trẻ qua chuỗi bài viết tiếp theo."
+            },
+            {
+              "type": "CALLOUT",
+              "variant": "INFO",
+              "title": "Nguồn tham khảo",
+              "text": "Nội dung được tổng hợp dựa trên nền tảng nghiên cứu về Tài chính hành vi (Behavioral Finance) và Tâm lý học Tài chính (Financial Psychology), được kiểm duyệt chuyên môn bởi Devon Frye (Psychology Today), đồng thời tích hợp nghiên cứu về thiên lệch nhận thức và heuristics của Daniel Kahneman và Amos Tversky."
+            }
+          ]
+        }
+      }
+    },
+    {
       "slug": "tam-li-chi-tieu-gioi-tre",
       "category": "EXPLAINER",
       "readMinutes": 4,
-      "authorName": "MoneyLab",
+      "authorName": "Money&Me",
       "publishedDaysAgo": 2,
       "i18n": {
         "vi": {
@@ -55,7 +125,7 @@
       "slug": "fomo-va-tieu-dung",
       "category": "EXPLAINER",
       "readMinutes": 5,
-      "authorName": "MoneyLab",
+      "authorName": "Money&Me",
       "publishedDaysAgo": 3,
       "i18n": {
         "vi": {
@@ -105,7 +175,7 @@
       "slug": "mua-sam-giam-stress",
       "category": "GUIDE",
       "readMinutes": 4,
-      "authorName": "MoneyLab",
+      "authorName": "Money&Me",
       "publishedDaysAgo": 5,
       "i18n": {
         "vi": {
@@ -145,7 +215,7 @@
       "slug": "the-tin-dung-lam-ban-tieu-nhieu-hon",
       "category": "EXPLAINER",
       "readMinutes": 5,
-      "authorName": "MoneyLab",
+      "authorName": "Money&Me",
       "publishedDaysAgo": 7,
       "i18n": {
         "vi": {
@@ -186,7 +256,7 @@
       "slug": "yolo-va-chi-tieu",
       "category": "STORY",
       "readMinutes": 4,
-      "authorName": "MoneyLab",
+      "authorName": "Money&Me",
       "publishedDaysAgo": 10,
       "i18n": {
         "vi": {

@@ -65,7 +65,7 @@ export async function seedUsers(): Promise<{ learnerEmail: string }> {
   const learnerPassword = e.SEED_LEARNER_PASSWORD ?? "learner12345";
 
   for (const [email, password, displayName, role] of [
-    [adminEmail, adminPassword, "MoneyLab Admin", "ADMIN"],
+    [adminEmail, adminPassword, "Money&Me Admin", "ADMIN"],
     [learnerEmail, learnerPassword, "Học sinh demo", "LEARNER"],
   ] as const) {
     const existing = await prisma.user.findFirst({
@@ -135,7 +135,7 @@ async function seedV2Badges(): Promise<void> {
   console.log(`✔ ${V2_BADGES.length} v2 badges`);
 }
 
-async function seedArticlesFromJson(): Promise<void> {
+export async function seedArticlesFromJson(): Promise<void> {
   const path = join(__dirname, "..", "content", "vi", "articles.json");
   const raw = JSON.parse(readFileSync(path, "utf-8")) as { articles: unknown[] };
   for (const a of raw.articles) {

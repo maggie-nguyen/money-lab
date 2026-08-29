@@ -28,11 +28,11 @@ export async function generateMetadata(): Promise<Metadata> {
     // relative, and a crawler resolves them against whatever host it came in on.
     metadataBase: new URL(env().APP_ORIGIN),
     title: {
-      default: "MoneyLab",
-      template: "%s · MoneyLab",
+      default: "Money&Me",
+      template: "%s · Money&Me",
     },
     description: t("landing.metaDescription"),
-    applicationName: "MoneyLab",
+    applicationName: "Money&Me",
     robots: { index: true, follow: true },
   };
 }

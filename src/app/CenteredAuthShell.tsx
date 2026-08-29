@@ -13,7 +13,7 @@ export function CenteredAuthShell({
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center bg-paper px-4 py-10">
       <Link href="/" className="mb-8 font-display text-xl font-semibold tracking-tight text-ink">
-        MoneyLab
+        Money&amp;Me
       </Link>
       <div className="w-full max-w-sm rounded-[var(--radius-card)] border border-rule bg-paper-raised p-6">
         <h1 className="text-xl">{title}</h1>

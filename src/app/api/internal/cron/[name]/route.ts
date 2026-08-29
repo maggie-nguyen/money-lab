@@ -4,9 +4,9 @@ import { jsonResponse } from "@/server/http";
 import { logger } from "@/server/lib/logger";
 import { isCronName, runCron, CRON_NAMES } from "@/server/services/cronService";
 
-// POST /api/internal/cron/{name} - doc 01 §8.
-// Not a public API: no user auth, no rate limit. The scheduler proves itself with X-Cron-Secret.
-// Anything else gets 403 (never 401 - this route does not participate in the token scheme).
+// GET/POST /api/internal/cron/{name} - doc 01 §8.
+// Vercel Cron calls GET with `Authorization: Bearer <CRON_SECRET>`. POST with
+// X-Cron-Secret remains available for manual runs and other schedulers.
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 300;
@@ -18,11 +18,14 @@ function secretMatches(provided: string | null): boolean {
   return a.length === b.length && timingSafeEqual(a, b);
 }
 
-export async function POST(
+async function handleCron(
   req: Request,
   { params }: { params: Promise<{ name: string }> },
 ): Promise<Response> {
-  if (!secretMatches(req.headers.get("x-cron-secret"))) {
+  const authorization = req.headers.get("authorization");
+  const bearer = authorization?.startsWith("Bearer ") ? authorization.slice(7) : null;
+  const provided = bearer ?? req.headers.get("x-cron-secret");
+  if (!secretMatches(provided)) {
     return jsonResponse(
       { error: { code: "FORBIDDEN", message: "Invalid cron secret" } },
       403,
@@ -82,3 +85,6 @@ export async function POST(
     { "cache-control": "no-store" },
   );
 }
+
+export const GET = handleCron;
+export const POST = handleCron;

@@ -57,7 +57,7 @@ export default async function LandingPage() {
     <div className="min-h-dvh bg-paper">
       <header className="border-b border-rule">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-4">
-          <span className="font-display text-xl font-semibold tracking-tight">MoneyLab</span>
+          <span className="font-display text-xl font-semibold tracking-tight">Money&amp;Me</span>
           <nav className="flex items-center gap-4 text-sm">
             <Link href="/login" className="text-ink-soft hover:text-ink">
               {t("landing.signIn")}

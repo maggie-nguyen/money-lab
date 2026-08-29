@@ -56,21 +56,35 @@ export function PricePinMarkers({
   pins,
   selectedId,
   onSelect,
+  onError,
 }: {
   pins: FoodSpotPin[];
   selectedId: string | null;
   onSelect: (pin: FoodSpotPin | null) => void;
+  onError?: (error: unknown) => void;
 }) {
   const map = useMap();
   const [markers, setMarkers] = React.useState<GMarker[]>([]);
   const onSelectRef = React.useRef(onSelect);
+  const onErrorRef = React.useRef(onError);
   onSelectRef.current = onSelect;
+  onErrorRef.current = onError;
 
   React.useEffect(() => {
     if (!map || !window.google?.maps) return;
-    const next = pins.map((pin) =>
-      makePinMarker(pin, pin.id === selectedId, (p) => onSelectRef.current(p)),
-    );
+    const next: GMarker[] = [];
+    try {
+      for (const pin of pins) {
+        next.push(
+          makePinMarker(pin, pin.id === selectedId, (p) => onSelectRef.current(p)),
+        );
+      }
+    } catch (error) {
+      for (const marker of next) marker.setMap(null);
+      setMarkers([]);
+      onErrorRef.current?.(error);
+      return;
+    }
     setMarkers(next);
     return () => {
       for (const m of next) {
@@ -81,12 +95,18 @@ export function PricePinMarkers({
 
   React.useEffect(() => {
     if (!map || markers.length === 0) return;
-    const clusterer = new MarkerClusterer({
-      map,
-      markers,
-      renderer: clusterRenderer,
-      algorithmOptions: { maxZoom: 18 },
-    });
+    let clusterer: MarkerClusterer;
+    try {
+      clusterer = new MarkerClusterer({
+        map,
+        markers,
+        renderer: clusterRenderer,
+        algorithmOptions: { maxZoom: 18 },
+      });
+    } catch (error) {
+      onErrorRef.current?.(error);
+      return;
+    }
     return () => clusterer.setMap(null);
   }, [map, markers]);
 
