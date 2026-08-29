@@ -16,3 +16,4 @@ prisma/data/*.json
 !prisma/data/osm/.gitkeep
 prisma/data/foody/
 .neon
+.vercel

@@ -1,19 +1,5 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
-  "buildCommand": "pnpm vercel-build",
-  "crons": [
-    {
-      "path": "/api/internal/cron/daily-rollover",
-      "schedule": "5 17 * * *"
-    },
-    {
-      "path": "/api/internal/cron/analytics-rollup",
-      "schedule": "0 18 * * *"
-    },
-    {
-      "path": "/api/internal/cron/integrity-check",
-      "schedule": "0 19 * * *"
-    }
-  ]
+  "buildCommand": "pnpm vercel-build"
 }

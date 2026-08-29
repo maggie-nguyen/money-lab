@@ -1,4 +1,5 @@
 import { prisma } from "@/server/db";
+import { env } from "@/server/config";
 import { jsonResponse } from "@/server/http";
 
 // GET /health - doc 01 §10. No auth, no rate limit, never cached.
@@ -10,20 +11,25 @@ export const dynamic = "force-dynamic";
 
 export async function GET(): Promise<Response> {
   let db: "ok" | "down" = "ok";
-  let cron: "ok" | "stale" = "stale";
+  const cronEnabled = Boolean(env().CRON_SECRET);
+  let cron: "ok" | "stale" | "disabled" = cronEnabled ? "stale" : "disabled";
 
   try {
-    const last = await prisma.cronRun.findFirst({
-      where: { name: "daily-rollover", ok: true },
-      orderBy: { ranAt: "desc" },
-      select: { ranAt: true },
-    });
-    cron = last && Date.now() - last.ranAt.getTime() < CRON_STALE_MS ? "ok" : "stale";
+    if (cronEnabled) {
+      const last = await prisma.cronRun.findFirst({
+        where: { name: "daily-rollover", ok: true },
+        orderBy: { ranAt: "desc" },
+        select: { ranAt: true },
+      });
+      cron = last && Date.now() - last.ranAt.getTime() < CRON_STALE_MS ? "ok" : "stale";
+    } else {
+      await prisma.$queryRaw`SELECT 1`;
+    }
   } catch {
     db = "down";
   }
 
-  const status = db === "ok" && cron === "ok" ? "ok" : "degraded";
+  const status = db === "ok" && cron !== "stale" ? "ok" : "degraded";
   return jsonResponse(
     { data: { status, db, cron, version: process.env.GIT_SHA ?? "dev" } },
     db === "ok" ? 200 : 503,

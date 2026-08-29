@@ -53,9 +53,7 @@ backend function. Neon hosts the Postgres database used by those functions.
 The checked-in `vercel.json` sets the Build Command to `pnpm vercel-build`. It
 generates the Prisma client, applies committed migrations, safely syncs
 editorial articles, and then runs the production build. The article sync does
-not touch users, reviews, map data, or other user-owned records. The same file
-schedules the three daily maintenance jobs in UTC; Vercel supplies
-`Authorization: Bearer <CRON_SECRET>` automatically.
+not touch users, reviews, map data, or other user-owned records.
 
 Required production environment variables:
 
@@ -65,8 +63,6 @@ Required production environment variables:
 | `DIRECT_URL` | Neon direct connection string (the value Neon exposes as `DATABASE_URL_UNPOOLED`) |
 | `AUTH_SECRET` | Random secret of at least 32 characters |
 | `APP_ORIGIN` | Exact public origin, for example `https://example.com` |
-| `CRON_SECRET` | Random secret of at least 8 characters |
-| `RATE_LIMIT_DISABLED` | `false` |
 
 Google sign-in additionally needs matching `GOOGLE_CLIENT_ID` and
 `NEXT_PUBLIC_GOOGLE_CLIENT_ID`. The map needs `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY`
